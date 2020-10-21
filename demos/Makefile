@@ -1,8 +1,10 @@
 PATH := $(DEVKITARM)/bin:$(PATH)
 
+TITLE		:= Fountain
+
 #  Project settings
 
-NAME       := Fountain
+NAME		:= $(TITLE)
 SOURCE_DIR := src
 LIB_DIR    := lib
 DUSK_DIR   := ../src/dusk
