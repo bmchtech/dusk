@@ -8,4 +8,4 @@
 
 const GBFS_FILE *gbfs_dat;
 
-void ds_load_init(); // initialize loader
+void dusk_load_init(); // initialize loader
