@@ -21,6 +21,8 @@ BUILD		:=	build
 SRCDIRS		:=	src src/contrib
 INCDIRS		:=	include include/contrib
 
+DEPFLAGS	:= -I$(DEVKITPRO)/libtonc/include -L$(DEVKITPRO)/libtonc/lib -ltonc
+
 DATESTRING	:=	$(shell date +%Y)$(shell date +%m)$(shell date +%d)
 
 ARCH		:=	-mthumb -mthumb-interwork
@@ -36,6 +38,7 @@ bDEBUG2		:= 0	# Generate debug info (bDEBUG2? Not a full DEBUG flag. Yet)
 
 CBASE   := $(INCLUDE) -Wall -fno-strict-aliasing #-fno-tree-loop-optimize
 CBASE	+= -O2
+CBASE	+= $(DEPFLAGS)
 
 RCFLAGS := $(CBASE) $(RARCH)
 ICFLAGS := $(CBASE) $(IARCH) -mlong-calls #-fno-gcse
