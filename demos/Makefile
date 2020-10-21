@@ -21,8 +21,8 @@ OBJCOPY	:= $(CROSS)objcopy
 
 ARCH	:= -mthumb-interwork -mthumb
 
-INCFLAGS := -I$(DEVKITPRO)/libtonc/include -I$(DUSK_DIR)/include
-LIBFLAGS := -L$(DEVKITPRO)/libtonc/lib -ltonc -L$(DUSK_DIR)/lib -ldusk
+INCFLAGS := -I$(DUSK_DIR)/include -I$(DEVKITPRO)/libtonc/include
+LIBFLAGS := -L$(DUSK_DIR)/lib -ldusk -L$(DEVKITPRO)/libtonc/lib -ltonc
 ASFLAGS	:= -mthumb-interwork
 CFLAGS	:= $(ARCH) -O2 -Wall -fno-strict-aliasing $(INCFLAGS) $(LIBFLAGS)
 LDFLAGS	:= $(ARCH) $(SPECS) $(LIBFLAGS)

@@ -2,10 +2,7 @@
 #include <tonc.h>
 #include "contrib/gbfs.h"
 #include "contrib/gbamap.h"
-
-OBJ_ATTR obj_buffer[128];
-OBJ_AFFINE *obj_aff_buffer = (OBJ_AFFINE *)obj_buffer;
-const GBFS_FILE *gbfs_dat;
+#include "dusk.h"
 
 Map load_map()
 {
@@ -17,14 +14,13 @@ Map load_map()
 
 int main()
 {
-    gbfs_dat = find_first_gbfs_file(find_first_gbfs_file);
+    dusk_init();
 
     map_init_registers();
     Map map = load_map();
     map_set_onscreen(map);
 
-    oam_init(obj_buffer, 128);
-    REG_DISPCNT |= DCNT_OBJ | DCNT_OBJ_1D;
+    dusk_sprites_init();
 
     u32 eggcat_img_len;
     const u32 *eggcat_img = gbfs_get_obj(gbfs_dat, "egg.img.bin", &eggcat_img_len);

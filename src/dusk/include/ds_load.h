@@ -6,6 +6,6 @@
 
 #include "contrib/gbfs.h"
 
-const GBFS_FILE *gbfs_dat;
+extern const GBFS_FILE *gbfs_dat;
 
 void dusk_load_init(); // initialize loader

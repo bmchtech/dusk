@@ -1,4 +1,6 @@
-#include <tonc.h>
+#include <tonc_oam.h>
 
-OBJ_ATTR obj_buffer[128];
-OBJ_AFFINE *obj_aff_buffer = (OBJ_AFFINE *)obj_buffer;
+extern OBJ_ATTR obj_buffer[128];
+extern OBJ_AFFINE *obj_aff_buffer;
+
+void dusk_sprites_init();
