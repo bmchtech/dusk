@@ -1,8 +1,9 @@
 #include "ds_spr.h"
+#include "ds_sys.h"
 #include <tonc.h>
 
 OBJ_ATTR obj_buffer[128];
-OBJ_AFFINE *obj_aff_buffer = (OBJ_AFFINE *)obj_buffer;
+OBJ_AFFINE* obj_aff_buffer = (OBJ_AFFINE*)obj_buffer;
 
 Sprite sprites[NUM_SPRITES];
 
@@ -69,7 +70,7 @@ Sprite* dusk_sprites_make(int index, u8 width, u8 height, Sprite spr) {
     }
 
     // set main attributes
-    obj_set_attr(&obj_buffer[index], shape | ATTR0_8BPP, size, spr.tid * BPP);
+    obj_set_attr(&obj_buffer[index], shape | ATTR0_8BPP, size, (spr.tid + spr.page) * BPP);
 
     // save sprite metadata
     sprites[index] = spr;
@@ -82,8 +83,11 @@ Sprite* dusk_sprites_make(int index, u8 width, u8 height, Sprite spr) {
 }
 
 inline void dusk_sprites_sync(int i) {
+    OBJ_ATTR* obj = &obj_buffer[i];
     // position
-    obj_set_pos(&obj_buffer[i], sprites[i].x, sprites[i].y);
+    obj_set_pos(obj, sprites[i].x, sprites[i].y);
+    // main attrs
+    obj_set_attr(obj, obj->attr0, obj->attr1, (sprites[i].tid + sprites[i].page) * BPP);
 }
 
 void dusk_sprites_update() {
@@ -94,4 +98,17 @@ void dusk_sprites_update() {
 
     // upload to gpu memory
     oam_copy(oam_mem, obj_buffer, NUM_SPRITES);
+}
+
+void dusk_sprites_anim_play(Sprite* spr, Anim* anim) {
+    // make sure page is within anim range
+    if (spr->page < anim->start || spr->page >= (anim->start + anim->len)) {
+        spr->page = anim->start; // reset to first
+    }
+    int ix = spr->page - anim->start;
+    if (frame_count % 6 == 0) {
+        ix = (ix + 1) % anim->len;
+    }
+    // set new frame
+    spr->page = anim->start + ix;
 }

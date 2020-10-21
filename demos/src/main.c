@@ -18,31 +18,17 @@ int main()
     SpriteAtlas atlas = dusk_load_atlas("atlas0");
     dusk_sprites_upload_atlas(&atlas);
 
-    // Sprite* eggcat = &sprites[0];
-    // eggcat->x = SCREEN_WIDTH / 2 - 8;
-    // eggcat->y = SCREEN_HEIGHT / 2 - 8;
-    // eggcat->
+    // make eggcat sprite
     Sprite* eggcat = dusk_sprites_make(0, 16, 16, (Sprite) {
         .x = SCREEN_WIDTH / 2 - 8,
         .y = SCREEN_HEIGHT / 2 - 8,
         .tid = 8,
         .page = 0,
-        .page_ct = 4,        
     });
-
-    // int px = SCREEN_WIDTH / 2 - 8, py = SCREEN_HEIGHT / 2 - 8;
-    // u32 bpp = 8;
-    // u32 tid = 8, pb = 0;
-    // OBJ_ATTR *player = &obj_buffer[0];
-    // int player_attr0 = ATTR0_SQUARE | ATTR0_8BPP;
-    // obj_set_attr(player,
-    //              player_attr0,             // Square, regular sprite
-    //              ATTR1_SIZE_16,            // 16x16p,
-    //              ATTR2_PALBANK(pb) | tid * bpp); // palbank 0, tile 0
+    Anim walk = (Anim) {.start = 0, .len = 4};
 
     const int SHIFT_SPEED = 1;
     BackgroundPoint bg_shift = {128, 248};
-    int player_frame = 0;
     while (TRUE)
     {
         while(KEY_DOWN_NOW(KEY_START)); // pause with start
@@ -50,33 +36,23 @@ int main()
 
         // input
         key_poll();
-        int ymove = key_tri_vert();
-        int xmove = key_tri_horz();
-        bg_shift.y += ymove * SHIFT_SPEED;
-        bg_shift.x += xmove * SHIFT_SPEED;
+        int y_move = key_tri_vert();
+        int x_move = key_tri_horz();
+        bool moving = (y_move != 0 || x_move != 0);
 
-        dusk_sprites_update();
+        // update bg scroll
+        bg_shift.y += y_move * SHIFT_SPEED;
+        bg_shift.x += x_move * SHIFT_SPEED;
 
-        // bool moving = (ymove != 0 || xmove != 0);
-        // if (moving)
-        // {
-        //     // when running
-        //     if (frames % 6 == 0)
-        //     {
-        //         player_frame = (player_frame + 1) % 4;
-        //     }
-        // }
-        // else
-        // {
-        //     player_frame = 0;
-        // }
-
-        // obj_set_attr(player, player_attr0, ATTR1_SIZE_16, ATTR2_PALBANK(pb) | ((tid + player_frame) * bpp));
-
-        // obj_set_pos(player, px, py);
-        // oam_copy(oam_mem, obj_buffer, 1); // only need to update one
+        if (moving)
+            dusk_sprites_anim_play(eggcat, &walk);
+        else
+            eggcat->page = 0;
 
         // update map position
         map_shift(map, bg_shift);
+
+        // update sprites
+        dusk_sprites_update();
     }
 }

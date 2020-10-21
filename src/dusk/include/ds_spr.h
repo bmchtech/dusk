@@ -18,8 +18,12 @@ typedef struct Sprite {
     // u16 w, h;
     u16 tid;
     u8 page;
-    u8 page_ct;
 } Sprite;
+
+typedef struct Anim {
+    u8 start;
+    u8 len;
+} Anim;
 
 extern Sprite sprites[NUM_SPRITES];
 
@@ -28,3 +32,4 @@ void dusk_sprites_upload_atlas(SpriteAtlas* atlas);
 Sprite* dusk_sprites_make(int index, u8 width, u8 height, Sprite spr);
 void dusk_sprites_sync(int index);
 void dusk_sprites_update();
+void dusk_sprites_anim_play(Sprite* spr, Anim* anim);
