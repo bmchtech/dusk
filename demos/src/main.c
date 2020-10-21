@@ -8,12 +8,13 @@ int main()
 {
     dusk_init();
 
+    // set up background
     Map map = dusk_load_map("fountain");
     map_init_registers();
     map_set_onscreen(map);
 
+    // load sprite atlas
     dusk_sprites_init();
-
     SpriteAtlas atlas = dusk_load_atlas("atlas0");
     dusk_sprites_upload_atlas(&atlas);
 
@@ -37,12 +38,12 @@ int main()
         vid_vsync();
         frames++;
 
+        // input
         key_poll();
         int ymove = key_tri_vert();
         int xmove = key_tri_horz();
         bg_shift.y += ymove * SHIFT_SPEED;
         bg_shift.x += xmove * SHIFT_SPEED;
-        map_shift(map, bg_shift);
 
         bool moving = (ymove != 0 || xmove != 0);
         if (moving)
@@ -62,5 +63,8 @@ int main()
 
         obj_set_pos(player, px, py);
         oam_copy(oam_mem, obj_buffer, 1); // only need to update one
+
+        // update map position
+        map_shift(map, bg_shift);
     }
 }
