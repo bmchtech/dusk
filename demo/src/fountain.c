@@ -16,7 +16,7 @@ void start() {
 
     // load sprite atlas
     dusk_sprites_init();
-    SpriteAtlas atlas = dusk_load_atlas("atlas0");
+    SpriteAtlas atlas = dusk_load_atlas("atlas0s0");
     dusk_sprites_upload_atlas(&atlas);
 
     // make eggcat sprite
