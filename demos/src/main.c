@@ -30,8 +30,6 @@ int main() {
     const int SHIFT_SPEED = 1;
     BackgroundPoint bg_shift = {128, 248};
     while (TRUE) {
-        while (KEY_DOWN_NOW(KEY_START))
-            ; // pause with start
         dusk_frame();
 
         // input
