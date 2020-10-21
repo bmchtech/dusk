@@ -18,6 +18,17 @@ int main()
     SpriteAtlas atlas = dusk_load_atlas("atlas0");
     dusk_sprites_upload_atlas(&atlas);
 
+    // Sprite* eggcat = &sprites[0];
+    // eggcat->x = SCREEN_WIDTH / 2 - 8;
+    // eggcat->y = SCREEN_HEIGHT / 2 - 8;
+    // eggcat->
+    Sprite* eggcat = dusk_sprites_make(0, 16, 16, (Sprite) {
+        .x = SCREEN_WIDTH / 2 - 8,
+        .y = SCREEN_HEIGHT / 2 - 8,
+        .tid = 8,
+        .frames = 4,        
+    });
+
     int px = SCREEN_WIDTH / 2 - 8, py = SCREEN_HEIGHT / 2 - 8;
     u32 bpp = 8;
     u32 tid = 8, pb = 0;

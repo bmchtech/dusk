@@ -4,6 +4,10 @@
 OBJ_ATTR obj_buffer[128];
 OBJ_AFFINE *obj_aff_buffer = (OBJ_AFFINE *)obj_buffer;
 
+Sprite sprites[NUM_SPRITES];
+
+#define BPP 8
+
 void dusk_sprites_init() {
     // initialize object buffer
     oam_init(obj_buffer, 128);
@@ -17,4 +21,77 @@ void dusk_sprites_upload_atlas(SpriteAtlas* atlas) {
     memcpy(&tile_mem[4][0], atlas->tiles, atlas->tile_sz);
     // object/sprite palette, in 8bpp stores 256 colors
     memcpy(&pal_obj_bank[0], atlas->pal, atlas->pal_sz);
+}
+
+Sprite* dusk_sprites_make(int index, u8 width, u8 height, Sprite spr) {
+    // spr.w = width;
+    // spr.h = height;
+
+    // automatically figure out size params
+    u16 shape = 0;
+    if (height > width) {
+        shape = ATTR0_TALL;
+    } else if (width > height) {
+        shape = ATTR0_WIDE;
+    } else if (width == height) {
+        shape = ATTR0_SQUARE;
+    }
+    u16 size = 0;
+    if (shape == ATTR0_TALL) {
+        if (width == 8 && height == 16)
+            size = ATTR1_SIZE_8x16;
+        if (width == 8 && height == 32)
+            size = ATTR1_SIZE_8x32;
+        if (width == 16 && height == 32)
+            size = ATTR1_SIZE_16x32;
+        if (width == 16 && height == 64)
+            size = ATTR1_SIZE_32x64;
+    }
+    if (shape == ATTR0_WIDE) {
+        if (width == 16 && height == 8)
+            size = ATTR1_SIZE_16x8;
+        if (width == 32 && height == 8)
+            size = ATTR1_SIZE_32x8;
+        if (width == 32 && height == 16)
+            size = ATTR1_SIZE_32x16;
+        if (width == 64 && height == 32)
+            size = ATTR1_SIZE_64x32;
+    }
+    if (shape == ATTR0_SQUARE) {
+        if (width == 8 && height == 8)
+            size = ATTR1_SIZE_8x8;
+        if (width == 16 && height == 16)
+            size = ATTR1_SIZE_16x16;
+        if (width == 32 && height == 32)
+            size = ATTR1_SIZE_32x32;
+        if (width == 64 && height == 64)
+            size = ATTR1_SIZE_64x64;
+    }
+
+    // set main attributes
+    obj_set_attr(index, shape | ATTR0_8BPP, size, spr.tid * BPP);
+
+    // save sprite metadata
+    sprites[index] = spr;
+
+    // sync other attributes
+    dusk_sprites_sync(index);
+    
+    // return pointer to this sprite
+    return &sprites[index];
+}
+
+inline void dusk_sprites_sync(int i) {
+    // position
+    obj_set_pos(&obj_buffer[i], sprites[i].x, sprites[i].y);
+}
+
+void dusk_sprites_update() {
+    // sync all sprites
+    for (int i = 0; i < NUM_SPRITES; i++) {
+        dusk_sprites_sync(i);
+    }
+
+    // upload to gpu memory
+    oam_copy(oam_mem, obj_buffer, NUM_SPRITES);
 }
