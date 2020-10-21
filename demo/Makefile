@@ -1,6 +1,6 @@
 PATH := $(DEVKITARM)/bin:$(PATH)
 
-TITLE		:= Fountain
+TITLE		:= DuskDemo
 
 #  Project settings
 
