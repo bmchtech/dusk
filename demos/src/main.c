@@ -22,21 +22,22 @@ int main()
 
     dusk_sprites_init();
 
-    u32 eggcat_img_len;
-    const u32 *eggcat_img = gbfs_get_obj(gbfs_dat, "egg.img.bin", &eggcat_img_len);
-    u32 eggcat_pal_len;
-    const u32 *eggcat_pal = gbfs_get_obj(gbfs_dat, "egg.pal.bin", &eggcat_pal_len);
-    memcpy(&tile_mem[4][0], eggcat_img, eggcat_img_len);
-    memcpy(&pal_obj_bank[0], eggcat_pal, eggcat_pal_len);
+    u32 atlas0_img_len;
+    const u32 *atlas0_img = gbfs_get_obj(gbfs_dat, "atlas0.img.bin", &atlas0_img_len);
+    u32 atlas0_pal_len;
+    const u32 *atlas0_pal = gbfs_get_obj(gbfs_dat, "atlas0.pal.bin", &atlas0_pal_len);
+    memcpy(&tile_mem[4][0], atlas0_img, atlas0_img_len);
+    memcpy(&pal_obj_bank[0], atlas0_pal, atlas0_pal_len);
 
     int px = SCREEN_WIDTH / 2 - 8, py = SCREEN_HEIGHT / 2 - 8;
-    u32 tid = 0, pb = 0;
+    u32 bpp = 8;
+    u32 tid = 8, pb = 0;
     OBJ_ATTR *player = &obj_buffer[0];
     int player_attr0 = ATTR0_SQUARE | ATTR0_8BPP;
     obj_set_attr(player,
                  player_attr0,             // Square, regular sprite
                  ATTR1_SIZE_16,            // 16x16p,
-                 ATTR2_PALBANK(pb) | tid); // palbank 0, tile 0
+                 ATTR2_PALBANK(pb) | tid * bpp); // palbank 0, tile 0
 
     const int SHIFT_SPEED = 1;
     BackgroundPoint bg_shift = {128, 248};
@@ -69,7 +70,7 @@ int main()
             player_frame = 0;
         }
 
-        obj_set_attr(player, player_attr0, ATTR1_SIZE_16, ATTR2_PALBANK(pb) | player_frame * 8);
+        obj_set_attr(player, player_attr0, ATTR1_SIZE_16, ATTR2_PALBANK(pb) | ((tid + player_frame) * bpp));
 
         obj_set_pos(player, px, py);
         oam_copy(oam_mem, obj_buffer, 1); // only need to update one
