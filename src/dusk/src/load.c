@@ -12,10 +12,10 @@ void dusk_load_init() {
 
 SpriteAtlas dusk_load_atlas(char* name) {
     SpriteAtlas atlas;
-    char tiles_name[GBFS_ENTRY_SIZE + 10];
+    char tiles_name[GBFS_ENTRY_SIZE];
     strcpy(tiles_name, name);
     strcat(tiles_name, ".img.bin");
-    char pal_name[GBFS_ENTRY_SIZE + 10];
+    char pal_name[GBFS_ENTRY_SIZE];
     strcpy(pal_name, name);
     strcat(pal_name, ".pal.bin");
 
@@ -23,4 +23,14 @@ SpriteAtlas dusk_load_atlas(char* name) {
     atlas.pal = gbfs_get_obj(gbfs_dat, pal_name, &atlas.pal_sz);
 
     return atlas;
+}
+
+Map dusk_load_map(char* name) {
+    char ass_name[GBFS_ENTRY_SIZE];
+    strcpy(ass_name, name);
+    strcat(ass_name, ".bin");
+
+    u32 map_data_sz = 0;
+    const u16 *map_data = gbfs_get_obj(gbfs_dat, ass_name, &map_data_sz);
+    return map_load_from_rom(map_data);
 }

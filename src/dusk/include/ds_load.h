@@ -5,6 +5,7 @@
 #pragma once
 
 #include "contrib/gbfs.h"
+#include "contrib/gbamap.h"
 
 extern const GBFS_FILE *gbfs_dat;
 
@@ -16,4 +17,7 @@ typedef struct SpriteAtlas {
 } SpriteAtlas;
 
 void dusk_load_init(); // initialize loader
-SpriteAtlas dusk_load_atlas(char* filename);
+
+// - CONTENT LOADERS: pass filename without extension
+SpriteAtlas dusk_load_atlas(char* name);
+Map dusk_load_map(char* name);

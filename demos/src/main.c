@@ -4,20 +4,12 @@
 #include "contrib/gbamap.h"
 #include "dusk.h"
 
-Map load_map()
-{
-    u32 map_data_sz = 0;
-    const u16 *map_data = gbfs_get_obj(gbfs_dat, "fountain.bin", &map_data_sz);
-
-    return map_load_from_rom(map_data);
-}
-
 int main()
 {
     dusk_init();
 
+    Map map = dusk_load_map("fountain");
     map_init_registers();
-    Map map = load_map();
     map_set_onscreen(map);
 
     dusk_sprites_init();

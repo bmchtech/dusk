@@ -3,7 +3,7 @@
 
 #include "gbamap_object.h"
 
-typedef struct {
+typedef struct Map {
     unsigned short sizeFlag,
         paletteLength,
         tileSetLength,
@@ -21,7 +21,7 @@ typedef struct {
     const unsigned short *tileMapLayers[3];
 } Map;
 
-typedef struct {
+typedef struct BackgroundPoint {
     short x, y;
 } __attribute__((aligned(4))) BackgroundPoint;
 
