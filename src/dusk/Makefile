@@ -2,6 +2,9 @@
 # Makefile for libdusk.
 #
 
+LIBNAME		:= dusk
+VERSION		:= 0.1.0
+
 #---------------------------------------------------------------------------------
 .SUFFIXES:
 #---------------------------------------------------------------------------------
@@ -26,8 +29,6 @@ IARCH		:= -mthumb-interwork -marm
 
 bTEMPS		:= 0	# Save gcc temporaries (.i and .s files)
 bDEBUG2		:= 0	# Generate debug info (bDEBUG2? Not a full DEBUG flag. Yet)
-
-VERSION		:=	0.1.0
 
 #---------------------------------------------------------------------------------
 # Options for code generation
@@ -67,7 +68,7 @@ export PATH		:=	$(DEVKITARM)/bin:$(PATH)
 
 ifneq ($(BUILD),$(notdir $(CURDIR)))
 
-export TARGET	:=	$(CURDIR)/lib/libgbaMap.a
+export TARGET	:=	$(CURDIR)/lib/lib$(LIBNAME).a
 
 export VPATH	:=	$(foreach dir,$(DATADIRS),$(CURDIR)/$(dir)) $(foreach dir,$(SRCDIRS),$(CURDIR)/$(dir))
 
@@ -91,11 +92,12 @@ $(BUILD):
 clean:
 	@echo clean ...
 	@rm -fr $(BUILD)
+	@rm -fr $(TARGET)
 
 install:
-	@mkdir -p $(DESTDIR)$(DEVKITPRO)/gbaMap/lib
-	@cp -rv include $(DESTDIR)$(DEVKITPRO)/gbaMap/include
-	@cp -v lib/libgbaMap.a $(DESTDIR)$(DEVKITPRO)/gbaMap/lib/
+	@mkdir -p $(DESTDIR)$(DEVKITPRO)/$(LIBNAME)/lib
+	@cp -rv include $(DESTDIR)$(DEVKITPRO)/$(LIBNAME)/include
+	@cp -v lib/lib$(LIBNAME).a $(DESTDIR)$(DEVKITPRO)/$(LIBNAME)/lib/
 
 #---------------------------------------------------------------------------------
 
