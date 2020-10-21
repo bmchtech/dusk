@@ -18,8 +18,8 @@ endif
 include $(DEVKITARM)/gba_rules
 
 BUILD		:=	build
-SRCDIRS		:=	src
-INCDIRS		:=	include
+SRCDIRS		:=	src src/contrib
+INCDIRS		:=	include include/contrib
 
 DATESTRING	:=	$(shell date +%Y)$(shell date +%m)$(shell date +%d)
 

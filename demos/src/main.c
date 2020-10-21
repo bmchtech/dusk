@@ -1,7 +1,7 @@
 #include <string.h>
 #include <tonc.h>
-#include "gbfs.h"
-#include "gbamap.h"
+#include "contrib/gbfs.h"
+#include "contrib/gbamap.h"
 
 OBJ_ATTR obj_buffer[128];
 OBJ_AFFINE *obj_aff_buffer = (OBJ_AFFINE *)obj_buffer;

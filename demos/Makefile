@@ -5,6 +5,7 @@ PATH := $(DEVKITARM)/bin:$(PATH)
 NAME       := Fountain
 SOURCE_DIR := src
 LIB_DIR    := lib
+DUSK_DIR   := ../src/dusk
 DATA_DIR   := asset
 SPECS      := -specs=gba.specs
 
@@ -18,8 +19,8 @@ OBJCOPY	:= $(CROSS)objcopy
 
 ARCH	:= -mthumb-interwork -mthumb
 
-INCFLAGS := -I$(DEVKITPRO)/libtonc/include -I$(LIB_DIR)/gbfs/include -I$(LIB_DIR)/gbaMap/include
-LIBFLAGS := -L$(DEVKITPRO)/libtonc/lib -ltonc -L$(LIB_DIR)/gbfs/lib -lgbfs -L$(LIB_DIR)/gbaMap/lib -lgbaMap
+INCFLAGS := -I$(DEVKITPRO)/libtonc/include -I$(DUSK_DIR)/include
+LIBFLAGS := -L$(DEVKITPRO)/libtonc/lib -ltonc -L$(DUSK_DIR)/lib -ldusk
 ASFLAGS	:= -mthumb-interwork
 CFLAGS	:= $(ARCH) -O2 -Wall -fno-strict-aliasing $(INCFLAGS) $(LIBFLAGS)
 LDFLAGS	:= $(ARCH) $(SPECS) $(LIBFLAGS)
@@ -40,8 +41,7 @@ build: libs $(NAME).gba
 no-content: libs $(NAME)-no_content.gba
 
 libs:
-	cd lib/gbaMap && make 
-	cd lib/gbfs && make
+	cd $(DUSK_DIR) && make
 
 assets:
 	cd asset/build && make
@@ -73,6 +73,4 @@ clean:
 	@rm -fv *.gbfs
 	@rm -rf $(APP_OBJECTS)
 	@rm -rf $(APP_MAIN_OBJECT)
-	cd lib/gbaMap && make clean
-	cd lib/gbfs && make clean
-	cd asset/build && make clean
+	cd $(DUSK_DIR) && make clean
