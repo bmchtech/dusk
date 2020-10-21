@@ -6,6 +6,7 @@
 DUsK, a library for gba dev
 
 ## features
++ simple, intuitive C API
 + library integration
     + built in support for TONC, GBFS
 + graphics
