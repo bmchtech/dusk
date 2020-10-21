@@ -3,8 +3,10 @@
 IMGS_DIR := ../img
 MAPS_DIR := ../map
 
-IMGS_SRC := atlas0.png
-IMGS_BIN := $(notdir $(IMGS_SRC:%.png=%.img.bin))
+ATLS_SRC := $(shell find $(IMGS_DIR) -mindepth 1 -type d)
+ATLS_OUT := $(patsubst %,atlas%s,$(notdir $(ATLS_SRC)))
+ATLS_PNG := $(ATLS_OUT:%s=%s0.png)
+IMGS_BIN := $(notdir $(ATLS_PNG:%.png=%.img.bin))
 MAPS_SRC := $(shell find $(MAPS_DIR) -name '*.tmx')
 MAPS_BIN := $(notdir $(MAPS_SRC:%.tmx=%.bin))
 
@@ -18,8 +20,14 @@ clean:
 $(MAPS_BIN): $(MAPS_SRC)
 	Tiled2GBA -b $< $@
 
-$(IMGS_BIN): $(IMGS_SRC)
-	grit $< -gt -p -g -gB 8 -gu32 -pu32 -Mh 2 -Mw 2 -ftb -o $@
+$(IMGS_BIN): $(ATLS_PNG)
+	grit "$<" -gt -p -g -gB 8 -gu32 -pu32 -Mh 2 -Mw 2 -ftb -o "$@"
 
-atlas0.png:
-	crunch_gen atlas "$(IMGS_DIR)" -v -p -j -s256
+$(ATLS_PNG): $(ATLS_OUT)
+	@true
+
+$(ATLS_OUT): $(ATLS_SRC)
+	crunch_gen $@ "$<" -v -p -j -s256
+
+# debug:
+#     $(foreach var,$(.VARIABLES),$(info $(var) = $($(var))))
