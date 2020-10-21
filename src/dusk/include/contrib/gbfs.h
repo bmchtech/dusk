@@ -46,6 +46,8 @@ extern "C" {
 const char filename[(kbytes)*1024] __attribute__ ((aligned (16))) = \
   "PinEightGBFSSpace-" #filename "-" #kbytes ;
 
+#define GBFS_ENTRY_SIZE 24
+
 typedef struct GBFS_FILE
 {
   char magic[16];    /* "PinEightGBFS\r\n\032\n" */
@@ -57,7 +59,7 @@ typedef struct GBFS_FILE
 
 typedef struct GBFS_ENTRY
 {
-  char name[24];     /* filename, nul-padded */
+  char name[GBFS_ENTRY_SIZE];     /* filename, nul-padded */
   u32  len;          /* length of object in bytes */
   u32  data_offset;  /* in bytes from beginning of file */
 } GBFS_ENTRY;
