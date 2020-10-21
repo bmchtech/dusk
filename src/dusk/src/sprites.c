@@ -12,6 +12,7 @@ Sprite sprites[NUM_SPRITES];
 void dusk_sprites_init() {
     // initialize object buffer
     oam_init(obj_buffer, 128);
+    memset(sprites, 0, sizeof(Sprite) * NUM_SPRITES);
 
     // enable sprite display
     REG_DISPCNT |= DCNT_OBJ | DCNT_OBJ_1D;
