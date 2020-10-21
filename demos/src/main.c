@@ -1,6 +1,5 @@
 #include <string.h>
 #include <tonc.h>
-#include "contrib/gbfs.h"
 #include "contrib/gbamap.h"
 #include "dusk.h"
 
