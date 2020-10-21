@@ -23,8 +23,7 @@ int main()
     dusk_sprites_init();
 
     SpriteAtlas atlas = dusk_load_atlas("atlas0");
-    memcpy(&tile_mem[4][0], atlas.tiles, atlas.tile_sz);
-    memcpy(&pal_obj_bank[0], atlas.pal, atlas.pal_sz);
+    dusk_sprites_upload_atlas(&atlas);
 
     int px = SCREEN_WIDTH / 2 - 8, py = SCREEN_HEIGHT / 2 - 8;
     u32 bpp = 8;
