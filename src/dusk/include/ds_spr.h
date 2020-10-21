@@ -17,7 +17,8 @@ typedef struct Sprite {
     u16 x, y;
     // u16 w, h;
     u16 tid;
-    u8 frames;
+    u8 page;
+    u8 page_ct;
 } Sprite;
 
 extern Sprite sprites[NUM_SPRITES];

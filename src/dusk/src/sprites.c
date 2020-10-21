@@ -69,14 +69,14 @@ Sprite* dusk_sprites_make(int index, u8 width, u8 height, Sprite spr) {
     }
 
     // set main attributes
-    obj_set_attr(index, shape | ATTR0_8BPP, size, spr.tid * BPP);
+    obj_set_attr(&obj_buffer[index], shape | ATTR0_8BPP, size, spr.tid * BPP);
 
     // save sprite metadata
     sprites[index] = spr;
 
     // sync other attributes
     dusk_sprites_sync(index);
-    
+
     // return pointer to this sprite
     return &sprites[index];
 }
