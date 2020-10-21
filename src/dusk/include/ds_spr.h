@@ -11,7 +11,7 @@
 #define NUM_SPRITES 128
 #define NUM_AFFINE_SPRITES 32
 extern OBJ_ATTR obj_buffer[NUM_SPRITES];
-extern OBJ_AFFINE *obj_aff_buffer;
+extern OBJ_AFFINE* obj_aff_buffer;
 
 typedef struct Sprite {
     u16 x, y;

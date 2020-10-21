@@ -4,3 +4,4 @@ ColumnLimit: 120
 # Force pointers to the type
 DerivePointerAlignment: false
 PointerAlignment: Left
+SortIncludes: false

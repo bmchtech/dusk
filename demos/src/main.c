@@ -4,8 +4,7 @@
 #include "contrib/gbamap.h"
 #include "dusk.h"
 
-int main()
-{
+int main() {
     dusk_init();
 
     // set up background
@@ -19,19 +18,20 @@ int main()
     dusk_sprites_upload_atlas(&atlas);
 
     // make eggcat sprite
-    Sprite* eggcat = dusk_sprites_make(0, 16, 16, (Sprite) {
-        .x = SCREEN_WIDTH / 2 - 8,
-        .y = SCREEN_HEIGHT / 2 - 8,
-        .tid = 8,
-        .page = 0,
-    });
-    Anim walk = (Anim) {.start = 0, .len = 4};
+    Sprite* eggcat = dusk_sprites_make(0, 16, 16,
+        (Sprite){
+            .x = SCREEN_WIDTH / 2 - 8,
+            .y = SCREEN_HEIGHT / 2 - 8,
+            .tid = 8,
+            .page = 0,
+        });
+    Anim walk = (Anim){.start = 0, .len = 4};
 
     const int SHIFT_SPEED = 1;
     BackgroundPoint bg_shift = {128, 248};
-    while (TRUE)
-    {
-        while(KEY_DOWN_NOW(KEY_START)); // pause with start
+    while (TRUE) {
+        while (KEY_DOWN_NOW(KEY_START))
+            ; // pause with start
         dusk_frame();
 
         // input

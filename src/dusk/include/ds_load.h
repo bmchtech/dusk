@@ -7,7 +7,7 @@
 #include "contrib/gbfs.h"
 #include "contrib/gbamap.h"
 
-extern const GBFS_FILE *gbfs_dat;
+extern const GBFS_FILE* gbfs_dat;
 
 typedef struct SpriteAtlas {
     u32* tiles;
