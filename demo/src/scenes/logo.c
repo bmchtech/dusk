@@ -2,27 +2,46 @@
 #include "dusk.h"
 
 Sprite* logo;
+const int FADE_LENGTH = 60; // fade length in frames
+int start_frame;
+int fade_step;
 
 void logo_start() {
     dusk_init_graphics();
+
+    start_frame = frame_count;
 
     // load sprite atlas
     dusk_sprites_init();
     SpriteAtlas atlas = dusk_load_atlas("atlas_logo_0");
     dusk_sprites_upload_atlas(&atlas);
 
-    // make eggcat sprite
     logo = dusk_sprites_make(0, 64, 64,
-        (Sprite){
-            .x = SCREEN_WIDTH / 2 - 32,
-            .y = SCREEN_HEIGHT / 2 - 32,
-            .tid = 0,
-            .page = 0,
-        });
+                             (Sprite){
+                                 .x = SCREEN_WIDTH / 2 - 32,
+                                 .y = SCREEN_HEIGHT / 2 - 32,
+                                 .tid = 0,
+                             });
+
+    // enable blend on this object
+    OBJ_ATTR* logo_attr = &obj_buffer[0];
+    obj_set_attr(logo_attr, logo_attr->attr0 | ATTR0_BLEND, logo_attr->attr1, logo_attr->attr2);
+
+    // set up blending registers
+    REG_BLDCNT = BLD_OBJ | BLD_BLACK;
+    REG_BLDY = BLDY_BUILD(16);
+
+    fade_step = FADE_LENGTH / 16;
 }
 
 void logo_update() {
     dusk_frame();
+
+    int progress = (frame_count - start_frame);
+    if (progress <= FADE_LENGTH) {
+        int fade = clamp(progress / fade_step, 0, 16);
+        REG_BLDY = BLDY_BUILD(16 - fade);
+    }
 
     // update sprites
     dusk_sprites_update();

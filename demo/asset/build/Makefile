@@ -10,6 +10,8 @@ IMGS_BIN := $(notdir $(ATLS_PNG:%.png=%.img.bin))
 MAPS_SRC := $(shell find $(MAPS_DIR) -name '*.tmx')
 MAPS_BIN := $(notdir $(MAPS_SRC:%.tmx=%.bin))
 
+GRIT_FLAGS := -gt -p -g -gB 8 -gu32 -pu32 -ftb
+
 all: $(MAPS_BIN) $(IMGS_BIN)
 
 clean:
@@ -24,7 +26,13 @@ $(MAPS_BIN): $(MAPS_SRC)
 # 	grit "$<" -gt -p -g -gB 8 -gu32 -pu32 -Mh 2 -Mw 2 -ftb -o "$@"
 
 %.img.bin: %.png
-	grit "$<" -gt -p -g -gB 8 -gu32 -pu32 -Mh 2 -Mw 2 -ftb -o "$@"
+	grit "$<" $(GRIT_FLAGS) -o "$@"
+
+atlas_chars_0.img.bin: atlas_chars_0.png
+	grit "$<" $(GRIT_FLAGS) -Mh 2 -Mw 2 -o "$@"
+
+atlas_logo_0.img.bin: atlas_logo_0.png
+	grit "$<" $(GRIT_FLAGS) -Mh 8 -Mw 8 -o "$@"
 
 $(ATLS_PNG): $(ATLS_OUT)
 	@true
