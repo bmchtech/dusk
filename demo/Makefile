@@ -21,8 +21,8 @@ OBJCOPY	:= $(CROSS)objcopy
 
 ARCH	:= -mthumb-interwork -marm
 
-INCFLAGS := 
-LIBFLAGS := 
+INCFLAGS := -I$(DEVKITPRO)/libgba/include
+LIBFLAGS := -lmm -L$(DEVKITPRO)/libgba/lib -lgba
 ASFLAGS	:= -mthumb-interwork
 CFLAGS	:= $(ARCH) -Wall $(INCFLAGS) $(LIBFLAGS)
 LDFLAGS	:= $(ARCH) $(SPECS) $(LIBFLAGS)
