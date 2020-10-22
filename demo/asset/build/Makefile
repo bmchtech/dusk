@@ -4,8 +4,8 @@ IMGS_DIR := ../img
 MAPS_DIR := ../map
 
 ATLS_SRC := $(shell find $(IMGS_DIR) -mindepth 1 -type d)
-ATLS_OUT := $(patsubst %,atlas%s,$(notdir $(ATLS_SRC)))
-ATLS_PNG := $(ATLS_OUT:%s=%s0.png)
+ATLS_OUT := $(patsubst %,atlas_%_,$(notdir $(ATLS_SRC)))
+ATLS_PNG := $(ATLS_OUT:%_=%_0.png)
 IMGS_BIN := $(notdir $(ATLS_PNG:%.png=%.img.bin))
 MAPS_SRC := $(shell find $(MAPS_DIR) -name '*.tmx')
 MAPS_BIN := $(notdir $(MAPS_SRC:%.tmx=%.bin))
