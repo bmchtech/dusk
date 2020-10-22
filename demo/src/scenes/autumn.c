@@ -8,11 +8,11 @@ void autumn_start() {
 
     // load sprite atlas
     dusk_sprites_init();
-    SpriteAtlas atlas = dusk_load_atlas("atlas_part");
+    SpriteAtlas atlas = dusk_load_atlas("atl_part");
     dusk_sprites_upload_atlas(&atlas);
 
     // load atlas layout
-    atlas_layout = dusk_load_atlas_layout("atlas_part");
+    atlas_layout = dusk_load_atlas_layout("atl_part");
 
     // get an entry and make a sprite
     // SpriteAtlasEntry* leaf_entry = dusk_load_atlas_entry(&atlas_layout, "lvs10");
