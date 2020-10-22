@@ -24,7 +24,7 @@ void autumn_start() {
     tte_write("bap!\n");
 
     // load sprite atlas
-    dusk_sprites_init();
+    // dusk_sprites_init();
     REG_DISPCNT = DCNT_MODE0 | DCNT_BG1 | DCNT_OBJ | DCNT_OBJ_1D;
     SpriteAtlas atlas = dusk_load_atlas("atl_part");
     dusk_sprites_upload_atlas(&atlas);
