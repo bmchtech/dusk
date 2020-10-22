@@ -19,8 +19,9 @@ typedef struct SpriteAtlas {
 
 // represents a single entry in the sprite atlas.
 // note that names are limited to just 5 chars and a NULL terminator.
+#define ATLAS_ENTRY_LEN 6
 typedef struct SpriteAtlasEntry {
-    char name[6];
+    char name[ATLAS_ENTRY_LEN];
     u8 x;
     u8 y;
     u8 w;
@@ -40,6 +41,7 @@ void dusk_load_init(); // initialize loader
 
 SpriteAtlas dusk_load_atlas(char* name);
 SpriteAtlasLayout dusk_load_atlas_layout(char* name);
+SpriteAtlasEntry* dusk_load_atlas_layout_entry(SpriteAtlasLayout* layout, char* entry_name);
 void dusk_free_atlas_layout(SpriteAtlasLayout* layout);
 
 Map dusk_load_map(char* name);

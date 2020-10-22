@@ -59,13 +59,11 @@ SpriteAtlasLayout dusk_load_atlas_layout(char* name) {
     pos += 2;
 
     // now read blocks
-    for (int i = 0; i < layout.num_entries; i++)
-    {
+    for (int i = 0; i < layout.num_entries; i++) {
         // save the entry name
         char last = data[pos];
         int name_len = 0;
-        while (last != 0)
-        {
+        while (last != 0) {
             layout.entries[i].name[name_len] = last;
             name_len++;
             last = data[pos + name_len];
@@ -85,6 +83,16 @@ SpriteAtlasLayout dusk_load_atlas_layout(char* name) {
     }
 
     return layout;
+}
+
+SpriteAtlasEntry* dusk_load_atlas_layout_entry(SpriteAtlasLayout* layout, char* entry_name) {
+    for (int i = 0; i < layout->num_entries; i++) {
+        SpriteAtlasEntry *entry = &layout->entries[i];
+        if (strncmp(entry_name, entry->name, ATLAS_ENTRY_LEN) == 0) {
+            return entry;
+        }
+    }
+    return NULL;
 }
 
 void dusk_free_atlas_layout(SpriteAtlasLayout* layout) {
