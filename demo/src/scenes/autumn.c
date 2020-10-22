@@ -6,7 +6,7 @@ SpriteAtlasLayout atlas_layout;
 void autumn_start() {
     dusk_init_graphics();
 
-    REG_DISPCNT = DCNT_MODE0 | DCNT_BG1;
+    REG_DISPCNT |= DCNT_BG1; // enable bg1
 
     // --- (1) Base TTE init for tilemaps ---
     tte_init_se(1,                      // Background number (BG 1)
@@ -36,7 +36,8 @@ void autumn_start() {
     tte_write(tst);
 
     // get an entry and make a sprite
-    SpriteAtlasEntry* leaf_entry = dusk_load_atlas_entry(&atlas_layout, "lvs10");
+    // SpriteAtlasEntry* leaf_entry = dusk_load_atlas_entry(&atlas_layout, "lvs10");
+    SpriteAtlasEntry* leaf_entry = dusk_load_atlas_entry(&atlas_layout, "lvs5");
     // u16 leaf_tid = leaf_entry->x / 8;
     u16 leaf_tid = 1;
     Sprite* leaf = dusk_sprites_make(0, leaf_entry->w, leaf_entry->h,
