@@ -27,9 +27,9 @@ typedef struct Anim {
 
 extern Sprite sprites[NUM_SPRITES];
 
-void dusk_sprites_init();
-void dusk_sprites_upload_atlas(SpriteAtlas* atlas);
-Sprite* dusk_sprites_make(int index, u8 width, u8 height, Sprite spr);
-void dusk_sprites_sync(int index);
-void dusk_sprites_update();
-void dusk_sprites_anim_play(Sprite* spr, Anim* anim);
+void dusk_sprites_init();                           // initialize sprite and OAM memory
+void dusk_sprites_upload_atlas(SpriteAtlas* atlas); // upload a sprite atlas to the sprite tiles and palettes
+Sprite* dusk_sprites_make(int index, u8 width, u8 height, Sprite spr); // create a sprite at index
+void dusk_sprites_sync(int index);                                     // synchronize sprite objects to OAM format
+void dusk_sprites_update();                                            // upload object data to OAM
+void dusk_sprites_anim_play(Sprite* spr, Anim* anim);                  // play frame animation on sprite
