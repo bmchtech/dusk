@@ -13,6 +13,16 @@ void autumn_start() {
 
     // load atlas layout
     atlas_layout = dusk_load_atlas_layout("atlas_part");
+
+    // get an entry and make a sprite
+    SpriteAtlasEntry* leaf_entry = dusk_load_atlas_layout_entry(&atlas_layout, "lvs10");
+    u16 leaf_tid = leaf_entry->x / 8;
+    Sprite* leaf = dusk_sprites_make(0, leaf_entry->w, leaf_entry->h,
+        (Sprite){
+            .x = SCREEN_WIDTH / 2 - 4,
+            .y = SCREEN_HEIGHT / 2 - 4,
+            .tid = leaf_tid,
+        });
 }
 
 void autumn_update() {
@@ -22,9 +32,7 @@ void autumn_update() {
     dusk_sprites_update();
 }
 
-void autumn_end() {
-    dusk_free_atlas_layout(&atlas_layout);
-}
+void autumn_end() { dusk_free_atlas_layout(&atlas_layout); }
 
 Scene autumn_scene = {
     .start = autumn_start,
