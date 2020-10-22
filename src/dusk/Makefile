@@ -30,7 +30,7 @@ RARCH		:= -mthumb-interwork -mthumb
 IARCH		:= -mthumb-interwork -marm
 
 bTEMPS		:= 0	# Save gcc temporaries (.i and .s files)
-bDEBUG2		:= 0	# Generate debug info (bDEBUG2? Not a full DEBUG flag. Yet)
+DEBUG		:= 0	# Generate debug info
 
 #---------------------------------------------------------------------------------
 # Options for code generation
@@ -57,7 +57,7 @@ endif
 
 # --- Debug info ? ---
 
-ifeq ($(strip $(bDEBUG2)), 1)
+ifeq ($(strip $(DEBUG)), 1)
 	CFLAGS	+= -g
 	LDFLAGS	+= -g
 endif
