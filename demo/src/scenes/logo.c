@@ -47,7 +47,10 @@ void logo_update() {
     dusk_sprites_update();
 }
 
-void logo_end() {}
+void logo_end() {
+    // clear blending registers
+    REG_BLDCNT = BLD_OFF;
+}
 
 Scene logo_scene = {
     .start = logo_start,
