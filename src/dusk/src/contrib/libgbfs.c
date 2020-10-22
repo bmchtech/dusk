@@ -114,7 +114,11 @@ const void *gbfs_get_obj(const GBFS_FILE *file,
   size_t n_entries = file->dir_nmemb;
   const GBFS_ENTRY *here;
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-truncation"
   strncpy(key, name, 24);
+#pragma GCC diagnostic pop
 
   here = bsearch(key, dirbase,
                  n_entries, sizeof(GBFS_ENTRY),
@@ -142,7 +146,10 @@ const void *gbfs_get_nth_obj(const GBFS_FILE *file,
 
   if(name)
   {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-truncation"
     strncpy(name, here->name, 24);
+#pragma GCC diagnostic pop
     name[24] = 0;
   }
 
