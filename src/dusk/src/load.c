@@ -41,7 +41,7 @@ SpriteAtlasLayout dusk_load_atlas_layout(char* name) {
     strcpy(file_name, name);
     strcat(file_name, "_.sht.bin");
 
-    u32 data_sz;
+    u32 data_sz = 0;
     u8* data = gbfs_get_obj(gbfs_dat, file_name, &data_sz);
 
     int pos = 0;
