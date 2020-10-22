@@ -21,10 +21,10 @@ OBJCOPY	:= $(CROSS)objcopy
 
 ARCH	:= -mthumb-interwork -mthumb
 
-INCFLAGS := -I$(DUSK_DIR)/include -I$(DEVKITPRO)/libtonc/include
-LIBFLAGS := -L$(DUSK_DIR)/lib -ldusk -L$(DEVKITPRO)/libtonc/lib -ltonc
+INCFLAGS := 
+LIBFLAGS := 
 ASFLAGS	:= -mthumb-interwork
-CFLAGS	:= $(ARCH) -Wall -fno-strict-aliasing -mcpu=arm7tdmi -mtune=arm7tdmi $(INCFLAGS) $(LIBFLAGS)
+CFLAGS	:= $(ARCH) -Wall $(INCFLAGS) $(LIBFLAGS)
 LDFLAGS	:= $(ARCH) $(SPECS) $(LIBFLAGS)
 
 DUSK_MKFLAGS :=
@@ -34,7 +34,7 @@ ifeq ($(DEBUG),1)
 	DUSK_MKFLAGS += DEBUG=1
 else
 	# non-debug
-	CFLAGS += -O2 -fomit-frame-pointer -ffast-math
+	CFLAGS += -O2
 endif
 
 .PHONY : build clean
