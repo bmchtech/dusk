@@ -24,8 +24,16 @@ ARCH	:= -mthumb-interwork -mthumb
 INCFLAGS := -I$(DUSK_DIR)/include -I$(DEVKITPRO)/libtonc/include
 LIBFLAGS := -L$(DUSK_DIR)/lib -ldusk -L$(DEVKITPRO)/libtonc/lib -ltonc
 ASFLAGS	:= -mthumb-interwork
-CFLAGS	:= $(ARCH) -O2 -Wall -fno-strict-aliasing $(INCFLAGS) $(LIBFLAGS)
+CFLAGS	:= $(ARCH) -Wall -fno-strict-aliasing -mcpu=arm7tdmi -mtune=arm7tdmi $(INCFLAGS) $(LIBFLAGS)
 LDFLAGS	:= $(ARCH) $(SPECS) $(LIBFLAGS)
+
+
+ifeq ($(DEBUG),1)
+	CFLAGS += -O2 -g
+else
+	# non-debug
+	CFLAGS += -O2 -fomit-frame-pointer -ffast-math
+endif
 
 .PHONY : build clean
 
@@ -76,3 +84,4 @@ clean:
 	@rm -rf $(APP_OBJECTS)
 	@rm -rf $(APP_MAIN_OBJECT)
 	cd $(DUSK_DIR) && make clean
+	cd asset/build && make clean
