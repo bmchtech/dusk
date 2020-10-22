@@ -40,8 +40,8 @@ void dusk_load_init(); // initialize loader
 // - CONTENT LOADERS: pass filename without extension
 
 SpriteAtlas dusk_load_atlas(char* name);
-SpriteAtlasLayout dusk_load_atlas_layout(char* name);
-SpriteAtlasEntry* dusk_load_atlas_layout_entry(SpriteAtlasLayout* layout, char* entry_name);
+SpriteAtlasLayout dusk_load_atlas_layout(const char* name);
+SpriteAtlasEntry* dusk_load_atlas_entry(SpriteAtlasLayout* layout, const char* entry_name);
 void dusk_free_atlas_layout(SpriteAtlasLayout* layout);
 
 Map dusk_load_map(char* name);

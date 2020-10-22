@@ -35,7 +35,7 @@ void seek_until_null(u8* data, int* pos) {
     }
 }
 
-SpriteAtlasLayout dusk_load_atlas_layout(char* name) {
+SpriteAtlasLayout dusk_load_atlas_layout(const char* name) {
     SpriteAtlasLayout layout;
     char file_name[GBFS_ENTRY_SIZE];
     strcpy(file_name, name);
@@ -85,7 +85,7 @@ SpriteAtlasLayout dusk_load_atlas_layout(char* name) {
     return layout;
 }
 
-SpriteAtlasEntry* dusk_load_atlas_layout_entry(SpriteAtlasLayout* layout, char* entry_name) {
+SpriteAtlasEntry* dusk_load_atlas_entry(SpriteAtlasLayout* layout, const char* entry_name) {
     for (int i = 0; i < layout->num_entries; i++) {
         SpriteAtlasEntry *entry = &layout->entries[i];
         if (strncmp(entry_name, entry->name, ATLAS_ENTRY_LEN) == 0) {
