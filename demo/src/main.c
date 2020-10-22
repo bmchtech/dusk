@@ -5,11 +5,15 @@ char beef(char* g) {
 }
 
 int main() {
-    char* str_a = "cheese flakes";
-    char* str_b = "applesauce";
-    char* str_c = "cupcake";
+    char* str_a = "apples";
+    char* str_b = "beans";
+    char* str_c = "cakes";
 
-    char a = beef(str_a); // 13
-    char b = beef(str_b); // 10
-    char c = beef(str_c); // 7
+    char a = 'x';
+    char b = 'x';
+    char c = 'x';
+
+    a = beef(str_a);
+    b = beef(str_b);
+    c = beef(str_c);
 }
