@@ -1,7 +1,7 @@
 #include "dusk.h"
 #include "scenes.h"
 
-#define NUM_DEMOS 2
+#define NUM_DEMOS 3
 
 int main() {
     dusk_init_all();
@@ -9,6 +9,7 @@ int main() {
     Scene demos[NUM_DEMOS] = {
         fountain_scene,
         logo_scene,
+        autumn_scene,
     };
     int demo_ix = 0;
 
@@ -17,7 +18,7 @@ int main() {
     while (TRUE) {
         key_poll(); // update input
         if (key_hit(KEY_START)) {
-            demo_ix = (++demo_ix) % NUM_DEMOS;
+            demo_ix = (demo_ix + 1) % NUM_DEMOS;
             dusk_scene_set(demos[demo_ix]);
         }
 
