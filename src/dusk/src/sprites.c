@@ -15,7 +15,7 @@ void dusk_sprites_init() {
     memset(sprites, 0, sizeof(Sprite) * NUM_SPRITES);
 
     // enable sprite display
-    REG_DISPCNT |= DCNT_OBJ | DCNT_OBJ_1D;
+    REG_DISPCNT |= DCNT_OBJ | DCNT_OBJ_2D;
 }
 
 void dusk_sprites_upload_atlas(SpriteAtlas* atlas) {
