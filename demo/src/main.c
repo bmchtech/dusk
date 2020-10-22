@@ -1,27 +1,15 @@
-#include "dusk.h"
-#include "scenes.h"
+#include <stddef.h>
 
-#define NUM_DEMOS 3
+size_t bleh(char* a) { return strlen(a); }
+
+size_t yeh(char* b) { return strlen(b); }
 
 int main() {
-    dusk_init_all();
+    char* str_a = "cheese flakes";
+    char* str_b = "applesauce";
+    char* str_c = "cupcake";
 
-    Scene demos[NUM_DEMOS] = {
-        autumn_scene,
-        fountain_scene,
-        logo_scene,
-    };
-    int demo_ix = 0;
-
-    dusk_scene_set(demos[demo_ix]);
-
-    while (TRUE) {
-        key_poll(); // update input
-        if (key_hit(KEY_START)) {
-            demo_ix = (demo_ix + 1) % NUM_DEMOS;
-            dusk_scene_set(demos[demo_ix]);
-        }
-
-        dusk_scene_update();
-    }
+    size_t b = bleh(str_b); // 10
+    size_t a = yeh(str_a);  // 13
+    size_t c = yeh(str_c);  // 7
 }

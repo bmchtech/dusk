@@ -30,7 +30,7 @@ LDFLAGS	:= $(ARCH) $(SPECS) $(LIBFLAGS)
 DUSK_MKFLAGS :=
 
 ifeq ($(DEBUG),1)
-	CFLAGS += -O2 -g
+	CFLAGS += -O0 -g
 	DUSK_MKFLAGS += DEBUG=1
 else
 	# non-debug

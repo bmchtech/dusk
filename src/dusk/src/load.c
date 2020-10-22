@@ -37,50 +37,50 @@ void seek_until_null(u8* data, int* pos) {
 
 SpriteAtlasLayout dusk_load_atlas_layout(const char* name) {
     SpriteAtlasLayout layout;
-    char file_name[GBFS_ENTRY_SIZE];
-    strcpy(file_name, name);
-    strcat(file_name, "_.sht.bin");
+    // char file_name[GBFS_ENTRY_SIZE];
+    // strcpy(file_name, name);
+    // strcat(file_name, "_.sht.bin");
 
-    u32 data_sz = 0;
-    u8* data = gbfs_get_obj(gbfs_dat, file_name, &data_sz);
+    // u32 data_sz = 0;
+    // u8* data = gbfs_get_obj(gbfs_dat, file_name, &data_sz);
 
-    int pos = 0;
+    // int pos = 0;
 
-    // get the number of textures
-    int num_tex = data[pos] | (data[pos + 1] << 8);
-    assert(num_tex == 1); // there should only be a single texture
-    pos += 2;
-    // eat the texture name
-    seek_until_null(data, &pos);
-    pos++;
+    // // get the number of textures
+    // int num_tex = data[pos] | (data[pos + 1] << 8);
+    // assert(num_tex == 1); // there should only be a single texture
+    // pos += 2;
+    // // eat the texture name
+    // seek_until_null(data, &pos);
+    // pos++;
 
-    layout.num_entries = data[pos] | (data[pos + 1] << 8);
-    layout.entries = malloc(sizeof(SpriteAtlasEntry) * layout.num_entries);
-    pos += 2;
+    // layout.num_entries = data[pos] | (data[pos + 1] << 8);
+    // layout.entries = malloc(sizeof(SpriteAtlasEntry) * layout.num_entries);
+    // pos += 2;
 
     // now read blocks
-    for (int i = 0; i < layout.num_entries; i++) {
-        // save the entry name
-        char last = data[pos];
-        int name_len = 0;
-        while (last != 0) {
-            layout.entries[i].name[name_len] = last;
-            name_len++;
-            last = data[pos + name_len];
-        }
-        layout.entries[i].name[name_len] = '\0'; // null terminator
-        pos += name_len + 1;                     // skip the name
+    // for (int i = 0; i < layout.num_entries; i++) {
+    //     // save the entry name
+    //     char last = data[pos];
+    //     int name_len = 0;
+    //     while (last != 0) {
+    //         layout.entries[i].name[name_len] = last;
+    //         name_len++;
+    //         last = data[pos + name_len];
+    //     }
+    //     layout.entries[i].name[name_len] = '\0'; // null terminator
+    //     pos += name_len + 1;                     // skip the name
 
-        // x,y,w,h
-        layout.entries[i].x = data[pos] | (data[pos + 1] << 8);
-        pos += 2;
-        layout.entries[i].y = data[pos] | (data[pos + 1] << 8);
-        pos += 2;
-        layout.entries[i].w = data[pos] | (data[pos + 1] << 8);
-        pos += 2;
-        layout.entries[i].h = data[pos] | (data[pos + 1] << 8);
-        pos += 2;
-    }
+    //     // x,y,w,h
+    //     layout.entries[i].x = data[pos] | (data[pos + 1] << 8);
+    //     pos += 2;
+    //     layout.entries[i].y = data[pos] | (data[pos + 1] << 8);
+    //     pos += 2;
+    //     layout.entries[i].w = data[pos] | (data[pos + 1] << 8);
+    //     pos += 2;
+    //     layout.entries[i].h = data[pos] | (data[pos + 1] << 8);
+    //     pos += 2;
+    // }
 
     return layout;
 }
