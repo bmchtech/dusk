@@ -28,6 +28,9 @@ $(MAPS_BIN): $(MAPS_SRC)
 %.img.bin: %.png
 	grit "$<" $(GRIT_FLAGS) -o "$@"
 
+atl_part_0.img.bin: atl_part_0.png
+	grit "$<" $(GRIT_FLAGS) -Mh 1 -Mw 1 -o "$@"
+
 atl_chars_0.img.bin: atl_chars_0.png
 	grit "$<" $(GRIT_FLAGS) -Mh 2 -Mw 2 -o "$@"
 

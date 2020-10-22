@@ -6,6 +6,23 @@ SpriteAtlasLayout atlas_layout;
 void autumn_start() {
     dusk_init_graphics();
 
+    REG_DISPCNT = DCNT_MODE0 | DCNT_BG1;
+
+    // --- (1) Base TTE init for tilemaps ---
+    tte_init_se(1,                      // Background number (BG 1)
+                BG_CBB(0) | BG_SBB(31), // BG control (for REG_BGxCNT)
+                4,                      // Tile offset (special cattr)
+                CLR_PURPLE,             // Ink color
+                14,                     // BitUnpack offset (on-pixel = 15)
+                &sys8Font,         // Default font (sys8)
+                NULL);                  // Default renderer (se_drawg_s)
+
+    // --- (3) Print some text ---
+
+    tte_write("press key!\n");
+
+    tte_write("bap!\n");
+
     // load sprite atlas
     dusk_sprites_init();
     SpriteAtlas atlas = dusk_load_atlas("atl_part");
@@ -14,16 +31,22 @@ void autumn_start() {
     // load atlas layout
     atlas_layout = dusk_load_atlas_layout("atl_part");
 
+    char tst[64];
+    sprintf(tst, " n: %d\n", atlas_layout.num_entries);
+    tte_write(tst);
+
     // get an entry and make a sprite
-    // SpriteAtlasEntry* leaf_entry = dusk_load_atlas_entry(&atlas_layout, "lvs10");
-    SpriteAtlasEntry* leaf_entry = dusk_load_atlas_entry(&atlas_layout, "lvs21");
-    u16 leaf_tid = leaf_entry->x / 8;
+    SpriteAtlasEntry* leaf_entry = dusk_load_atlas_entry(&atlas_layout, "lvs10");
+    // u16 leaf_tid = leaf_entry->x / 8;
+    u16 leaf_tid = 1;
     Sprite* leaf = dusk_sprites_make(0, leaf_entry->w, leaf_entry->h,
         (Sprite){
-            .x = 8,
-            .y = 8,
-            .tid = 7,
+            .x = 20,
+            .y = 100,
+            .tid = leaf_tid,
         });
+    sprintf(tst, " w: %d, h: %d, tid: %d\n", leaf_entry->w, leaf_entry->h, leaf_tid);
+    tte_write(tst);
 }
 
 void autumn_update() {
