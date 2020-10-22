@@ -19,7 +19,7 @@ CC	:= $(CROSS)gcc
 LD	:= $(CROSS)gcc
 OBJCOPY	:= $(CROSS)objcopy
 
-ARCH	:= -mthumb-interwork -mthumb
+ARCH	:= -mthumb-interwork -marm
 
 INCFLAGS := 
 LIBFLAGS := 
