@@ -44,7 +44,7 @@ $(ATLS_PNG): $(ATLS_OUT)
 # 	crunch_gen $@ "$<" -v -p -j -s256
 
 atl_%_: ../img/%
-	crunch_gen $@ "$<" -v -p -j -b -s256 -p0
+	crunch_gen $@ "$<" -v -p -j -b -s64 -p0
 
 # debug:
 #     $(foreach var,$(.VARIABLES),$(info $(var) = $($(var))))
