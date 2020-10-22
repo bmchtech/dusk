@@ -40,5 +40,6 @@ void dusk_load_init(); // initialize loader
 
 SpriteAtlas dusk_load_atlas(char* name);
 SpriteAtlasLayout dusk_load_atlas_layout(char* name);
+void dusk_free_atlas_layout(SpriteAtlasLayout* layout);
 
 Map dusk_load_map(char* name);

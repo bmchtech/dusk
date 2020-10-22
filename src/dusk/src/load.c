@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <tonc_types.h>
 #include "ds_load.h"
+#include <stdlib.h>
 
 const GBFS_FILE* gbfs_dat;
 
@@ -84,6 +85,12 @@ SpriteAtlasLayout dusk_load_atlas_layout(char* name) {
     }
 
     return layout;
+}
+
+void dusk_free_atlas_layout(SpriteAtlasLayout* layout) {
+    layout->num_entries = 0;
+    free(layout->entries);
+    layout->entries = NULL;
 }
 
 Map dusk_load_map(char* name) {
