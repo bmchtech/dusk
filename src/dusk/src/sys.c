@@ -4,13 +4,17 @@
 
 uint frame_count;
 
-void dusk_init() {
+void dusk_init_all() {
     // 1. initialize system graphics
-    // mode 0
-    REG_DISPCNT = DCNT_MODE0;
+    dusk_init_graphics();
 
     // initialize loader
     dusk_load_init();
+}
+
+void dusk_init_graphics() {
+    // mode 0
+    REG_DISPCNT = DCNT_MODE0;
 }
 
 void dusk_frame() {

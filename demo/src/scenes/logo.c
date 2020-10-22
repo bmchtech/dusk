@@ -4,6 +4,8 @@
 Sprite* logo;
 
 void logo_start() {
+    dusk_init_graphics();
+
     // load sprite atlas
     dusk_sprites_init();
     SpriteAtlas atlas = dusk_load_atlas("atlas_logo_0");
@@ -21,9 +23,6 @@ void logo_start() {
 
 void logo_update() {
     dusk_frame();
-
-    // input
-    key_poll();
 
     // update sprites
     dusk_sprites_update();

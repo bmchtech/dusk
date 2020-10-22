@@ -9,6 +9,8 @@ const int SHIFT_SPEED = 1;
 BackgroundPoint bg_shift;
 
 void fountain_start() {
+    dusk_init_graphics();
+    
     // set up background
     map = dusk_load_map("fountain");
     map_init_registers();
@@ -36,7 +38,6 @@ void fountain_update() {
     dusk_frame();
 
     // input
-    key_poll();
     int y_move = key_tri_vert();
     int x_move = key_tri_horz();
     bool moving = (y_move != 0 || x_move != 0);
