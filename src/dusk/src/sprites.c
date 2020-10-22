@@ -107,7 +107,7 @@ void dusk_sprites_anim_play(Sprite* spr, Anim* anim) {
         spr->page = anim->start; // reset to first
     }
     int ix = spr->page - anim->start;
-    if (frame_count % 6 == 0) {
+    if (frame_count % anim->rate == 0) {
         ix = (ix + 1) % anim->len;
     }
     // set new frame

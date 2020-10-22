@@ -17,13 +17,17 @@ typedef struct Sprite {
     u16 x, y;
     // u16 w, h;
     u16 tid;
-    u8 page;
+    u8 page; // used for spritesheets
 } Sprite;
 
 typedef struct Anim {
-    u8 start;
-    u8 len;
+    u8 start; // which page in the sprite the animation starts
+    u8 len;   // number of pages in this animation
+    u8 rate;  // (60/fps), or how many frames each page lasts
 } Anim;
+#define MAKE_ANIM_EX(st, le, fps)                                                                                      \
+    (Anim) { .start = st, .len = le, .rate = (60 / fps) }
+#define MAKE_ANIM(st, le) MAKE_ANIM_EX(st, le, 10) // default to 10fps
 
 extern Sprite sprites[NUM_SPRITES];
 

@@ -29,7 +29,7 @@ void fountain_start() {
             .tid = 8,
             .page = 0,
         });
-    walk = (Anim){.start = 0, .len = 4};
+    walk = MAKE_ANIM(0, 4);
 
     bg_shift = (BackgroundPoint){128, 248};
 }
