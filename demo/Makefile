@@ -27,9 +27,11 @@ ASFLAGS	:= -mthumb-interwork
 CFLAGS	:= $(ARCH) -Wall -fno-strict-aliasing -mcpu=arm7tdmi -mtune=arm7tdmi $(INCFLAGS) $(LIBFLAGS)
 LDFLAGS	:= $(ARCH) $(SPECS) $(LIBFLAGS)
 
+DUSK_MKFLAGS :=
 
 ifeq ($(DEBUG),1)
 	CFLAGS += -O2 -g
+	DUSK_MKFLAGS += DEBUG=1
 else
 	# non-debug
 	CFLAGS += -O2 -fomit-frame-pointer -ffast-math
@@ -51,7 +53,7 @@ build: libs $(NAME).gba
 no-content: libs $(NAME)-no_content.gba
 
 libs:
-	cd $(DUSK_DIR) && make
+	cd $(DUSK_DIR) && make $(DUSK_MKFLAGS)
 
 assets:
 	cd asset/build && make

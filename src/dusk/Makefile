@@ -30,7 +30,7 @@ RARCH		:= -mthumb-interwork -mthumb
 IARCH		:= -mthumb-interwork -marm
 
 bTEMPS		:= 0	# Save gcc temporaries (.i and .s files)
-DEBUG		:= 0	# Generate debug info
+# DEBUG		:= 0	# Generate debug info
 
 #---------------------------------------------------------------------------------
 # Options for code generation
@@ -40,6 +40,10 @@ CBASE   := $(INCLUDE) -Wall -fno-strict-aliasing #-fno-tree-loop-optimize
 CBASE	+= -O2
 CBASE	+= $(DEPFLAGS)
 CBASE	+= -Werror=implicit-function-declaration
+
+ifeq ($(DEBUG),1)
+	CBASE	+= -g
+endif
 
 RCFLAGS := $(CBASE) $(RARCH)
 ICFLAGS := $(CBASE) $(IARCH) -mlong-calls #-fno-gcse
@@ -53,13 +57,6 @@ ifeq ($(strip $(bTEMPS)), 1)
 	ICFLAGS  += -save-temps
 	CFLAGS	 += -save-temps
 	CXXFLAGS += -save-temps
-endif
-
-# --- Debug info ? ---
-
-ifeq ($(strip $(DEBUG)), 1)
-	CFLAGS	+= -g
-	LDFLAGS	+= -g
 endif
 
 #---------------------------------------------------------------------------------
