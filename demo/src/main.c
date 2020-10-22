@@ -8,7 +8,7 @@ int main() {
 
     Scene demos[NUM_DEMOS] = {
         fountain_scene,
-        fountain_scene
+        logo_scene,
     };
     int demo_ix = 0;
 
@@ -16,7 +16,7 @@ int main() {
 
     while (TRUE) {
         key_poll();
-        if (key_was_down(KEY_START)) {
+        if (key_hit(KEY_START)) {
             demo_ix = (++demo_ix) % NUM_DEMOS;
             dusk_scene_set(demos[demo_ix]);
         }

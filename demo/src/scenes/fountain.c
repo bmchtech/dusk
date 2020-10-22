@@ -8,7 +8,7 @@ Anim walk;
 const int SHIFT_SPEED = 1;
 BackgroundPoint bg_shift;
 
-void start() {
+void fountain_start() {
     // set up background
     map = dusk_load_map("fountain");
     map_init_registers();
@@ -32,7 +32,7 @@ void start() {
     bg_shift = (BackgroundPoint){128, 248};
 }
 
-void update() {
+void fountain_update() {
     dusk_frame();
 
     // input
@@ -57,10 +57,10 @@ void update() {
     dusk_sprites_update();
 }
 
-void end() {}
+void fountain_end() {}
 
 Scene fountain_scene = {
-    .start = start,
-    .update = update,
-    .end = end,
+    .start = fountain_start,
+    .update = fountain_update,
+    .end = fountain_end,
 };
