@@ -20,13 +20,19 @@ clean:
 $(MAPS_BIN): $(MAPS_SRC)
 	Tiled2GBA -b $< $@
 
-$(IMGS_BIN): $(ATLS_PNG)
+# $(IMGS_BIN): $(ATLS_PNG)
+# 	grit "$<" -gt -p -g -gB 8 -gu32 -pu32 -Mh 2 -Mw 2 -ftb -o "$@"
+
+%.img.bin: %.png
 	grit "$<" -gt -p -g -gB 8 -gu32 -pu32 -Mh 2 -Mw 2 -ftb -o "$@"
 
 $(ATLS_PNG): $(ATLS_OUT)
 	@true
 
-$(ATLS_OUT): $(ATLS_SRC)
+# $(ATLS_OUT): $(ATLS_SRC)
+# 	crunch_gen $@ "$<" -v -p -j -s256
+
+atlas_%_: ../img/%
 	crunch_gen $@ "$<" -v -p -j -s256
 
 # debug:
