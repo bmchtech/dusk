@@ -15,8 +15,8 @@ extern OBJ_AFFINE* obj_aff_buffer;
 
 typedef struct Sprite {
     u16 x, y;
-    // u16 w, h;
     u16 tid;
+    u16 tile_sz; // the number of tiles taken up by this sprite
     u8 page; // used for spritesheets
 } Sprite;
 
