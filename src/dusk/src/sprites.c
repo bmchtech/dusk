@@ -30,6 +30,7 @@ Sprite* dusk_sprites_make(int index, u8 width, u8 height, Sprite spr) {
     // spr.h = height;
 
     // automatically figure out size params
+    spr.tile_sz = (width / 8) * (height / 8);
     u16 shape = 0;
     if (height > width) {
         shape = ATTR0_TALL;
@@ -71,7 +72,7 @@ Sprite* dusk_sprites_make(int index, u8 width, u8 height, Sprite spr) {
     }
 
     // set main attributes
-    obj_set_attr(&obj_buffer[index], shape | ATTR0_8BPP, size, (spr.tid + spr.page) * BPP);
+    obj_set_attr(&obj_buffer[index], shape | ATTR0_8BPP, size, (spr.tid + spr.page) * spr.tile_sz);
 
     // save sprite metadata
     sprites[index] = spr;
@@ -88,7 +89,7 @@ inline void dusk_sprites_sync(int i) {
     // position
     obj_set_pos(obj, sprites[i].x, sprites[i].y);
     // main attrs
-    obj_set_attr(obj, obj->attr0, obj->attr1, (sprites[i].tid + sprites[i].page) * BPP);
+    obj_set_attr(obj, obj->attr0, obj->attr1, (sprites[i].tid + sprites[i].page) * sprites[i].tile_sz);
 }
 
 void dusk_sprites_update() {

@@ -39,7 +39,7 @@ void autumn_start() {
     // SpriteAtlasEntry* leaf_entry = dusk_load_atlas_entry(&atlas_layout, "lvs10");
     SpriteAtlasEntry* leaf_entry = dusk_load_atlas_entry(&atlas_layout, "lvs5");
     // u16 leaf_tid = leaf_entry->x / 8;
-    u16 leaf_tid = 1;
+    u16 leaf_tid = 2;
     Sprite* leaf = dusk_sprites_make(0, leaf_entry->w, leaf_entry->h,
         (Sprite){
             .x = 20,
