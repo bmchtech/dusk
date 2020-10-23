@@ -40,13 +40,21 @@ void autumn_start() {
     // SpriteAtlasEntry* leaf_entry = dusk_load_atlas_entry(&atlas_layout, "lvs10");
     SpriteAtlasEntry* leaf_entry = dusk_load_atlas_entry(&atlas_layout, "lvs5");
     // u16 leaf_tid = leaf_entry->x / 8;
-    u16 leaf_tid = 1;
-    Sprite* leaf = dusk_sprites_make(0, leaf_entry->w, leaf_entry->h,
-        (Sprite){
-            .x = 20,
-            .y = 100,
-            .tid = leaf_tid,
-        });
+    u16 leaf_tid = 4;
+    // Sprite* leaf = dusk_sprites_make(0, leaf_entry->w, leaf_entry->h,
+    //     (Sprite){
+    //         .x = 20,
+    //         .y = 100,
+    //         .tid = leaf_tid,
+    //     });
+    OBJ_ATTR *l0 = &obj_buffer[0];
+    obj_set_attr(l0,
+                 ATTR0_SQUARE | ATTR0_8BPP,
+                 ATTR1_SIZE_8,
+                 ATTR2_PALBANK(0) | leaf_tid);
+    obj_set_pos(l0, 20, 100);
+    oam_copy(oam_mem, obj_buffer, 1);
+
     sprintf(tst, " w: %d, h: %d, tid: %d\n", leaf_entry->w, leaf_entry->h, leaf_tid);
     tte_write(tst);
 }
@@ -55,7 +63,7 @@ void autumn_update() {
     dusk_frame();
 
     // update sprites
-    dusk_sprites_update();
+    // dusk_sprites_update();
 }
 
 void autumn_end() { dusk_free_atlas_layout(&atlas_layout); }
