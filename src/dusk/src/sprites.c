@@ -72,7 +72,8 @@ Sprite* dusk_sprites_make(int index, u8 width, u8 height, Sprite spr) {
     }
 
     // set main attributes
-    obj_set_attr(&obj_buffer[index], shape | ATTR0_8BPP, size, (spr.tid + spr.page) * spr.tile_sz);
+    // multiply by 2 because we're using 8bpp
+    obj_set_attr(&obj_buffer[index], shape | ATTR0_8BPP, size, (spr.tid + spr.page) * spr.tile_sz * 2);
 
     // save sprite metadata
     sprites[index] = spr;
@@ -89,7 +90,7 @@ inline void dusk_sprites_sync(int i) {
     // position
     obj_set_pos(obj, sprites[i].x, sprites[i].y);
     // main attrs
-    obj_set_attr(obj, obj->attr0, obj->attr1, (sprites[i].tid + sprites[i].page) * sprites[i].tile_sz);
+    obj_set_attr(obj, obj->attr0, obj->attr1, (sprites[i].tid + sprites[i].page) * sprites[i].tile_sz * 2);
 }
 
 void dusk_sprites_update() {
