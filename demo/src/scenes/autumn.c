@@ -1,6 +1,7 @@
 #include <string.h>
 #include "dusk.h"
 
+Map atm_map;
 SpriteAtlasLayout atlas_layout;
 const int GRAVITY = 1;
 
@@ -56,6 +57,11 @@ Sprite* respawn_leaf(int i, int x, int y) {
 void autumn_start() {
     dusk_init_graphics();
 
+    // set up background
+    atm_map = dusk_load_map("september");
+    map_init_registers();
+    map_set_onscreen(atm_map);
+
     // load sprite atlas
     dusk_sprites_init();
     SpriteAtlas atlas = dusk_load_atlas("atl_part");
@@ -64,22 +70,16 @@ void autumn_start() {
     // load atlas layout
     atlas_layout = dusk_load_atlas_layout("atl_part");
 
-    // // get an entry and make a sprite
-    // SpriteAtlasEntry* leaf_entry = dusk_load_atlas_entry(&atlas_layout, "lvs10");
-    // u16 leaf_tid = dusk_sprites_pos_to_tid(leaf_entry->x, leaf_entry->y, atlas_layout.width, atlas_layout.height);
-    // Sprite* leaf = dusk_sprites_make(0, leaf_entry->w, leaf_entry->h,
-    //     (Sprite){
-    //         .x = 20,
-    //         .y = 100,
-    //         .tid = leaf_tid,
-    //     });
-
     // set up N leaf sprites
     for (int i = 0; i < NUM_LEAVES; i++) {
         int ix = qran_range(0, SCREEN_WIDTH);
         int iy = qran_range(0, SCREEN_HEIGHT);
         respawn_leaf(i, ix, iy);
     }
+
+    // update map position
+    BackgroundPoint bg_shift = (BackgroundPoint){0, 0};
+    map_shift(atm_map, bg_shift);
 }
 
 void autumn_update() {

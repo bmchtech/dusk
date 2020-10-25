@@ -2,7 +2,7 @@
 #include "dusk.h"
 #include "contrib/gbamap.h"
 
-Map map;
+Map fnt_map;
 Sprite* eggcat;
 Anim walk;
 const int SHIFT_SPEED = 1;
@@ -12,9 +12,9 @@ void fountain_start() {
     dusk_init_graphics();
     
     // set up background
-    map = dusk_load_map("fountain");
+    fnt_map = dusk_load_map("fountain");
     map_init_registers();
-    map_set_onscreen(map);
+    map_set_onscreen(fnt_map);
 
     // load sprite atlas
     dusk_sprites_init();
@@ -52,7 +52,7 @@ void fountain_update() {
         eggcat->page = 0;
 
     // update map position
-    map_shift(map, bg_shift);
+    map_shift(fnt_map, bg_shift);
 
     // update sprites
     dusk_sprites_update();

@@ -19,7 +19,7 @@ clean:
 	rm -rfv *.h
 	rm -rfv atl*
 
-$(MAPS_BIN): $(MAPS_SRC)
+%.bin: ../map/%.tmx
 	Tiled2GBA -b $< $@
 
 # $(IMGS_BIN): $(ATLS_PNG)
