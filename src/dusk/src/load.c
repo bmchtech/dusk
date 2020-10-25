@@ -54,6 +54,11 @@ SpriteAtlasLayout dusk_load_atlas_layout(const char* name) {
     seek_until_null(data, &pos);
     pos++;
 
+    layout.width = data[pos] | (data[pos + 1] << 8);
+    pos += 2;
+    layout.height = data[pos] | (data[pos + 1] << 8);
+    pos += 2;
+
     layout.num_entries = data[pos] | (data[pos + 1] << 8);
     layout.entries = malloc(sizeof(SpriteAtlasEntry) * layout.num_entries);
     pos += 2;

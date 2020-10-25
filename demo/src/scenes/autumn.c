@@ -32,7 +32,7 @@ void autumn_start() {
     atlas_layout = dusk_load_atlas_layout("atl_part");
 
     char tst[64];
-    sprintf(tst, " n: %d\n", atlas_layout.num_entries);
+    sprintf(tst, " n: %d, w: %d, h: %d\n", atlas_layout.num_entries, atlas_layout.width, atlas_layout.height);
     tte_write(tst);
 
     // get an entry and make a sprite
