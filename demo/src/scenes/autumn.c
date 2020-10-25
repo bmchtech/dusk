@@ -38,15 +38,14 @@ void autumn_start() {
     // get an entry and make a sprite
     // SpriteAtlasEntry* leaf_entry = dusk_load_atlas_entry(&atlas_layout, "lvs10");
     SpriteAtlasEntry* leaf_entry = dusk_load_atlas_entry(&atlas_layout, "lvs5");
-    // u16 leaf_tid = leaf_entry->x / 8;
-    u16 leaf_tid = 1;
+    u16 leaf_tid = dusk_sprites_pos_to_tid(leaf_entry->x, leaf_entry->y, atlas_layout.width, atlas_layout.height);
     Sprite* leaf = dusk_sprites_make(0, leaf_entry->w, leaf_entry->h,
         (Sprite){
             .x = 20,
             .y = 100,
             .tid = leaf_tid,
         });
-    sprintf(tst, " w: %d, h: %d, tid: %d\n", leaf_entry->w, leaf_entry->h, leaf_tid);
+    sprintf(tst, " x: %d, y: %d, tid: %d\n", leaf_entry->x, leaf_entry->y, leaf_tid);
     tte_write(tst);
 }
 

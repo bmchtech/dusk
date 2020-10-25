@@ -37,4 +37,4 @@ Sprite* dusk_sprites_make(int index, u8 width, u8 height, Sprite spr); // create
 void dusk_sprites_sync(int index);                                     // synchronize sprite objects to OAM format
 void dusk_sprites_update();                                            // upload object data to OAM
 void dusk_sprites_anim_play(Sprite* spr, Anim* anim);                  // play frame animation on sprite
-// void dusk_sprites_pos_to_tid();                                        // get tid from spritesheet position
+u16 dusk_sprites_pos_to_tid(u16 x, u16 y, u16 sheet_width, u16 sheet_height); // get tid from spritesheet position
