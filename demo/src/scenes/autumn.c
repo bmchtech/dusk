@@ -90,7 +90,7 @@ void autumn_update() {
         // respawn if out of range
         if (sprites[i].y > SCREEN_HEIGHT) {
             int ix = qran_range(0, SCREEN_WIDTH);
-            int iy = 0;
+            int iy = -8;
             respawn_leaf(i, ix, iy);
         }
         // - motion
