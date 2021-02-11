@@ -17,9 +17,10 @@ typedef struct SpriteAtlas {
     u32 pal_sz;
 } SpriteAtlas;
 
-// represents a single entry in the sprite atlas.
-// note that names are limited to just 5 chars and a NULL terminator.
 #define ATLAS_ENTRY_LEN 6
+
+/** represents a single entry in the sprite atlas.
+ * note that names are limited to just 5 chars and a NULL terminator. */
 typedef struct SpriteAtlasEntry {
     char name[ATLAS_ENTRY_LEN];
     u8 x;
@@ -28,8 +29,8 @@ typedef struct SpriteAtlasEntry {
     u8 h;
 } SpriteAtlasEntry;
 
-// represents the layout of items in an atlas (https://github.com/xdrie/crunch#binary-format)
-// we only use the first texture because the GPU can only hold one
+/** represents the layout of items in an atlas (https://github.com/xdrie/crunch#binary-format).
+ * we only use the first texture because the GPU can only hold one */
 typedef struct SpriteAtlasLayout {
     u16 width;
     u16 height;
@@ -37,7 +38,8 @@ typedef struct SpriteAtlasLayout {
     SpriteAtlasEntry* entries;
 } SpriteAtlasLayout;
 
-void dusk_load_init(); // initialize loader
+/** initialize loader */
+void dusk_load_init();
 
 // - CONTENT LOADERS: pass filename without extension
 
