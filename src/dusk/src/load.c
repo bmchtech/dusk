@@ -21,13 +21,13 @@ SpriteAtlas dusk_load_atlas(char* name) {
     strcpy(pal_name, name);
     strcat(pal_name, "_0.pal.bin");
 
-    atlas.tiles = gbfs_get_obj(gbfs_dat, tiles_name, &atlas.tile_sz);
-    atlas.pal = gbfs_get_obj(gbfs_dat, pal_name, &atlas.pal_sz);
+    atlas.tiles = (u32*) gbfs_get_obj(gbfs_dat, tiles_name, &atlas.tile_sz);
+    atlas.pal = (u32*) gbfs_get_obj(gbfs_dat, pal_name, &atlas.pal_sz);
 
     return atlas;
 }
 
-void seek_until_null(u8* data, int* pos) {
+void seek_until_null(const u8* data, int* pos) {
     char last = data[*pos];
     while (last != 0) {
         *pos = *pos + 1; // advance pointer
@@ -42,7 +42,7 @@ SpriteAtlasLayout dusk_load_atlas_layout(const char* name) {
     strcat(file_name, "_.sht.bin");
 
     u32 data_sz = 0;
-    u8* data = gbfs_get_obj(gbfs_dat, file_name, &data_sz);
+    const u8* data = gbfs_get_obj(gbfs_dat, file_name, &data_sz);
 
     int pos = 0;
 
