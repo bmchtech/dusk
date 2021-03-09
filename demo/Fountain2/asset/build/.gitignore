@@ -1,0 +1,4 @@
+# generated data
+*.bin
+*.h
+atl*
