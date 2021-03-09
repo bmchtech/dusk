@@ -7,7 +7,7 @@ TITLE		:= DuskDemo
 NAME		:= $(TITLE)
 SOURCE_DIR := src
 LIB_DIR    := lib
-DUSK_DIR   := ../src/dusk
+DUSK_DIR   := ../../src/dusk
 DATA_DIR   := asset
 SPECS      := -specs=gba.specs
 
