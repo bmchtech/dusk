@@ -138,10 +138,10 @@ void check_room_doors() {
             }
             if (door_ud) {
                 if (door_u) {
-                    eggcat_vpos.y = 512 + UL_CUT_Y;
+                    eggcat_vpos.y = 512;
                 }
                 if (door_d) {
-                    eggcat_vpos.y = -UL_CUT_Y;
+                    eggcat_vpos.y = UL_CUT_Y;
                 }
             }
         }
