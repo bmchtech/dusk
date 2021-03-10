@@ -58,6 +58,7 @@ void adjust_background_to_player_vpos() {
         bg_overlap.y = eggcat_vpos.y;
         bg_shift.y = 0;
     }
+
     if (eggcat_vpos.x < 0) {
         bg_overlap.x = eggcat_vpos.x;
         bg_shift.x = 0;
@@ -80,7 +81,7 @@ void adjust_background_to_player_vpos() {
         eggcat->x += bg_overlap.x;
     }
     if (ABS(bg_overlap.y) > 0) {
-        eggcat->y += bg_overlap.x;
+        eggcat->y += bg_overlap.y;
     }
 }
 
