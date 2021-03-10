@@ -25,7 +25,7 @@ DUsK, a library for gba dev
 
 ### build
 
-enter `demo` and run:
+enter `demo/DuskDemo` and run:
 
 ```sh
 make
