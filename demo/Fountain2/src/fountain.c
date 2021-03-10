@@ -2,11 +2,14 @@
 #include "dusk.h"
 #include "contrib/gbamap.h"
 
-Map fnt_map;
+Map current_map;
 Sprite* eggcat;
 Anim walk;
 const int WALK_SPEED = 1;
 BackgroundPoint bg_shift;
+
+#define ROOMS_GRID_SZ 3
+char* rooms[ROOMS_GRID_SZ][ROOMS_GRID_SZ];
 
 /** virtual position */
 typedef struct VPos {
@@ -14,14 +17,19 @@ typedef struct VPos {
 } VPos;
 
 VPos eggcat_vpos;
+VPos room_pos;
 
 void fountain_start() {
     dusk_init_graphics();
 
+    memset(rooms, 0, sizeof(rooms));
+    rooms[1][1] = "central";
+    rooms[1][0] = "north";
+
     // set up background
-    fnt_map = dusk_load_map("central");
+    current_map = dusk_load_map(rooms[1][1]);
     map_init_registers();
-    map_set_onscreen(fnt_map);
+    map_set_onscreen(current_map);
 
     // load sprite atlas
     dusk_sprites_init();
@@ -41,6 +49,7 @@ void fountain_start() {
     // initialize
     bg_shift = (BackgroundPoint){128, 248};
     eggcat_vpos = (VPos){128, 248};
+    room_pos = (VPos){1, 1};
 }
 
 /** update background and sprite from pos */
@@ -85,6 +94,60 @@ void adjust_background_to_player_vpos() {
     }
 }
 
+void check_room_doors() {
+    // check room doors
+    VPos new_room_pos = room_pos;
+    bool door_l = false, door_u = false, door_r = false, door_d = false;
+
+    const int UL_CUT_X = -120;
+    const int UL_CUT_Y = -80;
+
+    if (eggcat_vpos.x < UL_CUT_X) {
+        new_room_pos.x -= 1;
+        door_l = true;
+    }
+    if (eggcat_vpos.y < UL_CUT_Y) {
+        new_room_pos.y -= 1;
+        door_u = true;
+    }
+    if (eggcat_vpos.x > 512) {
+        new_room_pos.x += 1;
+        door_r = true;
+    }
+    if (eggcat_vpos.y > 512) {
+        new_room_pos.y += 1;
+        door_d = true;
+    }
+    bool door_lr = door_l || door_r;
+    bool door_ud = door_u || door_d;
+    bool entered = door_lr || door_ud;
+    // make sure it's a valid index
+    if (entered && (new_room_pos.x >= 0 && new_room_pos.x < ROOMS_GRID_SZ) &&
+        (new_room_pos.y >= 0 && new_room_pos.y < ROOMS_GRID_SZ)) {
+        // make sure the room exists
+        char* room_name = rooms[new_room_pos.x][new_room_pos.y];
+        if (room_name) {
+            // switch room
+            room_pos = new_room_pos;
+            current_map = dusk_load_map(rooms[room_pos.x][room_pos.y]);
+            map_set_onscreen(current_map);
+
+            // set new eggcat vpos
+            if (door_lr) {
+                eggcat_vpos.x = (eggcat_vpos.x + UL_CUT_X + 512) % 512;
+            }
+            if (door_ud) {
+                if (door_u) {
+                    eggcat_vpos.y = 512 + UL_CUT_Y;
+                }
+                if (door_d) {
+                    eggcat_vpos.y = -UL_CUT_Y;
+                }
+            }
+        }
+    }
+}
+
 void fountain_update() {
     dusk_frame();
 
@@ -99,13 +162,15 @@ void fountain_update() {
 
     adjust_background_to_player_vpos();
 
+    check_room_doors();
+
     if (moving)
         dusk_sprites_anim_play(eggcat, &walk);
     else
         eggcat->page = 0;
 
     // update map position
-    map_shift(fnt_map, bg_shift);
+    map_shift(current_map, bg_shift);
 
     // update sprites
     dusk_sprites_update();
