@@ -72,8 +72,8 @@ void adjust_background_to_player_vpos() {
         bg_overlap.x = eggcat_vpos.x;
         bg_shift.x = 0;
     }
-    const int BG_CUT_Y = 512 - SCREEN_HEIGHT / 2;
-    const int BG_CUT_X = 512 - SCREEN_WIDTH / 2;
+    const int BG_CUT_Y = 512 - SCREEN_HEIGHT;
+    const int BG_CUT_X = 512 - SCREEN_WIDTH;
     if (eggcat_vpos.y > BG_CUT_Y) {
         bg_overlap.y = eggcat_vpos.y - BG_CUT_Y;
         bg_shift.y = BG_CUT_Y;
@@ -114,7 +114,7 @@ void check_room_doors() {
         new_room_pos.x += 1;
         door_r = true;
     }
-    if (eggcat_vpos.y > 512) {
+    if (eggcat_vpos.y > 512 + UL_CUT_Y) {
         new_room_pos.y += 1;
         door_d = true;
     }
@@ -134,11 +134,16 @@ void check_room_doors() {
 
             // set new eggcat vpos
             if (door_lr) {
-                eggcat_vpos.x = (eggcat_vpos.x + UL_CUT_X + 512) % 512;
+                if (door_l) {
+                    eggcat_vpos.x = 512 + UL_CUT_X;
+                }
+                if (door_r) {
+                    eggcat_vpos.x = UL_CUT_X;
+                }
             }
             if (door_ud) {
                 if (door_u) {
-                    eggcat_vpos.y = 512;
+                    eggcat_vpos.y = 512 + UL_CUT_Y;
                 }
                 if (door_d) {
                     eggcat_vpos.y = UL_CUT_Y;
