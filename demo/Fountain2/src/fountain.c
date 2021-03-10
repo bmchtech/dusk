@@ -25,6 +25,7 @@ void fountain_start() {
     memset(rooms, 0, sizeof(rooms));
     rooms[1][1] = "central";
     rooms[1][0] = "north";
+    rooms[0][1] = "west";
 
     // set up background
     current_map = dusk_load_map(rooms[1][1]);
@@ -110,7 +111,7 @@ void check_room_doors() {
         new_room_pos.y -= 1;
         door_u = true;
     }
-    if (eggcat_vpos.x > 512) {
+    if (eggcat_vpos.x > 512 + UL_CUT_X) {
         new_room_pos.x += 1;
         door_r = true;
     }
