@@ -26,6 +26,7 @@ void fountain_start() {
     rooms[1][1] = "central";
     rooms[1][0] = "north";
     rooms[0][1] = "west";
+    rooms[2][1] = "east";
 
     // set up background
     current_map = dusk_load_map(rooms[1][1]);
