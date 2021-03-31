@@ -2,7 +2,7 @@
 #include "ds_sys.h"
 #include <tonc.h>
 
-OBJ_ATTR obj_buffer[128];
+OBJ_ATTR obj_buffer[NUM_SPRITES];
 OBJ_AFFINE* obj_aff_buffer = (OBJ_AFFINE*)obj_buffer;
 
 Sprite sprites[NUM_SPRITES];
@@ -11,7 +11,7 @@ Sprite sprites[NUM_SPRITES];
 
 void dusk_sprites_init() {
     // initialize object buffer
-    oam_init(obj_buffer, 128);
+    oam_init(obj_buffer, NUM_SPRITES);
     memset(sprites, 0, sizeof(Sprite) * NUM_SPRITES);
 
     // enable sprite display
@@ -72,7 +72,8 @@ Sprite* dusk_sprites_make(int index, u8 width, u8 height, Sprite spr) {
 
     // set main attributes
     // multiply by 2 because we're using 8bpp
-    obj_set_attr(&obj_buffer[index], shape | ATTR0_8BPP, size, (spr.tid + spr.page) * spr.tile_sz * 2);
+    u16 curr_tid = (spr.tid + spr.page) * spr.tile_sz * 2;
+    obj_set_attr(&obj_buffer[index], shape | ATTR0_8BPP, size, ATTR2_PALBANK(0) | ATTR2_PRIO(SPRITEFLAG_PRIORITY_GET(spr.flags)) | curr_tid);
 
     // save sprite metadata
     sprites[index] = spr;

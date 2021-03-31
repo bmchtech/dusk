@@ -13,14 +13,20 @@
 extern OBJ_ATTR obj_buffer[NUM_SPRITES];
 extern OBJ_AFFINE* obj_aff_buffer;
 
+#define SPRITEFLAG_PRIORITY_SHIFT 6
+#define SPRITEFLAG_PRIORITY_GET(n) ((n >> SPRITEFLAG_PRIORITY_SHIFT) & 0b11)
+#define SPRITEFLAG_PRIORITY(n) ((n << SPRITEFLAG_PRIORITY_SHIFT) & 0b11)
+
 /** sprite data */
 typedef struct Sprite {
     s16 x, y;
     /** the number of tiles taken up by this sprite */
-    u16 tile_sz;
+    u8 tile_sz;
     u16 tid;
     /** used for spritesheets/animation */
     u8 page;
+    /** */
+    u8 flags;
 } Sprite;
 
 /** animation metadata */

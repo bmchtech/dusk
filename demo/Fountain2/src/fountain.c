@@ -46,6 +46,7 @@ void fountain_start() {
                                    .y = SCREEN_HEIGHT / 2 - 8,
                                    .tid = 8,
                                    .page = 0,
+                                   .flags = SPRITEFLAG_PRIORITY(3)
                                });
     walk = MAKE_ANIM(0, 4);
 
