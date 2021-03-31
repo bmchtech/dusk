@@ -17,7 +17,7 @@ void dusk_init_graphics_mode0() {
 }
 
 void dusk_init_graphics_mode3() {
-    REG_DISPCNT = DCNT_MODE3;
+    REG_DISPCNT = DCNT_MODE3 | DCNT_BG2;
 }
 
 void dusk_frame() {

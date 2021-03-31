@@ -1,7 +1,7 @@
 #include "dusk.h"
 #include "scenes.h"
 
-#define NUM_DEMOS 3
+#define NUM_DEMOS 4
 
 int main() {
     dusk_init_all();
@@ -10,6 +10,7 @@ int main() {
         autumn_scene,
         fountain_scene,
         logo_scene,
+        randbit_scene
     };
     int demo_ix = 0;
 
