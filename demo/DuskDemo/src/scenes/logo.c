@@ -7,7 +7,7 @@ int start_frame;
 int fade_step;
 
 void logo_start() {
-    dusk_init_graphics();
+    dusk_init_graphics_mode0();
 
     start_frame = frame_count;
 

@@ -55,7 +55,7 @@ Sprite* respawn_leaf(int i, int x, int y) {
 }
 
 void autumn_start() {
-    dusk_init_graphics();
+    dusk_init_graphics_mode0();
 
     // set up background
     atm_map = dusk_load_map("september");

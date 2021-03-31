@@ -20,7 +20,7 @@ VPos eggcat_vpos;
 VPos room_pos;
 
 void fountain_start() {
-    dusk_init_graphics();
+    dusk_init_graphics_mode0();
 
     memset(rooms, 0, sizeof(rooms));
     rooms[1][1] = "central";

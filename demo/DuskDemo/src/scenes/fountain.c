@@ -9,7 +9,7 @@ const int SHIFT_SPEED = 1;
 BackgroundPoint bg_shift;
 
 void fountain_start() {
-    dusk_init_graphics();
+    dusk_init_graphics_mode0();
     
     // set up background
     fnt_map = dusk_load_map("fountain");
