@@ -1,3 +1,4 @@
+#include "stdio.h"
 #include <tonc.h>
 #include "ds_sys.h"
 #include "ds_load.h"
@@ -12,7 +13,16 @@ void dusk_init_all() {
     dusk_load_init();
 }
 
+void dusk_clear_vidmem() {
+    // vram mem
+    memset32(vid_mem, 0, VRAM_BG_SIZE/4);
+    // pal mem
+    memset32(pal_bg_mem, 0, 0x00200/4);
+    memset32(pal_obj_mem, 0, 0x00200/4);
+}
+
 void dusk_init_graphics_mode0() {
+    dusk_clear_vidmem();
     REG_DISPCNT = DCNT_MODE0;
 }
 

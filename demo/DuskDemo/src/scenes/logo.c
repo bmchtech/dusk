@@ -1,6 +1,6 @@
 #include <string.h>
 #include "dusk.h"
-#include "font/mssans9.h"
+#include "tonc.h"
 
 Sprite* logo;
 const int FADE_LENGTH = 60; // fade length in frames
