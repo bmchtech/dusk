@@ -15,23 +15,28 @@ void dusk_init_all() {
 
 void dusk_clear_vidmem() {
     // vram mem
-    memset32(vid_mem, 0, VRAM_BG_SIZE/4);
+    memset32(vid_mem, 0, VRAM_BG_SIZE / 4);
     // pal mem
-    memset32(pal_bg_mem, 0, 0x00200/4);
-    memset32(pal_obj_mem, 0, 0x00200/4);
+    memset32(pal_bg_mem, 0, 0x00200 / 4);
+    memset32(pal_obj_mem, 0, 0x00200 / 4);
+}
+
+void dusk_reset_irq() {
+    irq_init(NULL);
+    irq_add(II_VBLANK, NULL);
 }
 
 void dusk_init_graphics_mode0() {
     dusk_clear_vidmem();
+    dusk_reset_irq();
     REG_DISPCNT = DCNT_MODE0;
 }
 
-void dusk_init_graphics_mode3() {
-    REG_DISPCNT = DCNT_MODE3 | DCNT_BG2;
-}
+void dusk_init_graphics_mode3() { REG_DISPCNT = DCNT_MODE3 | DCNT_BG2; }
 
 void dusk_frame() {
-    vid_vsync();
+    // vid_vsync();
+    VBlankIntrWait();
     frame_count++;
 }
 

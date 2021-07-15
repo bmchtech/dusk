@@ -8,7 +8,7 @@ NAME		:= $(TITLE)
 SOURCE_DIR := src
 LIB_DIR    := lib
 DUSK_DIR   := ../../src/dusk
-DATA_DIR   := asset
+DATA_DIR   := asset/build
 SPECS      := -specs=gba.specs
 
 # Compilation settings
@@ -21,8 +21,8 @@ OBJCOPY	:= $(CROSS)objcopy
 
 ARCH	:= -mthumb-interwork -mthumb
 
-INCFLAGS := -I$(DUSK_DIR)/include -I$(DEVKITPRO)/libtonc/include -I$(SOURCE_DIR)
-LIBFLAGS := -L$(DUSK_DIR)/lib -ldusk -L$(DEVKITPRO)/libtonc/lib -ltonc
+INCFLAGS := -I$(DUSK_DIR)/include -I$(DEVKITPRO)/libtonc/include -I$(DEVKITPRO)/libgba/include -I$(SOURCE_DIR) -I$(DATA_DIR)
+LIBFLAGS := -L$(DUSK_DIR)/lib -ldusk -L$(DEVKITPRO)/libtonc/lib -ltonc -L$(DEVKITPRO)/libgba/lib -lmm
 ASFLAGS	:= -mthumb-interwork
 CFLAGS	:= $(ARCH) -Wall -fno-strict-aliasing -mcpu=arm7tdmi -mtune=arm7tdmi $(INCFLAGS) $(LIBFLAGS)
 LDFLAGS	:= $(ARCH) $(SPECS) $(LIBFLAGS)
@@ -50,6 +50,8 @@ APP_OBJECTS_S     := $(APP_SOURCES_S:%.s=%.o)
 APP_OBJECTS		  := $(APP_OBJECTS_C) $(APP_OBJECTS_S)
 
 # Build commands and dependencies
+
+.PHONY: libs assets
 
 build: libs $(NAME).gba
 

@@ -2,17 +2,24 @@
 
 IMGS_DIR := ../img
 MAPS_DIR := ../map
+SOUND_DIR := ../snd
 
 ATLS_SRC := $(shell find $(IMGS_DIR) -mindepth 1 -type d)
 ATLS_OUT := $(patsubst %,atl_%_,$(notdir $(ATLS_SRC)))
 ATLS_PNG := $(ATLS_OUT:%_=%_0.png)
+
 IMGS_BIN := $(notdir $(ATLS_PNG:%.png=%.img.bin))
+
 MAPS_SRC := $(shell find $(MAPS_DIR) -name '*.tmx')
 MAPS_BIN := $(notdir $(MAPS_SRC:%.tmx=%.bin))
 
+SOUND_SRC := $(shell find $(SOUND_DIR))
+SOUND_BIN := soundbank.bin
+SOUND_H := soundbank.h
+
 GRIT_FLAGS := -gt -p -g -gB 8 -gu32 -pu32 -ftb
 
-all: $(MAPS_BIN) $(IMGS_BIN)
+all: $(MAPS_BIN) $(IMGS_BIN) $(SOUND_BIN) $(SOUND_H)
 
 clean:
 	rm -rfv *.bin
@@ -45,6 +52,13 @@ $(ATLS_PNG): $(ATLS_OUT)
 
 atl_%_: ../img/%
 	crunch_gen $@ "$<" -v -p -j -b -s256 -p0
+
+#---------------------------------------------------------------------------------
+# rule to build soundbank from music files
+#---------------------------------------------------------------------------------
+$(SOUND_BIN) $(SOUND_H) : $(SOUND_SRC)
+#---------------------------------------------------------------------------------
+	@mmutil $^ -osoundbank.bin -hsoundbank.h
 
 # debug:
 #     $(foreach var,$(.VARIABLES),$(info $(var) = $($(var))))

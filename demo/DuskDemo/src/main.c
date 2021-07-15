@@ -7,6 +7,7 @@ int main() {
     dusk_init_all();
 
     Scene demos[NUM_DEMOS] = {
+        audio_scene,
         logo_scene,
         fountain_scene,
         autumn_scene,
