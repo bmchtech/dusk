@@ -36,11 +36,14 @@ void logo_start() {
 
     // ----------
 
-	REG_DISPCNT |= DCNT_BG0;
-	tte_init_chr4c(0, BG_CBB(0)|BG_SBB(31), 0, 0x0201, CLR_WHITE, NULL, NULL);
+	REG_DISPCNT |= DCNT_BG1;
+	tte_init_chr4c(1, BG_CBB(0)|BG_SBB(31), 0, 0x0201, CLR_WHITE, NULL, NULL);
 	tte_init_con();
 
-    printf("dusk demo");
+    pal_gradient_ex(pal_bg_mem, 1, 4, CLR_YELLOW, CLR_ORANGE);
+
+    tte_printf("#{P:12,12}#{ci:4}dusk #{ci:2}demo");
+    tte_printf("#{P:12,24}#{ci:2}¯¯¯¯¯¯¯");
 }
 
 void logo_update() {
