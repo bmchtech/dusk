@@ -39,9 +39,8 @@ void audio_start() {
 }
 
 void audio_update() {
-    dusk_frame();
-    // audio frame
-    mmFrame();
+    dusk_frame(); // video frame    
+    mmFrame(); // audio frame
 
     int a_press = key_is_down(KEY_A);
 
