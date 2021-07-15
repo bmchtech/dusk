@@ -4,7 +4,7 @@
 #include "scenes.h"
 
 Sprite* logo;
-const int FADE_LENGTH = 60; // fade length in frames
+const int FADE_LENGTH = 30; // fade length in frames
 int start_frame;
 int fade_step; // frames per fade unit
 
