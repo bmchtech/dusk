@@ -29,7 +29,7 @@ void logo_start() {
     obj_set_attr(logo_attr, logo_attr->attr0 | ATTR0_BLEND, logo_attr->attr1, logo_attr->attr2);
 
     // set up blending registers
-    REG_BLDCNT = BLD_OBJ | BLD_BLACK;
+    REG_BLDCNT = BLD_OBJ | BLD_BG1 | BLD_BLACK;
     REG_BLDY = BLDY_BUILD(16);
 
     fade_step = FADE_LENGTH / 16;
@@ -41,9 +41,12 @@ void logo_start() {
 	tte_init_con();
 
     pal_gradient_ex(pal_bg_mem, 1, 4, CLR_YELLOW, CLR_ORANGE);
+    pal_gradient_ex(pal_bg_mem, 5, 8, CLR_BLACK, CLR_WHITE);
 
     tte_printf("#{P:12,12}#{ci:4}dusk #{ci:2}demo");
     tte_printf("#{P:12,24}#{ci:2}¯¯¯¯¯¯¯");
+
+    tte_printf("#{P:200,140}#{ci:7}start >");
 }
 
 void logo_update() {
