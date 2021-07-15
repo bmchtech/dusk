@@ -1,5 +1,6 @@
 #include <string.h>
 #include "dusk.h"
+#include "font/mssans9.h"
 
 Sprite* logo;
 const int FADE_LENGTH = 60; // fade length in frames
@@ -32,6 +33,14 @@ void logo_start() {
     REG_BLDY = BLDY_BUILD(16);
 
     fade_step = FADE_LENGTH / 16;
+
+    // ----------
+
+	REG_DISPCNT |= DCNT_BG0;
+	tte_init_chr4c(0, BG_CBB(0)|BG_SBB(31), 0, 0x0201, CLR_WHITE, NULL, NULL);
+	tte_init_con();
+
+    printf("dusk demo");
 }
 
 void logo_update() {

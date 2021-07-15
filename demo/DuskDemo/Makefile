@@ -21,7 +21,7 @@ OBJCOPY	:= $(CROSS)objcopy
 
 ARCH	:= -mthumb-interwork -mthumb
 
-INCFLAGS := -I$(DUSK_DIR)/include -I$(DEVKITPRO)/libtonc/include
+INCFLAGS := -I$(DUSK_DIR)/include -I$(DEVKITPRO)/libtonc/include -I$(SOURCE_DIR)
 LIBFLAGS := -L$(DUSK_DIR)/lib -ldusk -L$(DEVKITPRO)/libtonc/lib -ltonc
 ASFLAGS	:= -mthumb-interwork
 CFLAGS	:= $(ARCH) -Wall -fno-strict-aliasing -mcpu=arm7tdmi -mtune=arm7tdmi $(INCFLAGS) $(LIBFLAGS)
@@ -43,8 +43,11 @@ endif
 
 APP_MAIN_SOURCE := $(shell find $(SOURCE_DIR) -name '*main.c')
 APP_MAIN_OBJECT := $(APP_MAIN_SOURCE:%.c=%.o)
-APP_SOURCES     := $(shell find $(SOURCE_DIR) -name '*.c' ! -name "*main.c"  ! -name "*.test.c")
-APP_OBJECTS     := $(APP_SOURCES:%.c=%.o)
+APP_SOURCES_C     := $(shell find $(SOURCE_DIR) -name '*.c' ! -name "*main.c"  ! -name "*.test.c")
+APP_SOURCES_S     := $(shell find $(SOURCE_DIR) -name '*.s')
+APP_OBJECTS_C     := $(APP_SOURCES_C:%.c=%.o)
+APP_OBJECTS_S     := $(APP_SOURCES_S:%.s=%.o)
+APP_OBJECTS		  := $(APP_OBJECTS_C) $(APP_OBJECTS_S)
 
 # Build commands and dependencies
 
@@ -69,7 +72,10 @@ $(NAME)-no_content.gba : $(NAME).elf
 $(NAME).elf : $(APP_OBJECTS) $(APP_MAIN_OBJECT)
 	$(LD) $^ $(LDFLAGS) -o $@
 
-$(APP_OBJECTS) : %.o : %.c
+$(APP_OBJECTS_C) : %.o : %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(APP_OBJECTS_S) : %.o : %.s
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(APP_MAIN_OBJECT) : $(APP_MAIN_SOURCE)
