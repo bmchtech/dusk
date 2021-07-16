@@ -36,8 +36,10 @@ void audio_start() {
     tte_init_chr4c(1, BG_CBB(0) | BG_SBB(31), 0, 0x0201, CLR_WHITE, NULL, NULL);
     tte_init_con();
     int soundbank_size_kb = soundbank_len / 1000;
-    // tte_printf("#{P:12,12}audio (bank: %d KB)", soundbank_size_kb);
-    printf("audio (bank: %d KB)", soundbank_size_kb);
+    char banksize_str[16];
+    sprintf(banksize_str, "%d KB", soundbank_size_kb);
+    tte_printf("#{P:12,12}audio (bank: %s)", banksize_str);
+    // printf("audio (bank: %d KB)", soundbank_size_kb);
 }
 
 void audio_update() {
