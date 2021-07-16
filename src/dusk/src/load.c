@@ -22,8 +22,8 @@ SpriteAtlas dusk_load_atlas(char* name) {
     strcpy(pal_name, name);
     strcat(pal_name, "_0.pal.bin");
 
-    atlas.tiles = (u32*) gbfs_get_obj(gbfs_dat, tiles_name, &atlas.tile_sz);
-    atlas.pal = (u32*) gbfs_get_obj(gbfs_dat, pal_name, &atlas.pal_sz);
+    atlas.tiles = (u32*)gbfs_get_obj(gbfs_dat, tiles_name, &atlas.tile_sz);
+    atlas.pal = (u32*)gbfs_get_obj(gbfs_dat, pal_name, &atlas.pal_sz);
 
     return atlas;
 }
@@ -48,19 +48,19 @@ SpriteAtlasLayout dusk_load_atlas_layout(const char* name) {
     int pos = 0;
 
     // get the number of textures
-    int num_tex = (data[pos] | (data[pos + 1] << 8) / 8);
+    int num_tex = data[pos] | (data[pos + 1] << 8);
     assert(num_tex == 1); // there should only be a single texture
     pos += 2;
     // eat the texture name
     seek_until_null(data, &pos);
     pos++;
 
-    layout.width = (data[pos] | (data[pos + 1] << 8) / 8);
+    layout.width = data[pos] | (data[pos + 1] << 8);
     pos += 2;
-    layout.height = (data[pos] | (data[pos + 1] << 8) / 8);
+    layout.height = data[pos] | (data[pos + 1] << 8);
     pos += 2;
 
-    layout.num_entries = (data[pos] | (data[pos + 1] << 8) / 8);
+    layout.num_entries = data[pos] | (data[pos + 1] << 8);
     layout.entries = malloc(sizeof(SpriteAtlasEntry) * layout.num_entries);
     pos += 2;
 
@@ -77,16 +77,20 @@ SpriteAtlasLayout dusk_load_atlas_layout(const char* name) {
         layout.entries[i].name[name_len] = '\0'; // null terminator
         pos += name_len + 1;                     // skip the name
 
+        u16 x = data[pos] | (data[pos + 1] << 8);
+        pos += 2;
+        u16 y = data[pos] | (data[pos + 1] << 8);
+        pos += 2;
+        u16 w = data[pos] | (data[pos + 1] << 8);
+        pos += 2;
+        u16 h = data[pos] | (data[pos + 1] << 8);
+        pos += 2;
         // x,y,w,h are 8-bit so don't overflow!
         // these are in tile units (the final div by 8)
-        layout.entries[i].x = (data[pos] | (data[pos + 1] << 8) / 8);
-        pos += 2;
-        layout.entries[i].y = (data[pos] | (data[pos + 1] << 8) / 8);
-        pos += 2;
-        layout.entries[i].w = (data[pos] | (data[pos + 1] << 8) / 8);
-        pos += 2;
-        layout.entries[i].h = (data[pos] | (data[pos + 1] << 8) / 8);
-        pos += 2;
+        layout.entries[i].x = x / 8;
+        layout.entries[i].y = y / 8;
+        layout.entries[i].w = w / 8;
+        layout.entries[i].h = h / 8;
     }
 
     return layout;
@@ -94,7 +98,7 @@ SpriteAtlasLayout dusk_load_atlas_layout(const char* name) {
 
 SpriteAtlasEntry* dusk_load_atlas_entry(SpriteAtlasLayout* layout, const char* entry_name) {
     for (int i = 0; i < layout->num_entries; i++) {
-        SpriteAtlasEntry *entry = &layout->entries[i];
+        SpriteAtlasEntry* entry = &layout->entries[i];
         if (strncmp(entry_name, entry->name, ATLAS_ENTRY_LEN) == 0) {
             return entry;
         }
