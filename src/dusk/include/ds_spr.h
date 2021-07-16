@@ -53,7 +53,7 @@ void dusk_sprites_init();
 /** upload a sprite atlas to tile and palette memory */
 void dusk_sprites_upload_atlas(SpriteAtlas* atlas);
 /** upload a sprite atlas section to tile and palette memory */
-void dusk_sprites_upload_atlas_section(SpriteAtlasLayout* layout, SpriteAtlas* atlas, SpriteAtlasEntry* entry, u8 pal_offset, u16 tile_offset);
+void dusk_sprites_upload_atlas_section(SpriteAtlasLayout* layout, SpriteAtlas* atlas, SpriteAtlasEntry* entry, u16 pal_offset, u16 tile_offset);
 /** create a sprite and store it in index of sprite memory */
 Sprite* dusk_sprites_make(int index, u8 width, u8 height, Sprite spr);
 /** synchronize a sprite from the sprites array to OAM block (GPU memory) */
