@@ -12,29 +12,30 @@ void merge_start() {
 
     // load sprite atlas
     dusk_sprites_init();
-    SpriteAtlas thred_atlas = dusk_load_atlas("atl_thred");
-    dusk_sprites_upload_atlas(&thred_atlas);
+    SpriteAtlas chrs_atlas = dusk_load_atlas("atl_chars");
+    SpriteAtlasLayout chrs_atlas_layout = dusk_load_atlas_layout("atl_chars");
+    // dusk_sprites_upload_atlas(&chrs_atlas);
 
-    me_spr1 = dusk_sprites_make(0, 64, 64,
-                              (Sprite){
-                                  .x = SCREEN_WIDTH / 2 - 32,
-                                  .y = SCREEN_HEIGHT / 2 - 32,
-                                  .tid = 0,
-                                  .page = 0,
-                              });
+    // SpriteAtlas logo_atlas = dusk_load_atlas("atl_logo");
+    // SpriteAtlasLayout logo_atlas_layout = dusk_load_atlas_layout("atl_logo");
+    dusk_sprites_upload_atlas_section(&chrs_atlas_layout, &chrs_atlas, &chrs_atlas_layout.entries[2], 0, 0);
 
-    me_anim1 = MAKE_ANIM(0, 16);
-
+    me_spr1 = dusk_sprites_make(0, 16, 16,
+                                (Sprite){.x = SCREEN_WIDTH / 2 - 8,
+                                         .y = SCREEN_HEIGHT / 2 - 8,
+                                         .tid = 0,
+                                         .page = 0,
+                                         .flags = SPRITEFLAG_PRIORITY(3)});
+    me_anim1 = MAKE_ANIM(0, 4);
 
     REG_DISPCNT |= DCNT_BG1;
-    tte_init_chr4c(1, BG_CBB(0)|BG_SBB(31), 0, 0x0201, CLR_GRAY, NULL, NULL);
+    tte_init_chr4c(1, BG_CBB(0) | BG_SBB(31), 0, 0x0201, CLR_GRAY, NULL, NULL);
     tte_init_con();
 
-    SpriteAtlasLayout thred_atlas_layout = dusk_load_atlas_layout("atl_thred");
-    printf("ne: %d ", thred_atlas_layout.num_entries);
-    SpriteAtlasEntry* th_ent = &thred_atlas_layout.entries[0];
+    printf("ne: %d ", chrs_atlas_layout.num_entries);
+    SpriteAtlasEntry* th_ent = &chrs_atlas_layout.entries[0];
     printf("ent: %s, %d, %d, %d, %d\n", th_ent->name, th_ent->x, th_ent->y, th_ent->w, th_ent->h);
-    printf("atl: %d, %d ", thred_atlas.pal_sz, thred_atlas.tile_sz);
+    printf("atl: %d, %d ", chrs_atlas.pal_sz, chrs_atlas.tile_sz);
     // tte_printf("#{P:12,12}merge");
     // tte_printf("#{P:200,140}next >");
 }

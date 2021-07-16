@@ -33,8 +33,9 @@ void dusk_sprites_upload_atlas_section(SpriteAtlasLayout* layout, SpriteAtlas* a
     memcpy(&pal_obj_bank[pal_offset], atlas->pal, atlas->pal_sz);
     // 2. upload the tiles
     int entry_firsttid = dusk_sprites_pos_to_tid(entry->x, entry->y, layout->width, layout->height); // tid of entry start
-    int entry_tilecount = (entry->w / 8) * (entry->h / 8); // entry size in tiles
-    memcpy(&tile_mem[4][tile_offset], atlas->tiles, entry_tilecount);
+    int entry_tilecount = (entry->w) * (entry->h); // entry size in tiles
+    memcpy(&tile_mem[4][tile_offset], &atlas->tiles[entry_firsttid * entry_tilecount * 2], entry_tilecount * 64);
+    // memcpy(&tile_mem[4][tile_offset], &atlas->tiles[entry_firsttid * entry_tilecount * 2], atlas->tile_sz);
     // 3. fix tiles to point at right palette
 }
 
