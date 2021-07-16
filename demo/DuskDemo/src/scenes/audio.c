@@ -32,10 +32,10 @@ void audio_start() {
     // boom.panning = 255;
 
     // init text engine
-    REG_DISPCNT |= DCNT_BG1;
-    tte_init_chr4c(1, BG_CBB(0) | BG_SBB(31), 0, 0x0201, CLR_WHITE, NULL, NULL);
-    tte_init_con();
-    tte_printf("#{P:12,12}audio (bank: %d KB)", soundbank_len / 1000);
+    // REG_DISPCNT |= DCNT_BG1;
+    // tte_init_chr4c(1, BG_CBB(0) | BG_SBB(31), 0, 0x0201, CLR_WHITE, NULL, NULL);
+    // tte_init_con();
+    // tte_printf("#{P:12,12}audio (bank: %d KB)", soundbank_len / 1000);
 }
 
 void audio_update() {
