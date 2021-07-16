@@ -15,8 +15,8 @@ void audio_start() {
     // irq_enable(II_VBLANK);
 
     // // load soundbank
-    // u32 soundbank_len;
-    // u32* soundbank_bin = gbfs_get_obj(gbfs_dat, "soundbank.bin", &soundbank_len);
+    u32 soundbank_len;
+    u32* soundbank_bin = gbfs_get_obj(gbfs_dat, "soundbank.bin", &soundbank_len);
 
     // // initialise maxmod with soundbank and 8 channels
     // mmInitDefault((mm_addr)soundbank_bin, 8);
