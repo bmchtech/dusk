@@ -10,10 +10,6 @@ void merge_start() {
 
     pal_bg_mem[0] = 0x0C02; // background color
 
-    REG_DISPCNT |= DCNT_BG1;
-    tte_init_chr4c(1, BG_CBB(0)|BG_SBB(31), 0, 0x0201, CLR_GRAY, NULL, NULL);
-    tte_init_con();
-
     // load sprite atlas
     dusk_sprites_init();
     SpriteAtlas thred_atlas = dusk_load_atlas("atl_thred");
@@ -29,10 +25,16 @@ void merge_start() {
 
     me_anim1 = MAKE_ANIM(0, 16);
 
+
+    REG_DISPCNT |= DCNT_BG1;
+    tte_init_chr4c(1, BG_CBB(0)|BG_SBB(31), 0, 0x0201, CLR_GRAY, NULL, NULL);
+    tte_init_con();
+
     SpriteAtlasLayout thred_atlas_layout = dusk_load_atlas_layout("atl_thred");
     printf("ne: %d ", thred_atlas_layout.num_entries);
     SpriteAtlasEntry* th_ent = &thred_atlas_layout.entries[0];
     printf("ent: %s, %d, %d, %d, %d\n", th_ent->name, th_ent->x, th_ent->y, th_ent->w, th_ent->h);
+    printf("atl: %d, %d ", thred_atlas.pal_sz, thred_atlas.tile_sz);
     // tte_printf("#{P:12,12}merge");
     // tte_printf("#{P:200,140}next >");
 }
