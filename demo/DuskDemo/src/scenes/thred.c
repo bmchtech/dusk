@@ -26,10 +26,11 @@ void thred_start() {
     // ----------
 
     REG_DISPCNT |= DCNT_BG1;
-    tte_init_chr4c(1, BG_CBB(0)|BG_SBB(31), 0, 0x0201, CLR_SKYBLUE, NULL, NULL);
+    tte_init_chr4c(1, BG_CBB(0)|BG_SBB(31), 0, 0x0201, CLR_GRAY, NULL, NULL);
     tte_init_con();
 
     tte_printf("#{P:12,12}rendered 3d");
+    tte_printf("#{P:200,140}next >");
 }
 
 void thred_update() {
