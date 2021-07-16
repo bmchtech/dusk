@@ -20,7 +20,7 @@ void dusk_sprites_init() {
 
 void dusk_sprites_upload_atlas(SpriteAtlas* atlas) {
     // 1. upload the atlas tiles to tile memory
-    // tile memory (can store 1024 tiles, or 32x32b, or 256x256p)
+    // tile memory (can store 1024 tiles (32x32 tiles or 256x256px)
     memcpy(&tile_mem[4][0], atlas->tiles, atlas->tile_sz);
     // 2. upload the atlas tile palette to palette memory
     // object/sprite palette, in 8bpp stores 256 colors
