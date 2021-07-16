@@ -76,7 +76,7 @@ SpriteAtlasLayout dusk_load_atlas_layout(const char* name) {
         layout.entries[i].name[name_len] = '\0'; // null terminator
         pos += name_len + 1;                     // skip the name
 
-        // x,y,w,h
+        // x,y,w,h are 8-bit so don't overflow!
         layout.entries[i].x = data[pos] | (data[pos + 1] << 8);
         pos += 2;
         layout.entries[i].y = data[pos] | (data[pos + 1] << 8);
