@@ -9,27 +9,27 @@ mm_sound_effect boom;
 void audio_start() {
     dusk_init_graphics_mode0();
 
-    // // irq setup for maxmod dma
-    // irq_init(NULL);
-    // irq_add(II_VBLANK, mmVBlank);
-    // irq_enable(II_VBLANK);
+    // irq setup for maxmod dma
+    irq_init(NULL);
+    irq_add(II_VBLANK, mmVBlank);
+    irq_enable(II_VBLANK);
 
     // // load soundbank
     u32 soundbank_len;
     u32* soundbank_bin = gbfs_get_obj(gbfs_dat, "soundbank.bin", &soundbank_len);
 
-    // // initialise maxmod with soundbank and 8 channels
-    // mmInitDefault((mm_addr)soundbank_bin, 8);
+    // initialise maxmod with soundbank and 8 channels
+    mmInitDefault((mm_addr)soundbank_bin, 8);
 
-    // // play module
-    // mmStart(MOD_FLATOUTLIES, MM_PLAY_LOOP);
+    // play module
+    mmStart(MOD_FLATOUTLIES, MM_PLAY_LOOP);
 
-    // // define sfx
-    // boom.handle = 0;
-    // boom.id = SFX_BOOM;
-    // boom.rate = (int)(1.0f * (1 << 10));
-    // boom.volume = 255;
-    // boom.panning = 255;
+    // define sfx
+    boom.handle = 0;
+    boom.id = SFX_BOOM;
+    boom.rate = (int)(1.0f * (1 << 10));
+    boom.volume = 255;
+    boom.panning = 255;
 
     // init text engine
     // REG_DISPCNT |= DCNT_BG1;
@@ -40,13 +40,13 @@ void audio_start() {
 
 void audio_update() {
     dusk_frame(); // video frame    
-    // mmFrame(); // audio frame
+    mmFrame(); // audio frame
 
     int a_press = key_is_down(KEY_A);
 
     if (a_press) {
         // play sfx
-        // mmEffectEx(&boom);
+        mmEffectEx(&boom);
     }
 }
 
