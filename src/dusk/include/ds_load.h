@@ -23,6 +23,7 @@ typedef struct SpriteAtlas {
  * note that names are limited to just 5 chars and a NULL terminator. */
 typedef struct SpriteAtlasEntry {
     char name[ATLAS_ENTRY_LEN];
+    // all of these are in tiles (8px)
     u8 x;
     u8 y;
     u8 w;

@@ -4,6 +4,7 @@
 #include <tonc_types.h>
 #include "ds_load.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 const GBFS_FILE* gbfs_dat;
 

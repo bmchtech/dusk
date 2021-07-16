@@ -19,13 +19,23 @@ void dusk_sprites_init() {
 }
 
 void dusk_sprites_upload_atlas(SpriteAtlas* atlas) {
-    // 1. upload the atlas tiles to tile memory
+    // 1. upload the atlas tile palette to palette memory
+    // object/sprite palette, in 8bpp stores 256 colors
+    memcpy(&pal_obj_bank[0], atlas->pal, atlas->pal_sz);
+    // 2. upload the atlas tiles to tile memory
     // tile memory (can store 1024 tiles (32x32 tiles or 256x256px)
     // VRAM is charblocks 4 and 5, so &tile_mem[4][0] points to the first tile in object VRAM
     memcpy(&tile_mem[4][0], atlas->tiles, atlas->tile_sz);
-    // 2. upload the atlas tile palette to palette memory
-    // object/sprite palette, in 8bpp stores 256 colors
-    memcpy(&pal_obj_bank[0], atlas->pal, atlas->pal_sz);
+}
+
+void dusk_sprites_upload_atlas_section(SpriteAtlasLayout* layout, SpriteAtlas* atlas, SpriteAtlasEntry* entry, u8 pal_offset, u16 tile_offset) {
+    // 1. upload the palette
+    memcpy(&pal_obj_bank[pal_offset], atlas->pal, atlas->pal_sz);
+    // 2. upload the tiles
+    int entry_firsttid = dusk_sprites_pos_to_tid(entry->x, entry->y, layout->width, layout->height); // tid of entry start
+    int entry_tilecount = (entry->w / 8) * (entry->h / 8); // entry size in tiles
+    memcpy(&tile_mem[4][tile_offset], atlas->tiles, entry_tilecount);
+    // 3. fix tiles to point at right palette
 }
 
 Sprite* dusk_sprites_make(int index, u8 width, u8 height, Sprite spr) {
@@ -74,7 +84,8 @@ Sprite* dusk_sprites_make(int index, u8 width, u8 height, Sprite spr) {
     // set main attributes
     // multiply by 2 because we're using 8bpp
     u16 curr_tid = (spr.tid + spr.page) * spr.tile_sz * 2;
-    obj_set_attr(&obj_buffer[index], shape | ATTR0_8BPP, size, ATTR2_PALBANK(0) | ATTR2_PRIO(SPRITEFLAG_PRIORITY_GET(spr.flags)) | curr_tid);
+    obj_set_attr(&obj_buffer[index], shape | ATTR0_8BPP, size,
+                 ATTR2_PALBANK(0) | ATTR2_PRIO(SPRITEFLAG_PRIORITY_GET(spr.flags)) | curr_tid);
 
     // save sprite metadata
     sprites[index] = spr;
