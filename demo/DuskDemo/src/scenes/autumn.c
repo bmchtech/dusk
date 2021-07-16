@@ -31,7 +31,7 @@ SpriteAtlasEntry* pick_random_leaf() {
 Sprite* respawn_leaf(int i, int x, int y) {
     SpriteAtlasEntry* leaf_entry = pick_random_leaf();
     Sprite* leaf = dusk_sprites_make(
-        i, leaf_entry->w, leaf_entry->h,
+        i, leaf_entry->w * 8, leaf_entry->h * 8,
         (Sprite){
             .x = x,
             .y = y,
