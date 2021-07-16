@@ -47,6 +47,9 @@ atl_logo_0.img.bin: atl_logo_0.png
 atl_thred_0.img.bin: atl_thred_0.png
 	grit "$<" $(GRIT_FLAGS) -Mh 8 -Mw 8 -o "$@"
 
+atl_mus_0.img.bin: atl_mus_0.png
+	grit "$<" $(GRIT_FLAGS) -Mh 8 -Mw 8 -o "$@"
+
 $(ATLS_PNG): $(ATLS_OUT)
 	@true
 

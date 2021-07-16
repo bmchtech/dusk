@@ -3,7 +3,7 @@
 #include "tonc.h"
 
 Sprite* thred;
-Anim anim1;
+Anim th_anim1;
 
 void thred_start() {
     dusk_init_graphics_mode0();
@@ -21,7 +21,7 @@ void thred_start() {
                                   .page = 0,
                               });
 
-    anim1 = MAKE_ANIM(0, 16);
+    th_anim1 = MAKE_ANIM(0, 16);
 
     // ----------
 
@@ -36,7 +36,7 @@ void thred_start() {
 void thred_update() {
     dusk_frame();
 
-    dusk_sprites_anim_play(thred, &anim1);
+    dusk_sprites_anim_play(thred, &th_anim1);
 
     // update sprites
     dusk_sprites_update();

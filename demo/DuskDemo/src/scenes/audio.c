@@ -5,6 +5,8 @@
 #include "soundbank.h"
 
 mm_sound_effect boom;
+Sprite* vizspr;
+Anim vz_anim1;
 
 void audio_start() {
     dusk_init_graphics_mode0();
@@ -31,6 +33,19 @@ void audio_start() {
     boom.volume = 255;
     boom.panning = 255;
 
+    // load sprite atlas
+    dusk_sprites_init();
+    SpriteAtlas atlas = dusk_load_atlas("atl_mus");
+    dusk_sprites_upload_atlas(&atlas);
+
+    vizspr = dusk_sprites_make(0, 64, 64,
+                               (Sprite){
+                                   .x = SCREEN_WIDTH / 2 - 32,
+                                   .y = SCREEN_HEIGHT / 2 - 32,
+                                   .tid = 0,
+                               });
+    vz_anim1 = MAKE_ANIM(0, 16);
+
     // init text engine
     REG_DISPCNT |= DCNT_BG1;
     tte_init_chr4c(1, BG_CBB(0) | BG_SBB(31), 0, 0x0201, CLR_GRAY, NULL, NULL);
@@ -41,8 +56,10 @@ void audio_start() {
 }
 
 void audio_update() {
-    dusk_frame(); // video frame    
-    mmFrame(); // audio frame
+    dusk_frame(); // video frame
+    mmFrame();    // audio frame
+
+    dusk_sprites_anim_play(vizspr, &vz_anim1);
 
     int a_press = key_is_down(KEY_A);
 
@@ -50,6 +67,9 @@ void audio_update() {
         // play sfx
         mmEffectEx(&boom);
     }
+
+    // update sprites
+    dusk_sprites_update();
 }
 
 void audio_end() {
