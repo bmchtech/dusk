@@ -8,7 +8,7 @@ int main() {
 
     Scene demos[NUM_DEMOS] = {
         logo_scene,
-        audio_scene,
+        // audio_scene,
         autumn_scene,
         fountain_scene,
         randbit_scene
