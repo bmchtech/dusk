@@ -28,15 +28,15 @@ void dusk_reset_irq() {
 
 void dusk_init_graphics_mode0() {
     dusk_clear_vidmem();
-    // dusk_reset_irq();
+    dusk_reset_irq();
     REG_DISPCNT = DCNT_MODE0;
 }
 
 void dusk_init_graphics_mode3() { REG_DISPCNT = DCNT_MODE3 | DCNT_BG2; }
 
 void dusk_frame() {
-    vid_vsync();
-    // VBlankIntrWait();
+    // vid_vsync();
+    VBlankIntrWait();
     frame_count++;
 }
 
