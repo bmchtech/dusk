@@ -33,6 +33,8 @@ void audio_start() {
     boom.volume = 255;
     boom.panning = 255;
 
+    pal_bg_mem[0] = 0x0C02; // background color
+
     // load sprite atlas
     dusk_sprites_init();
     SpriteAtlas atlas = dusk_load_atlas("atl_mus");
