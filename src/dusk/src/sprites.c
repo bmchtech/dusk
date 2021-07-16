@@ -130,8 +130,9 @@ void dusk_sprites_anim_play(Sprite* spr, Anim* anim) {
 
 u16 dusk_sprites_pos_to_tid(u16 x, u16 y, u16 sheet_width, u16 sheet_height) {
     // calculate corner tile id
-    u16 xt = x >> 3;
-    u16 yt = y >> 3;
+    // first get x and y in tile coords
+    u16 xt = x;
+    u16 yt = y;
     u16 imw = sheet_width >> 3;
     // u16 imh = sheet_height >> 3;
     u16 tid = (yt * imw) + xt;

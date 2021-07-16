@@ -48,19 +48,19 @@ SpriteAtlasLayout dusk_load_atlas_layout(const char* name) {
     int pos = 0;
 
     // get the number of textures
-    int num_tex = data[pos] | (data[pos + 1] << 8);
+    int num_tex = (data[pos] | (data[pos + 1] << 8) / 8);
     assert(num_tex == 1); // there should only be a single texture
     pos += 2;
     // eat the texture name
     seek_until_null(data, &pos);
     pos++;
 
-    layout.width = data[pos] | (data[pos + 1] << 8);
+    layout.width = (data[pos] | (data[pos + 1] << 8) / 8);
     pos += 2;
-    layout.height = data[pos] | (data[pos + 1] << 8);
+    layout.height = (data[pos] | (data[pos + 1] << 8) / 8);
     pos += 2;
 
-    layout.num_entries = data[pos] | (data[pos + 1] << 8);
+    layout.num_entries = (data[pos] | (data[pos + 1] << 8) / 8);
     layout.entries = malloc(sizeof(SpriteAtlasEntry) * layout.num_entries);
     pos += 2;
 
@@ -78,13 +78,14 @@ SpriteAtlasLayout dusk_load_atlas_layout(const char* name) {
         pos += name_len + 1;                     // skip the name
 
         // x,y,w,h are 8-bit so don't overflow!
-        layout.entries[i].x = data[pos] | (data[pos + 1] << 8);
+        // these are in tile units (the final div by 8)
+        layout.entries[i].x = (data[pos] | (data[pos + 1] << 8) / 8);
         pos += 2;
-        layout.entries[i].y = data[pos] | (data[pos + 1] << 8);
+        layout.entries[i].y = (data[pos] | (data[pos + 1] << 8) / 8);
         pos += 2;
-        layout.entries[i].w = data[pos] | (data[pos + 1] << 8);
+        layout.entries[i].w = (data[pos] | (data[pos + 1] << 8) / 8);
         pos += 2;
-        layout.entries[i].h = data[pos] | (data[pos + 1] << 8);
+        layout.entries[i].h = (data[pos] | (data[pos + 1] << 8) / 8);
         pos += 2;
     }
 
