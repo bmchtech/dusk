@@ -33,23 +33,28 @@ void dusk_sprites_upload_atlas_section(SpriteAtlasLayout* layout, SpriteAtlas* a
     // 1. upload the palette (palettes are 16-bit highcolor)
     // memcpy(&pal_obj_bank[pal_offset], &atlas->pal[0], atlas->pal_sz);
     // TODO: fix palette size
-    memcpy(&pal_obj_bank[0][pal_offset], &atlas->pal[0], atlas->pal_sz);
-    // pal_obj_bank[0][1] = CLR_YELLOW;
+    // memcpy(&pal_obj_bank[0][pal_offset], &atlas->pal[0], atlas->pal_sz);
+    pal_obj_bank[0][4] = CLR_YELLOW;
     // 2. upload the tiles
     int entry_firsttid =
         dusk_sprites_pos_to_tid(entry->x, entry->y, layout->width, layout->height); // tid of entry start
     int entry_tilecount = (entry->w) * (entry->h);                                  // entry size in tiles
     int raw_tilecount = entry_firsttid * entry_tilecount * 2;
-    memcpy(&tile_mem[4][tile_offset], &atlas->tiles[raw_tilecount], entry_tilecount * 64);
+    // memcpy(&tile_mem[4][tile_offset], &atlas->tiles[raw_tilecount], entry_tilecount * 64);
     // 3. fix tiles to point at right palette
-    // for (int i = 0; i < raw_tilecount; i++) {
-    //     int tile_n = tile_offset + i;
-    //     TILE new_tile;
-    //     for (int j = 0; j < 8; j++) {
-    //         new_tile.data[j] = atlas->tiles[entry_firsttid + i];
-    //     }
-    //     tile_mem[4][tile_n] = new_tile;
-    // }
+    for (int i = 0; i < raw_tilecount; i += 2) {
+        int tile_n = tile_offset + i;
+        TILE8 new_tile;
+        for (int j = 0; j < 16; j++) {
+            // TILE8 tile.data consists of 16 u32s (a total of 64 bytes)
+
+            // new_tile.data[j] = atlas->tiles[entry_firsttid + i];
+            new_tile.data[j] = 0x04040404;
+        }
+        // copy in tile
+        memcpy(&tile_mem[4][tile_n], &new_tile, 64);
+        // tile_/mem[4][tile_n] = new_tile;
+    }
 }
 
 Sprite* dusk_sprites_make(int index, u8 width, u8 height, Sprite spr) {
