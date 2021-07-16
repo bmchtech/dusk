@@ -52,7 +52,7 @@ void audio_update() {
 }
 
 void audio_end() {
-    mmStop();
+    // mmStop();
 }
 
 Scene audio_scene = {
