@@ -1,6 +1,7 @@
 #include "ds_spr.h"
 #include "ds_sys.h"
 #include <tonc.h>
+#include "stdio.h"
 
 OBJ_ATTR obj_buffer[NUM_SPRITES];
 OBJ_AFFINE* obj_aff_buffer = (OBJ_AFFINE*)obj_buffer;
@@ -37,17 +38,18 @@ void dusk_sprites_upload_atlas_section(SpriteAtlasLayout* layout, SpriteAtlas* a
     pal_obj_bank[0][4] = CLR_YELLOW;
     // 2. upload the tiles
     int entry_firsttid =
-        dusk_sprites_pos_to_tid(entry->x, entry->y, layout->width, layout->height); // tid of entry start
+        dusk_sprites_pos_to_tid(entry->x, entry->y, layout->width, layout->height); // tid of entry start in atlas
     int entry_tilecount = (entry->w) * (entry->h);                                  // entry size in tiles
-    int raw_tilecount = entry_firsttid * entry_tilecount * 2;
+    int raw_tilecount = entry_tilecount * 2;
+    int raw_tileoffset = tile_offset * entry_tilecount * 2;
     // memcpy(&tile_mem[4][tile_offset], &atlas->tiles[raw_tilecount], entry_tilecount * 64);
     // 3. fix tiles to point at right palette
+    printf("rtc: %d\n", raw_tilecount);
     for (int i = 0; i < raw_tilecount; i += 2) {
-        int tile_n = tile_offset + i;
+        int tile_n = raw_tileoffset + i;
         TILE8 new_tile;
         for (int j = 0; j < 16; j++) {
             // TILE8 tile.data consists of 16 u32s (a total of 64 bytes)
-
             // new_tile.data[j] = atlas->tiles[entry_firsttid + i];
             new_tile.data[j] = 0x04040404;
         }

@@ -11,6 +11,10 @@ void merge_start() {
 
     pal_bg_mem[0] = 0x0C02; // background color
 
+    REG_DISPCNT |= DCNT_BG1;
+    tte_init_chr4c(1, BG_CBB(0) | BG_SBB(31), 0, 0x0201, CLR_GRAY, NULL, NULL);
+    tte_init_con();
+
     // load sprite atlas
     dusk_sprites_init();
     SpriteAtlas chrs_atlas = dusk_load_atlas("atl_chars");
@@ -26,10 +30,6 @@ void merge_start() {
     me_spr1 = dusk_sprites_make(0, 16, 16, (Sprite){.x = 40, .y = 40, .tid = 0, .flags = SPRITEFLAG_PRIORITY(3)});
     me_spr2 = dusk_sprites_make(1, 64, 64, (Sprite){.x = 80, .y = 80, .tid = 0});
     me_anim1 = MAKE_ANIM(0, 4);
-
-    REG_DISPCNT |= DCNT_BG1;
-    tte_init_chr4c(1, BG_CBB(0) | BG_SBB(31), 0, 0x0201, CLR_GRAY, NULL, NULL);
-    tte_init_con();
 
     SpriteAtlas print_atlas = logo_atlas;
     SpriteAtlasLayout print_atlas_layout = logo_atlas_layout;
