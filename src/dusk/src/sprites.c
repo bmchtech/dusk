@@ -32,29 +32,33 @@ void dusk_sprites_upload_atlas(SpriteAtlas* atlas) {
 void dusk_sprites_upload_atlas_section(SpriteAtlasLayout* layout, SpriteAtlas* atlas, SpriteAtlasEntry* entry,
                                        u16 pal_offset, u16 tile_offset) {
     // 1. upload the palette (palettes are 16-bit highcolor)
-    // memcpy(&pal_obj_bank[pal_offset], &atlas->pal[0], atlas->pal_sz);
-    // TODO: fix palette size
-    // memcpy(&pal_obj_bank[0][pal_offset], &atlas->pal[0], atlas->pal_sz);
-    pal_obj_bank[0][4] = CLR_YELLOW;
+    // TODO: fix palette size (pal_sz is too big)
+    memcpy(&pal_obj_bank[0][pal_offset], &atlas->pal[0], atlas->pal_sz);
+    // pal_obj_bank[0][4] = CLR_YELLOW;
     // 2. upload the tiles
     int entry_firsttid =
         dusk_sprites_pos_to_tid(entry->x, entry->y, layout->width, layout->height); // tid of entry start in atlas
     int entry_tilecount = (entry->w) * (entry->h);                                  // entry size in tiles
+    int raw_firsttid = entry_firsttid * 2; // read offset
     int raw_tilecount = entry_tilecount * 2;
-    int raw_tileoffset = tile_offset * entry_tilecount * 2;
-    // memcpy(&tile_mem[4][tile_offset], &atlas->tiles[raw_tilecount], entry_tilecount * 64);
+    int raw_tileoffset = tile_offset * 2; // write offset
+    memcpy(&tile_mem[4][raw_tileoffset], &atlas->tiles[raw_firsttid], entry_tilecount * 64);
     // 3. fix tiles to point at right palette
     printf("rtc: %d\n", raw_tilecount);
+    printf("rts: %d\n", entry_firsttid * 2);
     for (int i = 0; i < raw_tilecount; i += 2) {
         int tile_n = raw_tileoffset + i;
         TILE8 new_tile;
+        // TILE8 tile.data consists of 16 u32s (a total of 64 bytes)
+        // new_tile.data[j] = atlas->tiles[(entry_firsttid + i) * 2];
+        u32* rt = &atlas->tiles[raw_firsttid + i]; // read tile
+
         for (int j = 0; j < 16; j++) {
-            // TILE8 tile.data consists of 16 u32s (a total of 64 bytes)
-            // new_tile.data[j] = atlas->tiles[entry_firsttid + i];
-            new_tile.data[j] = 0x04040404;
+            new_tile.data[j] = rt[j];
+            // new_tile.data[j] = 0x04040404;
         }
         // copy in tile
-        memcpy(&tile_mem[4][tile_n], &new_tile, 64);
+        // memcpy(&tile_mem[4][tile_n], &new_tile, 64);
         // tile_/mem[4][tile_n] = new_tile;
     }
 }
