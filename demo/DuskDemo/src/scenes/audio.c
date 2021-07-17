@@ -24,7 +24,7 @@ void audio_start() {
     mmInitDefault((mm_addr)soundbank_bin, 8);
 
     // play module
-    mmStart(MOD_FLATOUTLIES, MM_PLAY_LOOP);
+    mmStart(MOD_RUNU5, MM_PLAY_LOOP);
 
     // define sfx
     boom.handle = 0;
