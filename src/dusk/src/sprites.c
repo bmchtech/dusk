@@ -39,28 +39,38 @@ void dusk_sprites_upload_atlas_section(SpriteAtlasLayout* layout, SpriteAtlas* a
     int entry_firsttid =
         dusk_sprites_pos_to_tid(entry->x, entry->y, layout->width, layout->height); // tid of entry start in atlas
     int entry_tilecount = (entry->w) * (entry->h);                                  // entry size in tiles
-    int raw_firsttid = entry_firsttid * entry_tilecount * 2; // read offset
+    int raw_firsttid = entry_firsttid * entry_tilecount * 2;                        // read offset
     int raw_tilecount = entry_tilecount * 2;
     int raw_tileoffset = tile_offset * 2; // write offset
-    
+
     printf("ro: %d. wo: %d, n: %d\n", raw_firsttid, raw_tileoffset, raw_tilecount);
 
-    memcpy(&tile_mem[4][raw_tileoffset], &atlas->tiles[raw_firsttid], entry_tilecount * 64);
-    // 3. fix tiles to point at right palette
-    for (int i = 0; i < raw_tilecount; i += 2) {
-        int tile_n = raw_tileoffset + i;
-        TILE8 new_tile;
-        // TILE8 tile.data consists of 16 u32s (a total of 64 bytes)
-        // new_tile.data[j] = atlas->tiles[(entry_firsttid + i) * 2];
-        u32* rt = &atlas->tiles[raw_firsttid + i]; // read tile
+    // memcpy(&tile_mem[4][raw_tileoffset], &atlas->tiles[raw_firsttid], entry_tilecount * 64);
 
-        for (int j = 0; j < 16; j++) {
-            new_tile.data[j] = rt[j];
-            // new_tile.data[j] = 0x04040404;
-        }
-        // copy in tile
-        // memcpy(&tile_mem[4][tile_n], &new_tile, 64);
-        // tile_/mem[4][tile_n] = new_tile;
+    // 3. fix tiles to point at right palette
+    // for (int i = 0; i < raw_tilecount; i += 2) {
+    //     TILE8 new_tile;
+    //     // TILE8 tile.data consists of 16 u32s (a total of 64 bytes)
+    //     // new_tile.data[j] = atlas->tiles[(entry_firsttid + i) * 2];
+    //     u32* rt = &atlas->tiles[raw_firsttid + i]; // read tile
+
+    //     for (int j = 0; j < 16; j++) {
+    //         new_tile.data[j] = rt[j];
+    //         // new_tile.data[j] = 0x04040404;
+    //     }
+    //     // copy in tile
+    //     memcpy(&tile_mem[4][raw_tileoffset + i], &new_tile, 64);
+    // }
+
+    // unroll malloc
+    // memcpy(&tile_mem[4][raw_tileoffset], &atlas->tiles[raw_firsttid], 64);
+    
+    // reinterpret as byte pointers
+    u8* loc_twrite = &tile_mem[4][raw_tileoffset];
+    u8* loc_tread = &atlas->tiles[raw_firsttid];
+    for (int i = 0; i < entry_tilecount; i += 1) {
+        int c = i * 64;
+        memcpy(loc_twrite + c, loc_tread + c, 64);
     }
 }
 
