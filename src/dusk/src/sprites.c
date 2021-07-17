@@ -70,9 +70,15 @@ void dusk_sprites_upload_atlas_section(SpriteAtlasLayout* layout, SpriteAtlas* a
     u8* loc_tread = &atlas->tiles[raw_firsttid];
     for (int i = 0; i < entry_tilecount; i += 1) {
         int c = i * 64;
-        u8 tile[64];
-        memcpy(&tile[0], loc_tread + c, 64);
-        memcpy(loc_twrite + c, &tile[0], 64);
+        u8 tile[64]; // create temp tile
+        memcpy(&tile[0], loc_tread + c, 64); // read tile
+        
+        // fix tile
+         for (int j = 0; j < 64; j++) {
+            tile[j] = tile[j] + pal_offset;
+        }
+
+        memcpy(loc_twrite + c, &tile[0], 64); // write tile
     }
 }
 
