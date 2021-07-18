@@ -31,13 +31,14 @@ SpriteAtlas dusk_load_atlas(char* name) {
 
     // NOTE: ASSERT pal_sz >= 2
 
-    u8* pal_u8 = (u8*) atlas.pal;
-    int true_pal_sz = 1; // true size of palette
-    u8 prev_color = pal_u8[0];
-    int col_match_streak = 0; // number of last few colors that matched
-    for (int i = 1; i < atlas.pal_sz; i++) { // start at 1 cause 0's in prev_color
-        u8 pal_col = pal_u8[i]; // color at index
-        printf("p: %d\n", (int) pal_col);
+    u8* pal_u8 = (u8*)atlas.pal;
+    const int palscan_start = 0;
+    int true_pal_sz = palscan_start + 1; // true size of palette
+    u8 prev_color = pal_u8[palscan_start];
+    int col_match_streak = 0;                      // number of last few colors that matched
+    for (int i = palscan_start + 1; i < atlas.pal_sz; i++) { // start at 1 cause 0's in prev_color
+        u8 pal_col = pal_u8[i];                    // color at index
+        printf("p: %0x\n", (int)pal_col);
 
         // check for match
         if (pal_col == prev_color) {
@@ -46,9 +47,9 @@ SpriteAtlas dusk_load_atlas(char* name) {
             col_match_streak = 0;
         }
 
-        if (col_match_streak >= 3) { // 4 past colors are same
+        if (col_match_streak >= 3) {       // 4 past colors are same
             true_pal_sz = true_pal_sz - 3; // we'll disregard all the last 4
-            break; // done
+            break;                         // done
         }
 
         prev_color = pal_col;
