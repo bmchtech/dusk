@@ -31,14 +31,16 @@ SpriteAtlas dusk_load_atlas(char* name) {
 
     // NOTE: ASSERT pal_sz >= 2
 
-    u8* pal_u8 = (u8*)atlas.pal;
+    u16* pal_raw = (u16*)atlas.pal; // 16-bit color
     const int palscan_start = 0;
-    int true_pal_sz = palscan_start + 1; // true size of palette
-    u8 prev_color = pal_u8[palscan_start];
-    int col_match_streak = 0;                      // number of last few colors that matched
-    for (int i = palscan_start + 1; i < atlas.pal_sz; i++) { // start at 1 cause 0's in prev_color
-        u8 pal_col = pal_u8[i];                    // color at index
-        printf("p: %0x\n", (int)pal_col);
+
+    u16 prev_color = pal_raw[palscan_start];
+    int true_pal_sz = 2;                     // true size of palette (starts at 1 color, so 2 bytes)
+    int col_match_streak = 0;                // number of last few colors that matched
+    int last_color_index = atlas.pal_sz / 2; // last color (div by 2 cause pal_sz is in bytes, and 16-bit color)
+
+    for (int i = palscan_start + 1; i < last_color_index; i++) { // start at 1 cause 0's in prev_color
+        u16 pal_col = pal_raw[i];                                // color at index
 
         // check for match
         if (pal_col == prev_color) {
@@ -47,16 +49,15 @@ SpriteAtlas dusk_load_atlas(char* name) {
             col_match_streak = 0;
         }
 
-        if (col_match_streak >= 3) {       // 4 past colors are same
-            true_pal_sz = true_pal_sz - 3; // we'll disregard all the last 4
-            break;                         // done
+        if (col_match_streak >= 3) {             // 4 past colors are same
+            true_pal_sz = true_pal_sz - (3) * 2; // we'll disregard all the last 4
+            break;                               // done
         }
 
         prev_color = pal_col;
-        true_pal_sz++;
+        true_pal_sz += 2;
     }
     atlas.pal_sz = true_pal_sz; // set adjusted pal size
-    printf("adjpal: %d\n", true_pal_sz);
 
     return atlas;
 }
