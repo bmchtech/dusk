@@ -44,7 +44,7 @@ void dusk_sprites_upload_atlas_section(SpriteAtlasLayout* layout, SpriteAtlas* a
     int raw_tilecount = entry_tilecount * 2;
     int raw_tileoffset = tile_offset * 2; // write offset
 
-    printf("ro: %d. wo: %d, n: %d\n", raw_firsttid, raw_tileoffset, raw_tilecount);
+    // printf("ro: %d. wo: %d, n: %d\n", raw_firsttid, raw_tileoffset, raw_tilecount);
 
     // memcpy(&tile_mem[4][raw_tileoffset], &atlas->tiles[raw_firsttid], entry_tilecount * 64);
 
@@ -67,8 +67,8 @@ void dusk_sprites_upload_atlas_section(SpriteAtlasLayout* layout, SpriteAtlas* a
     // memcpy(&tile_mem[4][raw_tileoffset], &atlas->tiles[raw_firsttid], 64);
     
     // reinterpret as byte pointers
-    u8* loc_twrite = &tile_mem[4][raw_tileoffset];
-    u8* loc_tread = &atlas->tiles[raw_firsttid];
+    u8* loc_twrite = (u8*) &tile_mem[4][raw_tileoffset];
+    u8* loc_tread = (u8*) &atlas->tiles[raw_firsttid];
     for (int i = 0; i < entry_tilecount; i += 1) {
         int c = i * 64;
         u8 tile[64]; // create temp tile
