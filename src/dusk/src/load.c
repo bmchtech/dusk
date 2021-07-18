@@ -25,6 +25,38 @@ SpriteAtlas dusk_load_atlas(char* name) {
     atlas.tiles = (u32*)gbfs_get_obj(gbfs_dat, tiles_name, &atlas.tile_sz);
     atlas.pal = (u32*)gbfs_get_obj(gbfs_dat, pal_name, &atlas.pal_sz);
 
+    // 1. pal_sz is some weird gradient thing
+    // we're going to detect when more than 4 in the row are the same
+    // so then find the actual end of the palette
+
+    // NOTE: ASSERT pal_sz >= 2
+
+    u8* pal_u8 = (u8*) atlas.pal;
+    int true_pal_sz = 1; // true size of palette
+    u8 prev_color = pal_u8[0];
+    int col_match_streak = 0; // number of last few colors that matched
+    for (int i = 1; i < atlas.pal_sz; i++) { // start at 1 cause 0's in prev_color
+        u8 pal_col = pal_u8[i]; // color at index
+        printf("p: %d\n", (int) pal_col);
+
+        // check for match
+        if (pal_col == prev_color) {
+            col_match_streak++;
+        } else {
+            col_match_streak = 0;
+        }
+
+        if (col_match_streak >= 3) { // 4 past colors are same
+            true_pal_sz = true_pal_sz - 3; // we'll disregard all the last 4
+            break; // done
+        }
+
+        prev_color = pal_col;
+        true_pal_sz++;
+    }
+    atlas.pal_sz = true_pal_sz; // set adjusted pal size
+    printf("adjpal: %d\n", true_pal_sz);
+
     return atlas;
 }
 

@@ -33,9 +33,9 @@ void dusk_sprites_upload_atlas_section(SpriteAtlasLayout* layout, SpriteAtlas* a
                                        u16 pal_offset, u16 pal_num, u16 tile_offset) {
     // 1. upload the palette (palettes are 16-bit highcolor)
     // TODO: fix palette size (pal_sz is too big)
-    
-    // memcpy(&pal_obj_bank[0][pal_offset], &atlas->pal[0], pal_num);
-    memcpy(&pal_obj_bank[0][pal_offset], &atlas->pal[0], atlas->pal_sz);
+
+    memcpy(&pal_obj_bank[0][pal_offset], &atlas->pal[0], pal_num);
+    // memcpy(&pal_obj_bank[0][pal_offset], &atlas->pal[0], atlas->pal_sz);
     
     // pal_obj_bank[0][4] = CLR_YELLOW;
     // 2. upload the tiles
@@ -46,7 +46,7 @@ void dusk_sprites_upload_atlas_section(SpriteAtlasLayout* layout, SpriteAtlas* a
     int raw_tilecount = entry_tilecount * 2;
     int raw_tileoffset = tile_offset * 2; // write offset
 
-    printf("ro: %d. wo: %d, n: %d\n", raw_firsttid, raw_tileoffset, raw_tilecount); // debug print tile r/w
+    // printf("ro: %d. wo: %d, n: %d\n", raw_firsttid, raw_tileoffset, raw_tilecount); // debug print tile r/w
 
     // memcpy(&tile_mem[4][raw_tileoffset], &atlas->tiles[raw_firsttid], entry_tilecount * 64);
 

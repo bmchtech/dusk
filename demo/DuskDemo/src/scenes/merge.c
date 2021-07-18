@@ -39,8 +39,9 @@ void merge_start() {
     SpriteAtlasEntry* th_ent = &print_atlas_layout.entries[0];
     printf("ent: %s, %d, %d, %d, %d\n", th_ent->name, th_ent->x, th_ent->y, th_ent->w, th_ent->h);
     printf("atl: %d, %d ", print_atlas.pal_sz, print_atlas.tile_sz);
-    tte_printf("#{P:12,12}merge");
-    tte_printf("#{P:200,140}next >");
+    
+    // tte_printf("#{P:12,12}merge");
+    // tte_printf("#{P:200,140}next >");
 }
 
 void merge_update() {
