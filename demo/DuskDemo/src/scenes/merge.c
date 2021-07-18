@@ -32,12 +32,13 @@ void merge_start() {
     me_spr2 = dusk_sprites_make(1, 64, 64, (Sprite){.x = 80, .y = 80, .tid = 16});
     me_anim1 = MAKE_ANIM(0, 4);
 
-    SpriteAtlas print_atlas = logo_atlas;
-    SpriteAtlasLayout print_atlas_layout = logo_atlas_layout;
-    printf("ne: %d ", print_atlas_layout.num_entries);
-    SpriteAtlasEntry* th_ent = &print_atlas_layout.entries[0];
-    printf("ent: %s, %d, %d, %d, %d\n", th_ent->name, th_ent->x, th_ent->y, th_ent->w, th_ent->h);
-    printf("atl: %d, %d ", print_atlas.pal_sz, print_atlas.tile_sz);
+    // SpriteAtlas print_atlas = logo_atlas;
+    // SpriteAtlasLayout print_atlas_layout = logo_atlas_layout;
+
+    // printf("ne: %d ", print_atlas_layout.num_entries);
+    // SpriteAtlasEntry* th_ent = &print_atlas_layout.entries[0];
+    // printf("ent: %s, %d, %d, %d, %d\n", th_ent->name, th_ent->x, th_ent->y, th_ent->w, th_ent->h);
+    // printf("atl: %d, %d ", print_atlas.pal_sz, print_atlas.tile_sz);
     // tte_printf("#{P:12,12}merge");
     // tte_printf("#{P:200,140}next >");
 }
