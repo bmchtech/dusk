@@ -19,7 +19,6 @@ void merge_start() {
     dusk_sprites_init();
     SpriteAtlas chrs_atlas = dusk_load_atlas("atl_chars");
     SpriteAtlasLayout chrs_atlas_layout = dusk_load_atlas_layout("atl_chars");
-    // dusk_sprites_upload_atlas(&chrs_atlas);
 
     SpriteAtlas logo_atlas = dusk_load_atlas("atl_logo");
     SpriteAtlasLayout logo_atlas_layout = dusk_load_atlas_layout("atl_logo");

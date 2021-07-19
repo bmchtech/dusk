@@ -41,6 +41,7 @@ SpriteAtlas dusk_load_atlas(char* name) {
 
     for (int i = palscan_start + 1; i < last_color_index; i++) { // start at 1 cause 0's in prev_color
         u16 pal_col = pal_raw[i];                                // color at index
+        // printf("p: %0x\n", (int)pal_col);
 
         // check for match
         if (pal_col == prev_color) {
@@ -58,6 +59,7 @@ SpriteAtlas dusk_load_atlas(char* name) {
         true_pal_sz += 2;
     }
     atlas.pal_sz = true_pal_sz; // set adjusted pal size
+    printf("adjpal: %d\n", true_pal_sz);
 
     return atlas;
 }
