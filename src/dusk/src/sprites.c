@@ -30,11 +30,9 @@ void dusk_sprites_upload_atlas(SpriteAtlas* atlas) {
 }
 
 void dusk_sprites_upload_atlas_section(SpriteAtlasLayout* layout, SpriteAtlas* atlas, SpriteAtlasEntry* entry,
-                                       u16 pal_offset, u16 pal_num, u16 tile_offset) {
-    // 1. upload the palette (palettes are 16-bit highcolor)
-    // TODO: fix palette size (pal_sz is too big)
+                                       u16 pal_offset, u16 tile_offset) {
 
-    // memcpy(&pal_obj_bank[0][pal_offset], &atlas->pal[0], pal_num);
+    // 1. upload the palette (palettes are 16-bit highcolor)
     memcpy(&pal_obj_bank[0][pal_offset], &atlas->pal[0], atlas->pal_sz);
     
     // pal_obj_bank[0][4] = CLR_YELLOW;

@@ -23,8 +23,8 @@ void merge_start() {
     SpriteAtlas logo_atlas = dusk_load_atlas("atl_logo");
     SpriteAtlasLayout logo_atlas_layout = dusk_load_atlas_layout("atl_logo");
 
-    dusk_sprites_upload_atlas_section(&chrs_atlas_layout, &chrs_atlas, &chrs_atlas_layout.entries[2], 0, 16, 0);
-    dusk_sprites_upload_atlas_section(&logo_atlas_layout, &logo_atlas, &logo_atlas_layout.entries[0], 16, 16, 16);
+    dusk_sprites_upload_atlas_section(&chrs_atlas_layout, &chrs_atlas, &chrs_atlas_layout.entries[2], 0, 0);
+    dusk_sprites_upload_atlas_section(&logo_atlas_layout, &logo_atlas, &logo_atlas_layout.entries[0], 16, 16);
     // dusk_sprites_upload_atlas_section(&logo_atlas_layout, &logo_atlas, &logo_atlas_layout.entries[0], 0, 0);
 
     me_spr1 = dusk_sprites_make(0, 16, 16, (Sprite){.x = 40, .y = 40, .tid = 0, .flags = SPRITEFLAG_PRIORITY(3)});
