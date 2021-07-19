@@ -33,6 +33,7 @@ SpriteAtlas dusk_load_atlas(char* name) {
 
     u16* pal_raw = (u16*)atlas.pal; // 16-bit color
     const int palscan_start = 0;
+    const int palscan_inarow = 6; // how many in a row we're looking for
 
     u16 prev_color = pal_raw[palscan_start];
     int true_pal_sz = 2;                     // true size of palette (starts at 1 color, so 2 bytes)
@@ -50,8 +51,8 @@ SpriteAtlas dusk_load_atlas(char* name) {
             col_match_streak = 0;
         }
 
-        if (col_match_streak >= 3) {             // 4 past colors are same
-            true_pal_sz = true_pal_sz - (3) * 2; // we'll disregard all the last 4
+        if (col_match_streak >= palscan_inarow) {             // 4 past colors are same
+            true_pal_sz = true_pal_sz - (palscan_inarow) * 2; // we'll disregard all the last 4
             break;                               // done
         }
 
