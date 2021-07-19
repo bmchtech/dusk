@@ -60,7 +60,7 @@ SpriteAtlas dusk_load_atlas(char* name) {
         true_pal_sz += 2;
     }
     atlas.pal_sz = true_pal_sz; // set adjusted pal size
-    printf("adjpal: %d\n", true_pal_sz);
+    // printf("adjpal: %d\n", true_pal_sz);
 
     return atlas;
 }
