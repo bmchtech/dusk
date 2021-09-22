@@ -41,7 +41,7 @@ void dusk_sprites_upload_atlas_section(SpriteAtlasLayout* layout, SpriteAtlas* a
         dusk_sprites_pos_to_tid(entry->x, entry->y, layout->width, layout->height); // tid of entry start in atlas
     int entry_tilecount = (entry->w) * (entry->h);                                  // entry size in tiles
     int raw_firsttid = entry_firsttid * entry_tilecount * 2;                        // read offset
-    int raw_tilecount = entry_tilecount * 2;
+    // int raw_tilecount = entry_tilecount * 2;
     int raw_tileoffset = tile_offset * 2; // write offset
 
     // printf("ro: %d. wo: %d, n: %d\n", raw_firsttid, raw_tileoffset, raw_tilecount); // debug print tile r/w

@@ -28,6 +28,8 @@ GritImage dusk_load_image(char* name) {
     img.tiles = (u32*)gbfs_get_obj(gbfs_dat, tiles_name, &img.tile_sz);
     img.pal = (u32*)gbfs_get_obj(gbfs_dat, pal_name, &img.pal_sz);
     img.map = (u32*)gbfs_get_obj(gbfs_dat, map_name, &img.map_sz);
+
+    return img;
 }
 
 SpriteAtlas dusk_load_atlas(char* name) {
