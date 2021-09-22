@@ -42,6 +42,7 @@ typedef struct Anim {
 /** background data */
 typedef struct Background {
     s16 x, y;
+    int cbb, sbb;
 } Background;
 
 /** define an animation, given a starting frame and frame count, and fps */
@@ -70,5 +71,5 @@ void dusk_sprites_anim_play(Sprite* spr, Anim* anim);
 /** calculate the tid of a sprite given pos and sheet dimens */
 u16 dusk_sprites_pos_to_tid(u16 x, u16 y, u16 sheet_width, u16 sheet_height);
 
-void dusk_background_upload_raw(GritImage* img);
+void dusk_background_upload_raw(GritImage* img, int cbb, int sbb);
 void dusk_background_make(u8 bg_id, Background bg);
