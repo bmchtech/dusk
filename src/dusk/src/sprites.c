@@ -34,7 +34,7 @@ void dusk_sprites_upload_atlas_section(SpriteAtlasLayout* layout, SpriteAtlas* a
 
     // 1. upload the palette (palettes are 16-bit highcolor)
     memcpy(&pal_obj_bank[0][pal_offset], &atlas->pal[0], atlas->pal_sz);
-    
+
     // pal_obj_bank[0][4] = CLR_YELLOW;
     // 2. upload the tiles
     int entry_firsttid =
@@ -65,17 +65,17 @@ void dusk_sprites_upload_atlas_section(SpriteAtlasLayout* layout, SpriteAtlas* a
 
     // unroll malloc
     // memcpy(&tile_mem[4][raw_tileoffset], &atlas->tiles[raw_firsttid], 64);
-    
+
     // reinterpret as byte pointers
-    u8* loc_twrite = (u8*) &tile_mem[4][raw_tileoffset];
-    u8* loc_tread = (u8*) &atlas->tiles[raw_firsttid];
+    u8* loc_twrite = (u8*)&tile_mem[4][raw_tileoffset];
+    u8* loc_tread = (u8*)&atlas->tiles[raw_firsttid];
     for (int i = 0; i < entry_tilecount; i += 1) {
         int c = i * 64;
-        u8 tile[64]; // create temp tile
+        u8 tile[64];                         // create temp tile
         memcpy(&tile[0], loc_tread + c, 64); // read tile
-        
+
         // fix tile
-         for (int j = 0; j < 64; j++) {
+        for (int j = 0; j < 64; j++) {
             tile[j] = tile[j] + pal_offset;
         }
 
@@ -183,4 +183,37 @@ u16 dusk_sprites_pos_to_tid(u16 x, u16 y, u16 sheet_width, u16 sheet_height) {
     // u16 imh = sheet_height >> 3;
     u16 tid = (yt * imw) + xt;
     return tid;
+}
+
+void dusk_background_make(u8 bg_id) {
+    int bg_flag = 0;
+    switch (bg_id) {
+    case 0:
+        bg_flag = DCNT_BG0;
+        break;
+    case 1:
+        bg_flag = DCNT_BG1;
+        break;
+    case 2:
+        bg_flag = DCNT_BG2;
+        break;
+    case 3:
+        bg_flag = DCNT_BG3;
+        break;
+    }
+    // enable bg
+    REG_DISPCNT |= bg_flag;
+}
+
+vu32* dusk_get_background_register(u8 bg_id) {
+    switch (bg_id) {
+    case 0:
+        return REG_BG0CNT;
+    case 1:
+        return REG_BG1CNT;
+    case 2:
+        return REG_BG2CNT;
+    case 3:
+        return REG_BG3CNT;
+    }
 }
