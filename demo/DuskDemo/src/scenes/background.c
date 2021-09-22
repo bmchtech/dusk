@@ -9,7 +9,7 @@ void background_start() {
 
     // load sprite atlas
     dusk_sprites_init();
-    SpriteAtlas atlas = dusk_load_atlas("atl_background");
+    SpriteAtlas atlas = dusk_load_atlas("atl_bg");
     dusk_sprites_upload_atlas(&atlas);
 
     background = dusk_sprites_make(0, 64, 64,

@@ -185,7 +185,7 @@ u16 dusk_sprites_pos_to_tid(u16 x, u16 y, u16 sheet_width, u16 sheet_height) {
     return tid;
 }
 
-void dusk_background_make(u8 bg_id) {
+void enable_bg(u8 bg_id) {
     int bg_flag = 0;
     switch (bg_id) {
     case 0:
@@ -201,8 +201,20 @@ void dusk_background_make(u8 bg_id) {
         bg_flag = DCNT_BG3;
         break;
     }
-    // enable bg
+
     REG_DISPCNT |= bg_flag;
+}
+
+void dusk_background_upload_atlas(SpriteAtlas* atlas) {
+    // 1. upload the atlas tile palette to bg palette memory
+    memcpy(&pal_bg_bank[0], atlas->pal, atlas->pal_sz);
+    // 2. upload the atlas tiles to bg tile memory
+    memcpy(&tile_mem[0][0], atlas->tiles, atlas->tile_sz);
+    // 3. upload the map
+}
+
+void dusk_background_make(u8 bg_id, Background bg) {
+    enable_bg(bg_id);
 }
 
 vu32* dusk_get_background_register(u8 bg_id) {

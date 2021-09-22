@@ -39,6 +39,11 @@ typedef struct Anim {
     u8 rate;
 } Anim;
 
+/** background data */
+typedef struct Background {
+    s16 x, y;
+} Background;
+
 /** define an animation, given a starting frame and frame count, and fps */
 #define MAKE_ANIM_EX(st, le, fps)                                                                                      \
     (Anim) { .start = st, .len = le, .rate = (60 / fps) }
