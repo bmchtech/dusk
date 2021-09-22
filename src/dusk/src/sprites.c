@@ -224,7 +224,8 @@ void dusk_background_upload_raw(GritImage* img) {
     // TODO: support selecting slot
 
     // 1. upload the atlas tile palette to bg palette memory
-    memcpy(&pal_bg_bank[0], img->pal, img->pal_sz);
+    // memcpy(&pal_bg_bank[0], img->pal, img->pal_sz);
+    memcpy(pal_bg_mem, img->pal, img->pal_sz);
     // 2. upload the atlas tiles to bg tile memory (CBB)
     memcpy(&tile_mem[0][0], img->tiles, img->tile_sz);
     // 3. upload the map (SBB)
