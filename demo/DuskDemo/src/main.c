@@ -1,20 +1,19 @@
 #include "dusk.h"
 #include "scenes.h"
 
-#define NUM_DEMOS 8
+#define NUM_DEMOS 7
 
 int main() {
     dusk_init_all();
 
     Scene demos[NUM_DEMOS] = {
         logo_scene,
-        thred_scene,
         audio_scene,
-        background_scene,
         merge_scene,
         fountain_scene,
-        autumn_scene,
         randbit_scene,
+        thred_scene,
+        autumn_scene,
     };
     int demo_ix = 0;
 
@@ -22,7 +21,7 @@ int main() {
 
     while (TRUE) {
         key_poll(); // update input
-        if (key_hit(KEY_START)) {
+        if (key_hit(KEY_START) || demo_ix < 4) {
             demo_ix = (demo_ix + 1) % NUM_DEMOS;
             dusk_scene_set(demos[demo_ix]);
         }
