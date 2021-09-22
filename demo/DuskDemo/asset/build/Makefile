@@ -34,8 +34,7 @@ clean:
 	Tiled2GBA -b $< $@
 
 %.bin: ../rawmap/%.png
-	grit "$<" -p -m -g -gB 8 -gu32 -pu32 -ftb -o "$@"
-#	grit "$<" -p -m -g -gB 4 -gu32 -pu32 -ftb -o "$@"
+	grit "$<" -p -m -g -gB 4 -gu32 -pu32 -ftb -o "$@"
 
 # $(IMGS_BIN): $(ATLS_PNG)
 # 	grit "$<" -gt -p -g -gB 8 -gu32 -pu32 -Mh 2 -Mw 2 -ftb -o "$@"

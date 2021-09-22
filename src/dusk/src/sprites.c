@@ -229,7 +229,7 @@ void dusk_background_upload_raw(GritImage* img) {
     // 2. upload the atlas tiles to bg tile memory (CBB)
     memcpy(&tile_mem[0][0], img->tiles, img->tile_sz);
     // 3. upload the map (SBB)
-    memcpy(&se_mem[0][0], img->map, img->map_sz);
+    memcpy(&se_mem[30][0], img->map, img->map_sz);
 }
 
 void dusk_background_make(u8 bg_id, Background bg) {
@@ -237,5 +237,5 @@ void dusk_background_make(u8 bg_id, Background bg) {
     enable_bg(bg_id);
     // set control flags
     vu16* bg_reg = dusk_get_background_register(bg_id);
-    *bg_reg |= BG_CBB(0) | BG_SBB(0) | BG_8BPP | BG_REG_32x32;
+    *bg_reg |= BG_CBB(0) | BG_SBB(30) | BG_4BPP | BG_REG_32x32;
 }
