@@ -205,27 +205,36 @@ void enable_bg(u8 bg_id) {
     REG_DISPCNT |= bg_flag;
 }
 
-void dusk_background_upload_atlas(SpriteAtlas* atlas) {
+vu16* dusk_get_background_register(u8 bg_id) {
+    switch (bg_id) {
+    case 0:
+        return &REG_BG0CNT;
+    case 1:
+        return &REG_BG1CNT;
+    case 2:
+        return &REG_BG2CNT;
+    case 3:
+        return &REG_BG3CNT;
+    default:
+        return NULL;
+    }
+}
+
+void dusk_background_upload_raw(GritImage* img) {
+    // TODO: support selecting slot
+
     // 1. upload the atlas tile palette to bg palette memory
-    memcpy(&pal_bg_bank[0], atlas->pal, atlas->pal_sz);
-    // 2. upload the atlas tiles to bg tile memory
-    memcpy(&tile_mem[0][0], atlas->tiles, atlas->tile_sz);
-    // 3. upload the map
+    memcpy(&pal_bg_bank[0], img->pal, img->pal_sz);
+    // 2. upload the atlas tiles to bg tile memory (CBB)
+    memcpy(&tile_mem[0][0], img->tiles, img->tile_sz);
+    // 3. upload the map (SBB)
+    memcpy(&se_mem[0][0], img->map, img->map_sz);
 }
 
 void dusk_background_make(u8 bg_id, Background bg) {
+    // set bg on screen enabled
     enable_bg(bg_id);
-}
-
-vu32* dusk_get_background_register(u8 bg_id) {
-    switch (bg_id) {
-    case 0:
-        return REG_BG0CNT;
-    case 1:
-        return REG_BG1CNT;
-    case 2:
-        return REG_BG2CNT;
-    case 3:
-        return REG_BG3CNT;
-    }
+    // set control flags
+    vu16* bg_reg = dusk_get_background_register(bg_id);
+    *bg_reg |= BG_CBB(0) | BG_SBB(0) | BG_8BPP | BG_REG_32x32;
 }

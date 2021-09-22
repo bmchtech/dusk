@@ -2,6 +2,7 @@
 
 IMGS_DIR := ../img
 MAPS_DIR := ../map
+RAWMAPS_DIR := ../rawmap
 SOUND_DIR := ../snd
 
 ATLS_SRC := $(shell find $(IMGS_DIR) -mindepth 1 -type d)
@@ -9,6 +10,9 @@ ATLS_OUT := $(patsubst %,atl_%_,$(notdir $(ATLS_SRC)))
 ATLS_PNG := $(ATLS_OUT:%_=%_0.png)
 
 IMGS_BIN := $(notdir $(ATLS_PNG:%.png=%.img.bin))
+
+RAWMAPS_SRC := $(shell find $(RAWMAPS_DIR) -name '*.png')
+RAWMAPS_BIN := $(notdir $(RAWMAPS_SRC:%.png=%.bin))
 
 MAPS_SRC := $(shell find $(MAPS_DIR) -name '*.tmx')
 MAPS_BIN := $(notdir $(MAPS_SRC:%.tmx=%.bin))
@@ -19,7 +23,7 @@ SOUND_H := soundbank.h
 
 GRIT_FLAGS := -gt -p -g -gB 8 -gu32 -pu32 -ftb
 
-all: $(MAPS_BIN) $(IMGS_BIN) $(SOUND_BIN) $(SOUND_H)
+all: $(MAPS_BIN) $(RAWMAPS_BIN) $(IMGS_BIN) $(SOUND_BIN) $(SOUND_H)
 
 clean:
 	rm -rfv *.bin
@@ -28,6 +32,9 @@ clean:
 
 %.bin: ../map/%.tmx
 	Tiled2GBA -b $< $@
+
+%.bin: ../rawmap/%.png
+	grit "$<" -gt -p -m -g -gB 8 -gu32 -pu32 -Mh 2 -Mw 2 -ftb -o "$@"
 
 # $(IMGS_BIN): $(ATLS_PNG)
 # 	grit "$<" -gt -p -g -gB 8 -gu32 -pu32 -Mh 2 -Mw 2 -ftb -o "$@"

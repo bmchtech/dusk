@@ -13,6 +13,23 @@ void dusk_load_init() {
     gbfs_dat = find_first_gbfs_file(find_first_gbfs_file);
 }
 
+GritImage dusk_load_image(char* name) {
+    GritImage img;
+    char tiles_name[GBFS_ENTRY_SIZE];
+    strcpy(tiles_name, name);
+    strcat(tiles_name, ".img.bin");
+    char pal_name[GBFS_ENTRY_SIZE];
+    strcpy(pal_name, name);
+    strcat(pal_name, ".pal.bin");
+    char map_name[GBFS_ENTRY_SIZE];
+    strcpy(map_name, name);
+    strcat(map_name, ".map.bin");
+
+    img.tiles = (u32*)gbfs_get_obj(gbfs_dat, tiles_name, &img.tile_sz);
+    img.pal = (u32*)gbfs_get_obj(gbfs_dat, pal_name, &img.pal_sz);
+    img.map = (u32*)gbfs_get_obj(gbfs_dat, map_name, &img.map_sz);
+}
+
 SpriteAtlas dusk_load_atlas(char* name) {
     SpriteAtlas atlas;
     char tiles_name[GBFS_ENTRY_SIZE];

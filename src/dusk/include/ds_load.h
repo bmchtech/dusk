@@ -17,6 +17,15 @@ typedef struct SpriteAtlas {
     u32 pal_sz;
 } SpriteAtlas;
 
+typedef struct GritImage {
+    u32* tiles;
+    u32 tile_sz;
+    u32* pal;
+    u32 pal_sz;
+    u32* map;
+    u32 map_sz;
+} GritImage;
+
 #define ATLAS_ENTRY_LEN 6
 
 /** represents a single entry in the sprite atlas.
@@ -44,6 +53,7 @@ void dusk_load_init();
 
 // - CONTENT LOADERS: pass filename without extension
 
+GritImage dusk_load_image(char* name);
 SpriteAtlas dusk_load_atlas(char* name);
 SpriteAtlasLayout dusk_load_atlas_layout(const char* name);
 SpriteAtlasEntry* dusk_load_atlas_entry(SpriteAtlasLayout* layout, const char* entry_name);
