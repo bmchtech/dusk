@@ -6,6 +6,8 @@ Sprite* thred;
 Anim th_anim1;
 
 void thred_start() {
+    REG_WIN0H = 0xBEB0;
+    
     dusk_init_graphics_mode0();
 
     pal_bg_mem[0] = 0x0C02; // background color

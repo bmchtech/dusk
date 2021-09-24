@@ -9,6 +9,8 @@ Sprite* vizspr;
 Anim vz_anim1;
 
 void audio_start() {
+    REG_WIN0H = 0xBEA0;
+
     dusk_init_graphics_mode0();
 
     // irq setup for maxmod dma
