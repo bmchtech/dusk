@@ -21,7 +21,7 @@ int main() {
 
     while (TRUE) {
         key_poll(); // update input
-        if (key_hit(KEY_START) || demo_ix < 4) {
+        if (key_hit(KEY_START)) {
             demo_ix = (demo_ix + 1) % NUM_DEMOS;
             dusk_scene_set(demos[demo_ix]);
         }
