@@ -50,7 +50,7 @@ void audio_start() {
 
     // init text engine
     REG_DISPCNT |= DCNT_BG1;
-    tte_init_chr4c(1, BG_CBB(0) | BG_SBB(31), 0, 0x0201, CLR_GRAY, NULL, NULL);
+    tte_init_chr4c_default(1, BG_CBB(0) | BG_SBB(31));
     tte_init_con();
     
     tte_printf("music");
