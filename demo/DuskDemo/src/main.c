@@ -1,20 +1,20 @@
 #include "dusk.h"
 #include "scenes.h"
 
-#define NUM_DEMOS 7
+#define NUM_DEMOS 8
 
 int main() {
     dusk_init_all();
 
     Scene demos[NUM_DEMOS] = {
         logo_scene,
-        fountain_scene,
-        randbit_scene,
-        audio_scene,
         thred_scene,
-        
+        audio_scene,
+        background_scene,
         merge_scene,
+        fountain_scene,
         autumn_scene,
+        randbit_scene,
     };
     int demo_ix = 0;
 
