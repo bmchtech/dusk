@@ -25,7 +25,7 @@ INCFLAGS := -I$(DUSK_DIR)/include -I$(DEVKITPRO)/libtonc/include -I$(DEVKITPRO)/
 LIBFLAGS := -L$(DUSK_DIR)/lib -ldusk -L$(DEVKITPRO)/libtonc/lib -ltonc -L$(DEVKITPRO)/libgba/lib -lmm
 ASFLAGS	:= -mthumb-interwork
 CFLAGS	:= $(ARCH) -Wall -fno-strict-aliasing -mcpu=arm7tdmi -mtune=arm7tdmi $(INCFLAGS) $(LIBFLAGS)
-LDFLAGS	:= $(ARCH) $(SPECS) $(LIBFLAGS)
+LDFLAGS	:= $(ARCH) $(SPECS) $(LIBFLAGS) -Wl,-Map,$(TITLE).map
 
 DUSK_MKFLAGS :=
 
@@ -53,7 +53,7 @@ APP_OBJECTS		  := $(APP_OBJECTS_C) $(APP_OBJECTS_S)
 
 .PHONY: libs assets
 
-build: libs $(NAME).gba
+build: assets libs $(NAME).gba
 
 no-content: libs $(NAME)-no_content.gba
 
