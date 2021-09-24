@@ -8,12 +8,11 @@ int main() {
 
     Scene demos[NUM_DEMOS] = {
         logo_scene,
+        audio_scene,
+        merge_scene,
         fountain_scene,
         randbit_scene,
-        audio_scene,
         thred_scene,
-        
-        merge_scene,
         autumn_scene,
     };
     int demo_ix = 0;

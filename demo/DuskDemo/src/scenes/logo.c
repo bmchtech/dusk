@@ -39,8 +39,8 @@ void logo_start() {
     // ----------
 
 	REG_DISPCNT |= DCNT_BG1;
-	tte_init_chr4c(1, BG_CBB(0)|BG_SBB(31), 0, 0x0201, CLR_GRAY, NULL, NULL);
-    tte_init_con();
+	tte_init_chr4c(1, BG_CBB(0)|BG_SBB(31), 0, 0x0201, CLR_WHITE, NULL, NULL);
+	tte_init_con();
 
     pal_gradient_ex(pal_bg_mem, 1, 4, CLR_YELLOW, CLR_ORANGE);
     pal_gradient_ex(pal_bg_mem, 5, 8, CLR_BLACK, CLR_WHITE);
