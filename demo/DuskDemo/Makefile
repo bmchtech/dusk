@@ -53,7 +53,7 @@ APP_OBJECTS		  := $(APP_OBJECTS_C) $(APP_OBJECTS_S)
 
 .PHONY: libs assets
 
-build: libs $(NAME).gba
+build: assets libs $(NAME).gba
 
 no-content: libs $(NAME)-no_content.gba
 
