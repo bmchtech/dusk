@@ -3,10 +3,10 @@
 #include <tonc.h>
 #include "stdio.h"
 
-__attribute__((section(".ewram"))) OBJ_ATTR obj_buffer[NUM_SPRITES];
+EWRAM_DATA OBJ_ATTR obj_buffer[NUM_SPRITES];
 OBJ_AFFINE* obj_aff_buffer = (OBJ_AFFINE*)obj_buffer;
 
-__attribute__((section(".ewram"))) Sprite sprites[NUM_SPRITES];
+EWRAM_DATA Sprite sprites[NUM_SPRITES];
 
 #define BPP 8
 
