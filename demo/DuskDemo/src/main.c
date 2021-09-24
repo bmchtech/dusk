@@ -17,14 +17,17 @@ int main() {
     int demo_ix = 0;
 
     dusk_scene_set(demos[demo_ix]);
+    REG_WIN0H = 0xCCC0;
 
     while (TRUE) {
         key_poll(); // update input
         if (key_hit(KEY_START) || demo_ix < 4) {
             demo_ix = (demo_ix + 1) % NUM_DEMOS;
             dusk_scene_set(demos[demo_ix]);
+            REG_WIN0H = 0xCCC1;
         }
 
+        REG_WIN0H = 0xCCC7;
         dusk_scene_update();
     }
 }
