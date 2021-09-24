@@ -50,13 +50,19 @@ void audio_start() {
 
     // init text engine
     REG_DISPCNT |= DCNT_BG1;
+
+    REG_WIN0H = 0xBEA1;
     tte_init_chr4c_default(1, BG_CBB(0) | BG_SBB(31));
+    REG_WIN0H = 0xBEA2;
     tte_init_con();
+    REG_WIN0H = 0xBEA3;
     
     tte_printf("music");
+    REG_WIN0H = 0xBEA4;
 }
 
 void audio_update() {
+    REG_WIN0H = 0xCAC0;
     dusk_frame(); // video frame
     mmFrame();    // audio frame
 
@@ -71,6 +77,7 @@ void audio_update() {
 
     // update sprites
     dusk_sprites_update();
+    REG_WIN0H = 0xCAC1;
 }
 
 void audio_end() {

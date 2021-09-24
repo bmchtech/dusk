@@ -28,19 +28,26 @@ void thred_start() {
     // ----------
 
     REG_DISPCNT |= DCNT_BG1;
+
+    REG_WIN0H = 0xBEB1;
     tte_init_chr4c_default(1, BG_CBB(0) | BG_SBB(31));
+    REG_WIN0H = 0xBEB2;
     tte_init_con();
+    REG_WIN0H = 0xBEB3;
 
     tte_printf("thred hello");
+    REG_WIN0H = 0xBEB4;
 }
 
 void thred_update() {
+    REG_WIN0H = 0xCAD0;
     dusk_frame();
 
     dusk_sprites_anim_play(thred, &th_anim1);
 
     // update sprites
     dusk_sprites_update();
+    REG_WIN0H = 0xCAD1;
 }
 
 void thred_end() {}
