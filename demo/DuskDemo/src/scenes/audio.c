@@ -50,6 +50,11 @@ void audio_start() {
 
     // init text engine
     REG_DISPCNT |= DCNT_BG1;
+    tte_init_chr4c(1, BG_CBB(0) | BG_SBB(31), 0, 0x0201, CLR_GRAY, NULL, NULL);
+    tte_init_con();
+    // tte_printf("#{P:12,12}audio (bank: %d KB)", soundbank_len / 1000); // this line is problematic on TempGBA
+    tte_printf("#{P:12,12} § music demo");
+    tte_printf("#{P:200,140}next >");
 }
 
 void audio_update() {
