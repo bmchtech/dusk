@@ -157,8 +157,10 @@ void dusk_sprites_update() {
         dusk_sprites_sync(i);
     }
 
-    // upload to gpu memory
+    // upload shadow oam to gpu memory
+
     oam_copy(oam_mem, obj_buffer, NUM_SPRITES);
+    // CpuFastSet(obj_buffer, oam_mem, NUM_SPRITES * 2);
 }
 
 void dusk_sprites_anim_play(Sprite* spr, Anim* anim) {
