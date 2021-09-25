@@ -7,11 +7,11 @@ int main() {
     dusk_init_all();
 
     Scene demos[NUM_DEMOS] = {
-        merge_scene,
         logo_scene,
         thred_scene,
         audio_scene,
         background_scene,
+        merge_scene,
         fountain_scene,
         autumn_scene,
         randbit_scene,
