@@ -1,5 +1,6 @@
 # generated data
 *.bin
+*.b
 *.h
 atl*
 a_*
