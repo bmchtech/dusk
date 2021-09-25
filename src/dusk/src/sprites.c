@@ -147,7 +147,11 @@ inline void dusk_sprites_sync(int i) {
     // position
     obj_set_pos(obj, sprites[i].x, sprites[i].y);
     // main attrs
+
+    // logical base tid mode
     // obj_set_attr(obj, obj->attr0, obj->attr1, (sprites[i].tid + sprites[i].page) * sprites[i].tile_sz * 2);
+
+    // raw base tid mode
     obj_set_attr(obj, obj->attr0, obj->attr1, (sprites[i].base_tid + (sprites[i].page * sprites[i].tile_sz)) * 2);
 }
 
