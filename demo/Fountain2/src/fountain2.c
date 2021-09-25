@@ -28,10 +28,8 @@ void load_save() {
     // load data
     int p = 1;
 
-    memcpy(&eggcat_vpos, sram_mem + p, sizeof(VPos));
-    p += sizeof(VPos);
-    memcpy(&room_pos, sram_mem + p, sizeof(VPos));
-    p += sizeof(VPos);
+    SV_LOAD_ITEM(eggcat_vpos, VPos, p);
+    SV_LOAD_ITEM(room_pos, VPos, p);
 }
 
 void write_save() {
@@ -41,10 +39,8 @@ void write_save() {
     // save data
     int p = 1;
 
-    memcpy(sram_mem + p, &eggcat_vpos, sizeof(VPos));
-    p += sizeof(VPos);
-    memcpy(sram_mem + p, &room_pos, sizeof(VPos));
-    p += sizeof(VPos);
+    SV_SAVE_ITEM(eggcat_vpos, VPos, p);
+    SV_SAVE_ITEM(room_pos, VPos, p);
 }
 
 void fountain_start() {
