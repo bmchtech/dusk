@@ -35,16 +35,6 @@ clean:
 	rm -rfv *.hash
 	rm -rfv *.json
 
-%.bin: ../map/%.tmx
-	Tiled2GBA -b $< $@
-
-%.bin: ../rawmap/%.png
-	grit "$<" -p -m -g -gB 4 -gu32 -pu32 -ftb -o "$@"
-
-# $(IMGS_BIN): $(ATLS_PNG)
-# 	grit "$<" -gt -p -g -gB 8 -gu32 -pu32 -Mh 2 -Mw 2 -ftb -o "$@"
-
-
 # define a function: atlpng2grit(size), this will set Mw and Mh to size
 atlpng2grit = grit "$<" $(GRIT_FLAGS) -Mh $(1) -Mw $(1) -o "$@"
 
@@ -52,23 +42,27 @@ atlpng2grit = grit "$<" $(GRIT_FLAGS) -Mh $(1) -Mw $(1) -o "$@"
 %.img.bin: %.png
 	grit "$<" $(GRIT_FLAGS) -o "$@"
 
-# import custom atlas grit recipes
+# import custom recipes
 include custom.mk
 
+# rule for building atlas pngs from sprite dirs
+# build a_thing_
+a_%_: ../img/%
+	crunch_gen "$@" "$<" $(CRUNCH_FLAGS)
+# convert a_thing_ to a_thing_0.png (fake recipe)
 $(ATLS_PNG): $(ATLS_OUT)
 	@true
 
-# $(ATLS_OUT): $(ATLS_SRC)
-# 	crunch_gen $@ "$<" -v -p -j -s256
+# rule for building tmx maps
+%.bin: ../map/%.tmx
+	Tiled2GBA -b $< $@
 
-a_%_: ../img/%
-	crunch_gen $@ "$<" $(CRUNCH_FLAGS)
+# rule for building raw maps
+%.bin: ../rawmap/%.png
+	grit "$<" -p -m -g -gB 4 -gu32 -pu32 -ftb -o "$@"
 
-#---------------------------------------------------------------------------------
-# rule to build soundbank from music files
-#---------------------------------------------------------------------------------
+# rule for building soundbank
 $(SOUND_BIN) $(SOUND_H) : $(SOUND_SRC)
-#---------------------------------------------------------------------------------
 	@mmutil $^ -osoundbank.bin -hsoundbank.h
 
 # debug:
