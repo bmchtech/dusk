@@ -22,8 +22,9 @@ typedef struct Sprite {
     s16 x, y;
     /** the number of tiles taken up by this sprite */
     u8 tile_sz;
+    /** the raw tid of the top left corner tile of spritesheet frame 0 */
     u16 base_tid;
-    /** used for spritesheets/animation */
+    /** the frame index of the spritesheet */
     u8 page;
     /** */
     u8 flags;
