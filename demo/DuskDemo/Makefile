@@ -27,6 +27,7 @@ ASFLAGS	:= -mthumb-interwork
 CFLAGS	:= $(ARCH) -Wall -Werror -fno-strict-aliasing -mcpu=arm7tdmi -mtune=arm7tdmi $(INCFLAGS) $(LIBFLAGS)
 LDFLAGS	:= $(ARCH) $(SPECS) $(LIBFLAGS) -Wl,-Map,$(TITLE).map
 
+ASSET_MKFLAGS :=
 DUSK_MKFLAGS :=
 
 ifeq ($(DEBUG),1)
@@ -61,7 +62,7 @@ libs:
 	cd $(DUSK_DIR) && make $(DUSK_MKFLAGS)
 
 assets:
-	cd asset/build && make
+	cd asset/build && make $(ASSET_MKFLAGS)
 
 $(NAME).gba : $(NAME)-code.gba $(NAME).gbfs
 	cat $^ > $(NAME).gba
