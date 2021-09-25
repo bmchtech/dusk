@@ -25,7 +25,6 @@ IN THE SOFTWARE.
 
 */
 
-
 /* Dependency on prior include files
 
 Before you #include "gbfs.h", you should define the following types:
@@ -42,43 +41,31 @@ extern "C" {
 
 /* to make a 300 KB space called samples do GBFS_SPACE(samples, 300) */
 
-#define GBFS_SPACE(filename, kbytes) \
-const char filename[(kbytes)*1024] __attribute__ ((aligned (16))) = \
-  "PinEightGBFSSpace-" #filename "-" #kbytes ;
+#define GBFS_SPACE(filename, kbytes)                                                                                   \
+    const char filename[(kbytes)*1024] __attribute__((aligned(16))) = "PinEightGBFSSpace-" #filename "-" #kbytes;
 
 #define GBFS_ENTRY_SIZE 24
 
-typedef struct GBFS_FILE
-{
-  char magic[16];    /* "PinEightGBFS\r\n\032\n" */
-  u32  total_len;    /* total length of archive */
-  u16  dir_off;      /* offset in bytes to directory */
-  u16  dir_nmemb;    /* number of files */
-  char reserved[8];  /* for future use */
+typedef struct GBFS_FILE {
+    char magic[16];   /* "PinEightGBFS\r\n\032\n" */
+    u32 total_len;    /* total length of archive */
+    u16 dir_off;      /* offset in bytes to directory */
+    u16 dir_nmemb;    /* number of files */
+    char reserved[8]; /* for future use */
 } GBFS_FILE;
 
-typedef struct GBFS_ENTRY
-{
-  char name[GBFS_ENTRY_SIZE];     /* filename, nul-padded */
-  u32  len;          /* length of object in bytes */
-  u32  data_offset;  /* in bytes from beginning of file */
+typedef struct GBFS_ENTRY {
+    char name[GBFS_ENTRY_SIZE]; /* filename, nul-padded */
+    u32 len;                    /* length of object in bytes */
+    u32 data_offset;            /* in bytes from beginning of file */
 } GBFS_ENTRY;
 
-
-const GBFS_FILE *find_first_gbfs_file(const void *start);
-const void *skip_gbfs_file(const GBFS_FILE *file);
-const void *gbfs_get_obj(const GBFS_FILE *file,
-                         const char *name,
-                         u32 *len);
-const void *gbfs_get_nth_obj(const GBFS_FILE *file,
-                             size_t n,
-                             char *name,
-                             u32 *len);
-void *gbfs_copy_obj(void *dst,
-                    const GBFS_FILE *file,
-                    const char *name);
-size_t gbfs_count_objs(const GBFS_FILE *file);
-
+const GBFS_FILE* find_first_gbfs_file(const void* start);
+const void* skip_gbfs_file(const GBFS_FILE* file);
+const void* gbfs_get_obj(const GBFS_FILE* file, const char* name, u32* len);
+const void* gbfs_get_nth_obj(const GBFS_FILE* file, size_t n, char* name, u32* len);
+void* gbfs_copy_obj(void* dst, const GBFS_FILE* file, const char* name);
+size_t gbfs_count_objs(const GBFS_FILE* file);
 
 #ifdef __cplusplus
 }
