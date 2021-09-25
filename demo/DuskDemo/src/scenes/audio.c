@@ -37,7 +37,7 @@ void audio_start() {
 
     // load sprite atlas
     dusk_sprites_init();
-    SpriteAtlas atlas = dusk_load_atlas("atl_mus");
+    SpriteAtlas atlas = dusk_load_atlas("a_mus");
     dusk_sprites_upload_atlas(&atlas);
 
     vizspr = dusk_sprites_make(0, 64, 64,

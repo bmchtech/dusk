@@ -13,11 +13,11 @@ void merge_start() {
 
     // load sprite atlas
     dusk_sprites_init();
-    SpriteAtlas chrs_atlas = dusk_load_atlas("atl_chars");
-    SpriteAtlasLayout chrs_atlas_layout = dusk_load_atlas_layout("atl_chars");
+    SpriteAtlas chrs_atlas = dusk_load_atlas("a_chars");
+    SpriteAtlasLayout chrs_atlas_layout = dusk_load_atlas_layout("a_chars");
 
-    SpriteAtlas logo_atlas = dusk_load_atlas("atl_logo");
-    SpriteAtlasLayout logo_atlas_layout = dusk_load_atlas_layout("atl_logo");
+    SpriteAtlas logo_atlas = dusk_load_atlas("a_logo");
+    SpriteAtlasLayout logo_atlas_layout = dusk_load_atlas_layout("a_logo");
 
     dusk_sprites_upload_atlas_section(&chrs_atlas_layout, &chrs_atlas, &chrs_atlas_layout.entries[2], 0, 0);
     dusk_sprites_upload_atlas_section(&logo_atlas_layout, &logo_atlas, &logo_atlas_layout.entries[0], 16, 16);

@@ -12,7 +12,7 @@ void thred_start() {
 
     // load sprite atlas
     dusk_sprites_init();
-    SpriteAtlas atlas = dusk_load_atlas("atl_thred");
+    SpriteAtlas atlas = dusk_load_atlas("a_thred");
     dusk_sprites_upload_atlas(&atlas);
 
     thred = dusk_sprites_make(0, 64, 64,

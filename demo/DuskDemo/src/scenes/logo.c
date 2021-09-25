@@ -16,7 +16,7 @@ void logo_start() {
 
     // load sprite atlas
     dusk_sprites_init();
-    SpriteAtlas atlas = dusk_load_atlas("atl_logo");
+    SpriteAtlas atlas = dusk_load_atlas("a_logo");
     dusk_sprites_upload_atlas(&atlas);
 
     logo = dusk_sprites_make(0, 64, 64,

@@ -64,11 +64,11 @@ void autumn_start() {
 
     // load sprite atlas
     dusk_sprites_init();
-    SpriteAtlas atlas = dusk_load_atlas("atl_part");
+    SpriteAtlas atlas = dusk_load_atlas("a_part");
     dusk_sprites_upload_atlas(&atlas);
 
     // load atlas layout
-    atlas_layout = dusk_load_atlas_layout("atl_part");
+    atlas_layout = dusk_load_atlas_layout("a_part");
 
     // set up N leaf sprites
     for (int i = 0; i < NUM_LEAVES; i++) {
