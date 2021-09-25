@@ -43,23 +43,28 @@ clean:
 # $(IMGS_BIN): $(ATLS_PNG)
 # 	grit "$<" -gt -p -g -gB 8 -gu32 -pu32 -Mh 2 -Mw 2 -ftb -o "$@"
 
+
+# define a function: atlpng2grit(size), this will set Mw and Mh to size
+atlpng2grit = grit "$<" $(GRIT_FLAGS) -Mh $(1) -Mw $(1) -o "$@"
+
+# default rule for atlpng -> img bin
 %.img.bin: %.png
 	grit "$<" $(GRIT_FLAGS) -o "$@"
 
 a_part_0.img.bin: a_part_0.png
-	grit "$<" $(GRIT_FLAGS) -Mh 1 -Mw 1 -o "$@"
+	$(call atlpng2grit,1)
 
 a_chars_0.img.bin: a_chars_0.png
-	grit "$<" $(GRIT_FLAGS) -Mh 2 -Mw 2 -o "$@"
+	$(call atlpng2grit,2)
 
 a_logo_0.img.bin: a_logo_0.png
-	grit "$<" $(GRIT_FLAGS) -Mh 8 -Mw 8 -o "$@"
+	$(call atlpng2grit,8)
 
 a_thred_0.img.bin: a_thred_0.png
-	grit "$<" $(GRIT_FLAGS) -Mh 8 -Mw 8 -o "$@"
+	$(call atlpng2grit,8)
 
 a_mus_0.img.bin: a_mus_0.png
-	grit "$<" $(GRIT_FLAGS) -Mh 8 -Mw 8 -o "$@"
+	$(call atlpng2grit,8)
 
 $(ATLS_PNG): $(ATLS_OUT)
 	@true
