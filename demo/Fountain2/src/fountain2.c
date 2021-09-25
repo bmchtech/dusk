@@ -28,8 +28,8 @@ void load_save() {
     // load data
     int p = 1;
 
-    SV_LOAD_ITEM(eggcat_vpos, VPos, p);
-    SV_LOAD_ITEM(room_pos, VPos, p);
+    SV_LOAD_ITEM(eggcat_vpos, p);
+    SV_LOAD_ITEM(room_pos, p);
 }
 
 void write_save() {
@@ -39,8 +39,8 @@ void write_save() {
     // save data
     int p = 1;
 
-    SV_SAVE_ITEM(eggcat_vpos, VPos, p);
-    SV_SAVE_ITEM(room_pos, VPos, p);
+    SV_SAVE_ITEM(eggcat_vpos, p);
+    SV_SAVE_ITEM(room_pos, p);
 }
 
 void fountain_start() {

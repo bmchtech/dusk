@@ -6,12 +6,12 @@
 
 // utilities for saving and loading vars
 
-#define SV_LOAD_ITEM(var, type, offset)                                                                                \
-    memcpy(&var, sram_mem + offset, sizeof(type));                                                                     \
-    offset += sizeof(type);
+#define SV_LOAD_ITEM(var, offset)                                                                         \
+    memcpy(&var, sram_mem + offset, sizeof(typeof(var)));                                                              \
+    offset += sizeof(typeof(var));
 
-#define SV_SAVE_ITEM(var, type, offset)                                                                                \
-    memcpy(sram_mem + offset, &var, sizeof(type));                                                                     \
-    offset += sizeof(type);
+#define SV_SAVE_ITEM(var, offset)                                                                                      \
+    memcpy(sram_mem + offset, &var, sizeof(typeof(var)));                                                              \
+    offset += sizeof(typeof(var));
 
 // utilities for saving and loading vars
