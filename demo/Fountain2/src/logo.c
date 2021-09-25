@@ -41,10 +41,10 @@ void logo_start() {
 	tte_init_chr4c(1, BG_CBB(0)|BG_SBB(31), 0, 0x0201, CLR_WHITE, NULL, NULL);
 	tte_init_con();
 
-    pal_gradient_ex(pal_bg_mem, 1, 4, CLR_YELLOW, CLR_ORANGE);
+    pal_gradient_ex(pal_bg_mem, 1, 4, 0x6F98, 0x4964);
 
-    tte_printf("#{P:12,12}#{ci:4}dusk #{ci:2}demo");
-    tte_printf("#{P:12,24}#{ci:2}¯¯¯¯¯¯¯");
+    tte_printf("#{P:12,12}#{ci:1}fountain #{ci:3}v2.0");
+    tte_printf("#{P:12,24}#{ci:2}¯¯¯¯¯¯¯¯¯");
 }
 
 void logo_update() {
