@@ -21,14 +21,18 @@ SOUND_SRC := $(shell find $(SOUND_DIR))
 SOUND_BIN := soundbank.bin
 SOUND_H := soundbank.h
 
-GRIT_FLAGS := -gt -p -g -gB 8 -gu32 -pu32 -ftb
+GRIT_FLAGS := -gt -p -g -gB 8 -gu32 -pu32 -ftb -fh!
 
 all: $(MAPS_BIN) $(RAWMAPS_BIN) $(IMGS_BIN) $(SOUND_BIN) $(SOUND_H)
 
 clean:
 	rm -rfv *.bin
+	rm -rfv *.b
 	rm -rfv *.h
 	rm -rfv atl*
+	rm -rfv *.png
+	rm -rfv *.hash
+	rm -rfv *.json
 
 %.bin: ../map/%.tmx
 	Tiled2GBA -b $< $@
