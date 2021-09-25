@@ -55,7 +55,7 @@ APP_OBJECTS		  := $(APP_OBJECTS_C) $(APP_OBJECTS_S)
 
 build: assets libs $(NAME).gba
 
-no-content: libs $(NAME)-no_content.gba
+no-content: libs $(NAME)-code.gba
 
 libs:
 	cd $(DUSK_DIR) && make $(DUSK_MKFLAGS)
@@ -63,10 +63,10 @@ libs:
 assets:
 	cd asset/build && make
 
-$(NAME).gba : $(NAME)-no_content.gba $(NAME).gbfs
+$(NAME).gba : $(NAME)-code.gba $(NAME).gbfs
 	cat $^ > $(NAME).gba
 
-$(NAME)-no_content.gba : $(NAME).elf
+$(NAME)-code.gba : $(NAME).elf
 	$(OBJCOPY) -v -O binary $< $@
 	-@gbafix $@ -t$(NAME)
 	padbin 256 $@
