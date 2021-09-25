@@ -22,6 +22,7 @@ SOUND_BIN := soundbank.bin
 SOUND_H := soundbank.h
 
 GRIT_FLAGS := -gt -p -g -gB 8 -gu32 -pu32 -ftb -fh!
+CRUNCH_FLAGS := -p -j -b -s256 -p0
 
 all: $(MAPS_BIN) $(RAWMAPS_BIN) $(IMGS_BIN) $(SOUND_BIN) $(SOUND_H)
 
@@ -73,7 +74,7 @@ $(ATLS_PNG): $(ATLS_OUT)
 # 	crunch_gen $@ "$<" -v -p -j -s256
 
 a_%_: ../img/%
-	crunch_gen $@ "$<" -v -p -j -b -s256 -p0
+	crunch_gen $@ "$<" $(CRUNCH_FLAGS)
 
 #---------------------------------------------------------------------------------
 # rule to build soundbank from music files
