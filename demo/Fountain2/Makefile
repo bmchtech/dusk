@@ -8,7 +8,7 @@ NAME		:= $(TITLE)
 SOURCE_DIR := src
 LIB_DIR    := lib
 DUSK_DIR   := ../../src/dusk
-DATA_DIR   := asset
+DATA_DIR   := asset/build
 SPECS      := -specs=gba.specs
 
 # Compilation settings
@@ -21,12 +21,13 @@ OBJCOPY	:= $(CROSS)objcopy
 
 ARCH	:= -mthumb-interwork -mthumb
 
-INCFLAGS := -I$(DUSK_DIR)/include -I$(DEVKITPRO)/libtonc/include
-LIBFLAGS := -L$(DUSK_DIR)/lib -ldusk -L$(DEVKITPRO)/libtonc/lib -ltonc
+INCFLAGS := -I$(DUSK_DIR)/include -I$(DEVKITPRO)/libtonc/include -I$(DEVKITPRO)/libgba/include -I$(SOURCE_DIR) -I$(DATA_DIR)
+LIBFLAGS := -L$(DUSK_DIR)/lib -ldusk -L$(DEVKITPRO)/libtonc/lib -ltonc -L$(DEVKITPRO)/libgba/lib -lmm
 ASFLAGS	:= -mthumb-interwork
-CFLAGS	:= $(ARCH) -Wall -fno-strict-aliasing -mcpu=arm7tdmi -mtune=arm7tdmi $(INCFLAGS) $(LIBFLAGS)
+CFLAGS	:= $(ARCH) -Wall -Werror -fno-strict-aliasing -mcpu=arm7tdmi -mtune=arm7tdmi $(INCFLAGS) $(LIBFLAGS)
 LDFLAGS	:= $(ARCH) $(SPECS) $(LIBFLAGS) -Wl,-Map,$(TITLE).map
 
+ASSET_MKFLAGS :=
 DUSK_MKFLAGS :=
 
 ifeq ($(DEBUG),1)
@@ -43,25 +44,30 @@ endif
 
 APP_MAIN_SOURCE := $(shell find $(SOURCE_DIR) -name '*main.c')
 APP_MAIN_OBJECT := $(APP_MAIN_SOURCE:%.c=%.o)
-APP_SOURCES     := $(shell find $(SOURCE_DIR) -name '*.c' ! -name "*main.c"  ! -name "*.test.c")
-APP_OBJECTS     := $(APP_SOURCES:%.c=%.o)
+APP_SOURCES_C     := $(shell find $(SOURCE_DIR) -name '*.c' ! -name "*main.c"  ! -name "*.test.c")
+APP_SOURCES_S     := $(shell find $(SOURCE_DIR) -name '*.s')
+APP_OBJECTS_C     := $(APP_SOURCES_C:%.c=%.o)
+APP_OBJECTS_S     := $(APP_SOURCES_S:%.s=%.o)
+APP_OBJECTS		  := $(APP_OBJECTS_C) $(APP_OBJECTS_S)
 
 # Build commands and dependencies
 
-build: libs $(NAME).gba
+.PHONY: libs assets
 
-no-content: libs $(NAME)-no_content.gba
+build: assets libs $(NAME).gba
+
+no-content: libs $(NAME)-code.gba
 
 libs:
 	cd $(DUSK_DIR) && make $(DUSK_MKFLAGS)
 
 assets:
-	cd asset/build && make
+	cd asset/build && make $(ASSET_MKFLAGS)
 
-$(NAME).gba : $(NAME)-no_content.gba $(NAME).gbfs
+$(NAME).gba : $(NAME)-code.gba $(NAME).gbfs
 	cat $^ > $(NAME).gba
 
-$(NAME)-no_content.gba : $(NAME).elf
+$(NAME)-code.gba : $(NAME).elf
 	$(OBJCOPY) -v -O binary $< $@
 	-@gbafix $@ -t$(NAME)
 	padbin 256 $@
@@ -69,7 +75,10 @@ $(NAME)-no_content.gba : $(NAME).elf
 $(NAME).elf : $(APP_OBJECTS) $(APP_MAIN_OBJECT)
 	$(LD) $^ $(LDFLAGS) -o $@
 
-$(APP_OBJECTS) : %.o : %.c
+$(APP_OBJECTS_C) : %.o : %.c assets libs
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(APP_OBJECTS_S) : %.o : %.s
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(APP_MAIN_OBJECT) : $(APP_MAIN_SOURCE)
