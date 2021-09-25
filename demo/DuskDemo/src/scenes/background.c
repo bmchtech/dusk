@@ -5,6 +5,8 @@
 void background_start() {
     dusk_init_graphics_mode0();
 
+    REG_DISPCNT |= DCNT_BG0;
+
     // load bg
     GritImage bg_img = dusk_load_image("dusk_bg");
     dusk_background_upload_raw(&bg_img, 0, 30);
