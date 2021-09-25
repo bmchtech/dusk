@@ -5,6 +5,11 @@
 
 DUsK, a library for gba dev
 
+## example
+
+<img src="media/duskdemo.webp" width="256">
+<img src="media/fountain2.webp" width="256">
+
 ## features
 + simple, intuitive C API
 + library integration
