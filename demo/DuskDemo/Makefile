@@ -75,7 +75,7 @@ $(NAME)-code.gba : $(NAME).elf
 $(NAME).elf : $(APP_OBJECTS) $(APP_MAIN_OBJECT)
 	$(LD) $^ $(LDFLAGS) -o $@
 
-$(APP_OBJECTS_C) : %.o : %.c assets
+$(APP_OBJECTS_C) : %.o : %.c assets libs
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(APP_OBJECTS_S) : %.o : %.s
