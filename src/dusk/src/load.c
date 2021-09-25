@@ -33,16 +33,17 @@ GritImage dusk_load_image(char* name) {
 }
 
 SpriteAtlas dusk_load_atlas(char* name) {
-    SpriteAtlas atlas;
-    char tiles_name[GBFS_ENTRY_SIZE];
-    strcpy(tiles_name, name);
-    strcat(tiles_name, "_0.img.bin");
-    char pal_name[GBFS_ENTRY_SIZE];
-    strcpy(pal_name, name);
-    strcat(pal_name, "_0.pal.bin");
+    char atlas_name[GBFS_ENTRY_SIZE];
+    strcpy(atlas_name, name);
+    strcat(atlas_name, "_0");
 
-    atlas.tiles = (u32*)gbfs_get_obj(gbfs_dat, tiles_name, &atlas.tile_sz);
-    atlas.pal = (u32*)gbfs_get_obj(gbfs_dat, pal_name, &atlas.pal_sz);
+    GritImage img = dusk_load_image(atlas_name);
+    
+    SpriteAtlas atlas;
+    atlas.tiles = img.tiles;
+    atlas.tile_sz = img.tile_sz;
+    atlas.pal = img.pal;
+    atlas.pal_sz = img.pal_sz;
 
     // 1. pal_sz is some weird gradient thing
     // we're going to detect when more than 4 in the row are the same
