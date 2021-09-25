@@ -14,7 +14,7 @@ void dusk_init_all() {
 }
 
 void dusk_clear_vidmem() {
-    // vram mem
+    // clear video memory (vram region)
     memset32(vid_mem, 0, VRAM_BG_SIZE / 4);
     // pal mem
     memset32(pal_bg_mem, 0, 0x00200 / 4);

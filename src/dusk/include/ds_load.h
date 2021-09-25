@@ -40,7 +40,7 @@ typedef struct SpriteAtlasEntry {
 } SpriteAtlasEntry;
 
 /** represents the layout of items in an atlas (https://github.com/xdrie/crunch#binary-format).
- * we only use the first texture because the GPU can only hold one */
+ * we only use the first texture because the vram can only hold one */
 typedef struct SpriteAtlasLayout {
     u16 width;
     u16 height;
