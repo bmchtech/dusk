@@ -103,8 +103,10 @@ const void* gbfs_get_obj(const GBFS_FILE* file, const char* name, u32* len) {
 #pragma GCC diagnostic pop
 
     here = bsearch(key, dirbase, n_entries, sizeof(GBFS_ENTRY), namecmp);
-    if (!here)
+    if (!here) {
+        *len = 0;
         return NULL;
+    }
 
     if (len)
         *len = here->len;
