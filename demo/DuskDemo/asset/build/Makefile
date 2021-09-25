@@ -6,7 +6,7 @@ RAWMAPS_DIR := ../rawmap
 SOUND_DIR := ../snd
 
 ATLS_SRC := $(shell find $(IMGS_DIR) -mindepth 1 -type d)
-ATLS_OUT := $(patsubst %,atl_%_,$(notdir $(ATLS_SRC)))
+ATLS_OUT := $(patsubst %,a_%_,$(notdir $(ATLS_SRC)))
 ATLS_PNG := $(ATLS_OUT:%_=%_0.png)
 
 IMGS_BIN := $(notdir $(ATLS_PNG:%.png=%.img.bin))
@@ -42,19 +42,19 @@ clean:
 %.img.bin: %.png
 	grit "$<" $(GRIT_FLAGS) -o "$@"
 
-atl_part_0.img.bin: atl_part_0.png
+a_part_0.img.bin: a_part_0.png
 	grit "$<" $(GRIT_FLAGS) -Mh 1 -Mw 1 -o "$@"
 
-atl_chars_0.img.bin: atl_chars_0.png
+a_chars_0.img.bin: a_chars_0.png
 	grit "$<" $(GRIT_FLAGS) -Mh 2 -Mw 2 -o "$@"
 
-atl_logo_0.img.bin: atl_logo_0.png
+a_logo_0.img.bin: a_logo_0.png
 	grit "$<" $(GRIT_FLAGS) -Mh 8 -Mw 8 -o "$@"
 
-atl_thred_0.img.bin: atl_thred_0.png
+a_thred_0.img.bin: a_thred_0.png
 	grit "$<" $(GRIT_FLAGS) -Mh 8 -Mw 8 -o "$@"
 
-atl_mus_0.img.bin: atl_mus_0.png
+a_mus_0.img.bin: a_mus_0.png
 	grit "$<" $(GRIT_FLAGS) -Mh 8 -Mw 8 -o "$@"
 
 $(ATLS_PNG): $(ATLS_OUT)
@@ -63,7 +63,7 @@ $(ATLS_PNG): $(ATLS_OUT)
 # $(ATLS_OUT): $(ATLS_SRC)
 # 	crunch_gen $@ "$<" -v -p -j -s256
 
-atl_%_: ../img/%
+a_%_: ../img/%
 	crunch_gen $@ "$<" -v -p -j -b -s256 -p0
 
 #---------------------------------------------------------------------------------
