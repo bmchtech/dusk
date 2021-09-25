@@ -22,7 +22,7 @@ typedef struct Sprite {
     s16 x, y;
     /** the number of tiles taken up by this sprite */
     u8 tile_sz;
-    u16 tid;
+    u16 base_tid;
     /** used for spritesheets/animation */
     u8 page;
     /** */

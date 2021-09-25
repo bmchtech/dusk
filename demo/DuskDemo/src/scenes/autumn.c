@@ -35,7 +35,7 @@ Sprite* respawn_leaf(int i, int x, int y) {
         (Sprite){
             .x = x,
             .y = y,
-            .tid = dusk_sprites_pos_to_tid(leaf_entry->x, leaf_entry->y, atlas_layout.width, atlas_layout.height),
+            .base_tid = dusk_sprites_pos_to_tid(leaf_entry->x, leaf_entry->y, atlas_layout.width, atlas_layout.height),
         });
 
     leaves[i].max_fall_points = qran_range(0, 4);

@@ -22,7 +22,7 @@ void logo_start() {
                              (Sprite){
                                  .x = SCREEN_WIDTH / 2 - 32,
                                  .y = SCREEN_HEIGHT / 2 - 32,
-                                 .tid = 0,
+                                 .base_tid = 0,
                              });
 
     // enable blend on this object

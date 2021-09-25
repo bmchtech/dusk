@@ -23,8 +23,8 @@ void merge_start() {
     dusk_sprites_upload_atlas_section(&logo_atlas_layout, &logo_atlas, &logo_atlas_layout.entries[0], 16, 16);
     // dusk_sprites_upload_atlas_section(&logo_atlas_layout, &logo_atlas, &logo_atlas_layout.entries[0], 0, 0);
 
-    me_spr1 = dusk_sprites_make(0, 16, 16, (Sprite){.x = 40, .y = 40, .tid = 0, .flags = SPRITEFLAG_PRIORITY(3)});
-    me_spr2 = dusk_sprites_make(1, 64, 64, (Sprite){.x = 80, .y = 80, .tid = 16});
+    me_spr1 = dusk_sprites_make(0, 16, 16, (Sprite){.x = 40, .y = 40, .base_tid = 0, .flags = SPRITEFLAG_PRIORITY(3)});
+    me_spr2 = dusk_sprites_make(1, 64, 64, (Sprite){.x = 80, .y = 80, .base_tid = 16});
     me_anim1 = MAKE_ANIM(0, 4);
 
 

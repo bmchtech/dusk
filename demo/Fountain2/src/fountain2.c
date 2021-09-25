@@ -44,7 +44,7 @@ void fountain_start() {
                                (Sprite){
                                    .x = SCREEN_WIDTH / 2 - 8,
                                    .y = SCREEN_HEIGHT / 2 - 8,
-                                   .tid = 32,
+                                   .base_tid = 32,
                                    .page = 0,
                                    .flags = SPRITEFLAG_PRIORITY(3)
                                });
