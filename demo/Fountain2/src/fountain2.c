@@ -36,7 +36,7 @@ void fountain_start() {
 
     // load sprite atlas
     dusk_sprites_init();
-    SpriteAtlas atlas = dusk_load_atlas("atl_chars");
+    SpriteAtlas atlas = dusk_load_atlas("a_chars");
     dusk_sprites_upload_atlas(&atlas);
 
     // make eggcat sprite (&sprites[0])
