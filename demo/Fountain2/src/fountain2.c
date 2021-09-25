@@ -19,6 +19,34 @@ typedef struct VPos {
 VPos eggcat_vpos;
 VPos room_pos;
 
+#define SAVE_MAGIC 0xF0
+void load_save() {
+    // check if save valid
+    if (sram_mem[0] != SAVE_MAGIC)
+        return;
+
+    // load data
+    int p = 1;
+
+    memcpy(&eggcat_vpos, sram_mem + p, sizeof(VPos));
+    p += sizeof(VPos);
+    memcpy(&room_pos, sram_mem + p, sizeof(VPos));
+    p += sizeof(VPos);
+}
+
+void write_save() {
+    // set magic flag
+    sram_mem[0] = SAVE_MAGIC;
+
+    // save data
+    int p = 1;
+
+    memcpy(sram_mem + p, &eggcat_vpos, sizeof(VPos));
+    p += sizeof(VPos);
+    memcpy(sram_mem + p, &room_pos, sizeof(VPos));
+    p += sizeof(VPos);
+}
+
 void fountain_start() {
     dusk_init_graphics_mode0();
 
@@ -29,8 +57,16 @@ void fountain_start() {
     rooms[2][1] = "east";
     rooms[0][0] = "northwest";
 
+    // vars
+    bg_shift = (BackgroundPoint){128, 248};
+    eggcat_vpos = (VPos){128, 248};
+    room_pos = (VPos){1, 1};
+
+    // read save data
+    load_save();
+
     // set up background
-    current_map = dusk_load_map(rooms[1][1]);
+    current_map = dusk_load_map(rooms[room_pos.x][room_pos.y]);
     map_init_registers();
     map_set_onscreen(current_map);
 
@@ -41,19 +77,12 @@ void fountain_start() {
 
     // make eggcat sprite (&sprites[0])
     eggcat = dusk_sprites_make(0, 16, 16,
-                               (Sprite){
-                                   .x = SCREEN_WIDTH / 2 - 8,
-                                   .y = SCREEN_HEIGHT / 2 - 8,
-                                   .base_tid = 32,
-                                   .page = 0,
-                                   .flags = SPRITEFLAG_PRIORITY(3)
-                               });
+                               (Sprite){.x = SCREEN_WIDTH / 2 - 8,
+                                        .y = SCREEN_HEIGHT / 2 - 8,
+                                        .base_tid = 32,
+                                        .page = 0,
+                                        .flags = SPRITEFLAG_PRIORITY(3)});
     walk = MAKE_ANIM(0, 4);
-
-    // initialize
-    bg_shift = (BackgroundPoint){128, 248};
-    eggcat_vpos = (VPos){128, 248};
-    room_pos = (VPos){1, 1};
 }
 
 /** update background and sprite from pos */
@@ -183,6 +212,11 @@ void fountain_update() {
 
     // update sprites
     dusk_sprites_update();
+
+    // write save data
+    if (frame_count % 60 == 0) {
+        write_save();
+    }
 }
 
 void fountain_end() {}
