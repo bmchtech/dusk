@@ -84,53 +84,53 @@ void dusk_sprites_upload_atlas_section(SpriteAtlasLayout* layout, SpriteAtlas* a
 }
 
 Sprite* dusk_sprites_make(int index, u8 width, u8 height, Sprite spr) {
-    // automatically figure out size params
-    spr.tile_sz = (width / 8) * (height / 8);
-    u16 shape = 0;
+    // automatically figure out sprite size/shape attributes
+    u16 shape_attr = 0;
     if (height > width) {
-        shape = ATTR0_TALL;
+        shape_attr = ATTR0_TALL;
     } else if (width > height) {
-        shape = ATTR0_WIDE;
+        shape_attr = ATTR0_WIDE;
     } else if (width == height) {
-        shape = ATTR0_SQUARE;
+        shape_attr = ATTR0_SQUARE;
     }
-    u16 size = 0;
-    if (shape == ATTR0_TALL) {
+    u16 size_attr = 0;
+    if (shape_attr == ATTR0_TALL) {
         if (width == 8 && height == 16)
-            size = ATTR1_SIZE_8x16;
+            size_attr = ATTR1_SIZE_8x16;
         if (width == 8 && height == 32)
-            size = ATTR1_SIZE_8x32;
+            size_attr = ATTR1_SIZE_8x32;
         if (width == 16 && height == 32)
-            size = ATTR1_SIZE_16x32;
+            size_attr = ATTR1_SIZE_16x32;
         if (width == 16 && height == 64)
-            size = ATTR1_SIZE_32x64;
+            size_attr = ATTR1_SIZE_32x64;
     }
-    if (shape == ATTR0_WIDE) {
+    if (shape_attr == ATTR0_WIDE) {
         if (width == 16 && height == 8)
-            size = ATTR1_SIZE_16x8;
+            size_attr = ATTR1_SIZE_16x8;
         if (width == 32 && height == 8)
-            size = ATTR1_SIZE_32x8;
+            size_attr = ATTR1_SIZE_32x8;
         if (width == 32 && height == 16)
-            size = ATTR1_SIZE_32x16;
+            size_attr = ATTR1_SIZE_32x16;
         if (width == 64 && height == 32)
-            size = ATTR1_SIZE_64x32;
+            size_attr = ATTR1_SIZE_64x32;
     }
-    if (shape == ATTR0_SQUARE) {
+    if (shape_attr == ATTR0_SQUARE) {
         if (width == 8 && height == 8)
-            size = ATTR1_SIZE_8x8;
+            size_attr = ATTR1_SIZE_8x8;
         if (width == 16 && height == 16)
-            size = ATTR1_SIZE_16x16;
+            size_attr = ATTR1_SIZE_16x16;
         if (width == 32 && height == 32)
-            size = ATTR1_SIZE_32x32;
+            size_attr = ATTR1_SIZE_32x32;
         if (width == 64 && height == 64)
-            size = ATTR1_SIZE_64x64;
+            size_attr = ATTR1_SIZE_64x64;
     }
 
+    // calculate the number of tiles used by one frame of this sprite (divide width and height by 8)
+    spr.tile_sz = (width >> 3) * (height >> 3);
+
     // set main attributes
-    // multiply by 2 because we're using 8bpp
-    u16 curr_tid = (spr.base_tid + spr.page) * spr.tile_sz * 2;
-    obj_set_attr(&obj_buffer[index], shape | ATTR0_8BPP, size,
-                 ATTR2_PALBANK(0) | ATTR2_PRIO(SPRITEFLAG_PRIORITY_GET(spr.flags)) | curr_tid);
+    // leave tile id (attr2) null, it will be set in sync
+    obj_set_attr(&obj_buffer[index], shape_attr | ATTR0_8BPP, size_attr, 0);
 
     // save sprite metadata
     sprites[index] = spr;
