@@ -17,7 +17,7 @@ RAWMAPS_BIN := $(notdir $(RAWMAPS_SRC:%.png=%.bin))
 MAPS_SRC := $(shell find $(MAPS_DIR) -name '*.tmx')
 MAPS_BIN := $(notdir $(MAPS_SRC:%.tmx=%.bin))
 
-SOUND_SRC := $(shell find $(SOUND_DIR))
+SOUND_SRC := $(shell find $(SOUND_DIR) -type f)
 SOUND_BIN := soundbank.bin
 SOUND_H := soundbank.h
 
@@ -52,20 +52,8 @@ atlpng2grit = grit "$<" $(GRIT_FLAGS) -Mh $(1) -Mw $(1) -o "$@"
 %.img.bin: %.png
 	grit "$<" $(GRIT_FLAGS) -o "$@"
 
-a_part_0.img.bin: a_part_0.png
-	$(call atlpng2grit,1)
-
-a_chars_0.img.bin: a_chars_0.png
-	$(call atlpng2grit,2)
-
-a_logo_0.img.bin: a_logo_0.png
-	$(call atlpng2grit,8)
-
-a_thred_0.img.bin: a_thred_0.png
-	$(call atlpng2grit,8)
-
-a_mus_0.img.bin: a_mus_0.png
-	$(call atlpng2grit,8)
+# import custom atlas grit recipes
+include custom.mk
 
 $(ATLS_PNG): $(ATLS_OUT)
 	@true
