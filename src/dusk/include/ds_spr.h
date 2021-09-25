@@ -73,4 +73,4 @@ void dusk_sprites_anim_play(Sprite* spr, Anim* anim);
 u16 dusk_sprites_pos_to_tid(u16 x, u16 y, u16 sheet_width, u16 sheet_height);
 
 void dusk_background_upload_raw(GritImage* img, int cbb, int sbb);
-void dusk_background_make(u8 bg_id, Background bg);
+void dusk_background_make(u8 bg_id, u16 size, Background bg);

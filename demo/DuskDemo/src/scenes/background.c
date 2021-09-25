@@ -11,7 +11,7 @@ void background_start() {
     GritImage bg_img = dusk_load_image("dusk_bg");
     dusk_background_upload_raw(&bg_img, 0, 30);
 
-    dusk_background_make(0, (Background){.x = 0, .y = 0, .cbb = 0, .sbb = 30});
+    dusk_background_make(0, BG_REG_32x32, (Background){.x = 0, .y = 0, .cbb = 0, .sbb = 30});
 }
 
 void background_update() { dusk_frame(); }

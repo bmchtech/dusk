@@ -237,10 +237,10 @@ void dusk_background_upload_raw(GritImage* img, int cbb, int sbb) {
     memcpy(&se_mem[sbb][0], img->map, img->map_sz);
 }
 
-void dusk_background_make(u8 bg_id, Background bg) {
+void dusk_background_make(u8 bg_id, u16 size, Background bg) {
     // set bg on screen enabled
     enable_bg(bg_id);
     // set control flags
     vu16* bg_reg = dusk_get_background_register(bg_id);
-    *bg_reg |= BG_CBB(bg.cbb) | BG_SBB(bg.sbb) | BG_4BPP | BG_REG_32x32;
+    *bg_reg |= BG_CBB(bg.cbb) | BG_SBB(bg.sbb) | BG_4BPP | size;
 }
