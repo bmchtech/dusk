@@ -60,7 +60,7 @@ $(ATLS_PNG): $(ATLS_OUT)
 
 # rule for building raw maps
 %.bin: ../rawmap/%.png
-	grit "$<" -p -m -g -gB $(GRIT_BPP) -gu32 -pu32 -ftb -o "$@"
+	grit "$<" -p -m -g -gB 8 -gu32 -pu32 -ftb -o "$@"
 
 # rule for building soundbank
 $(SOUND_BIN) $(SOUND_H): $(SOUND_SRC)
