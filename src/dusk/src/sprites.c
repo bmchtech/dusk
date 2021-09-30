@@ -160,8 +160,8 @@ inline void dusk_sprites_sync(int i) {
 
     // raw base tid mode
     int bpp_mult = (sprites_bpp8 == 1) ? 2 : 1;
-    obj_set_attr(obj, obj->attr0, obj->attr1,
-                 (sprites[i].base_tid + (sprites[i].page * sprites[i].tile_sz)) * bpp_mult);
+    u16 tid = (sprites[i].base_tid + (sprites[i].page * sprites[i].tile_sz)) * bpp_mult;
+    obj_set_attr(obj, obj->attr0, obj->attr1, ATTR2_ID(tid) | ATTR2_PALBANK(0));
 }
 
 void dusk_sprites_update() {
