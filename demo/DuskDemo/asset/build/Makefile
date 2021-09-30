@@ -21,7 +21,8 @@ SOUND_SRC := $(shell find $(SOUND_DIR) -type f)
 SOUND_BIN := soundbank.bin
 SOUND_H := soundbank.h
 
-GRIT_FLAGS := -gt -p -g -gB 8 -gu32 -pu32 -ftb -fh!
+GRIT_BPP := 8
+GRIT_FLAGS := -gt -p -g -gB $(GRIT_BPP) -gu32 -pu32 -ftb -fh!
 CRUNCH_FLAGS := -p -j -b -s256 -p0
 
 all: $(MAPS_BIN) $(RAWMAPS_BIN) $(IMGS_BIN) $(SOUND_BIN) $(SOUND_H)
@@ -59,11 +60,12 @@ $(ATLS_PNG): $(ATLS_OUT)
 
 # rule for building raw maps
 %.bin: ../rawmap/%.png
-	grit "$<" -p -m -g -gB 8 -gu32 -pu32 -ftb -o "$@"
+	grit "$<" -p -m -g -gB $(GRIT_BPP) -gu32 -pu32 -ftb -o "$@"
 
 # rule for building soundbank
 $(SOUND_BIN) $(SOUND_H): $(SOUND_SRC)
-	@mmutil $^ -osoundbank.bin -hsoundbank.h
+	# @mmutil $^ -osoundbank.bin -hsoundbank.h
+	@true
 
 # debug:
 #     $(foreach var,$(.VARIABLES),$(info $(var) = $($(var))))
