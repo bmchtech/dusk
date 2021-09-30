@@ -242,5 +242,5 @@ void dusk_background_make(u8 bg_id, u16 size, Background bg) {
     enable_bg(bg_id);
     // set control flags
     vu16* bg_reg = dusk_get_background_register(bg_id);
-    *bg_reg |= BG_CBB(bg.cbb) | BG_SBB(bg.sbb) | BG_4BPP | size;
+    *bg_reg |= BG_CBB(bg.cbb) | BG_SBB(bg.sbb) | BG_8BPP | size;
 }
