@@ -8,7 +8,8 @@ OBJ_AFFINE* obj_aff_buffer = (OBJ_AFFINE*)obj_buffer;
 
 EWRAM_DATA Sprite sprites[NUM_SPRITES];
 
-BOOL sprites_bpp8; // when true, 8BPP, when false, 4BPP
+/** when true, 8BPP, when false, 4BPP */
+BOOL sprites_bpp8 = TRUE;
 
 void dusk_sprites_init() {
     // initialize object buffer
@@ -135,7 +136,7 @@ Sprite* dusk_sprites_make(int index, u8 width, u8 height, Sprite spr) {
 
     // set main attributes
     // leave tile id (attr2) null, it will be set in sync
-    u16 bpp_flag = sprites_bpp8 ? ATTR0_8BPP : ATTR0_4BPP;
+    u16 bpp_flag = (sprites_bpp8 == 1) ? ATTR0_8BPP : ATTR0_4BPP;
     obj_set_attr(&obj_buffer[index], shape_attr | bpp_flag, size_attr, 0);
 
     // save sprite metadata
@@ -158,7 +159,7 @@ inline void dusk_sprites_sync(int i) {
     // obj_set_attr(obj, obj->attr0, obj->attr1, (sprites[i].tid + sprites[i].page) * sprites[i].tile_sz * 2);
 
     // raw base tid mode
-    int bpp_mult = sprites_bpp8 ? 2 : 1;
+    int bpp_mult = (sprites_bpp8 == 1) ? 2 : 1;
     obj_set_attr(obj, obj->attr0, obj->attr1,
                  (sprites[i].base_tid + (sprites[i].page * sprites[i].tile_sz)) * bpp_mult);
 }
@@ -251,6 +252,6 @@ void dusk_background_make(u8 bg_id, u16 size, Background bg) {
     // set control flags
     vu16* bg_reg = dusk_get_background_register(bg_id);
 
-    u16 bpp_flag = sprites_bpp8 ? BG_8BPP : BG_4BPP;
+    u16 bpp_flag = (sprites_bpp8 == 1) ? BG_8BPP : BG_4BPP;
     *bg_reg |= BG_CBB(bg.cbb) | BG_SBB(bg.sbb) | bpp_flag | size;
 }
