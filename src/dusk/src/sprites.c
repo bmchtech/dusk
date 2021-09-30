@@ -252,6 +252,6 @@ void dusk_background_make(u8 bg_id, u16 size, Background bg) {
     // set control flags
     vu16* bg_reg = dusk_get_background_register(bg_id);
 
-    u16 bpp_flag = (sprites_bpp8 == 1) ? BG_8BPP : BG_4BPP;
-    *bg_reg |= BG_CBB(bg.cbb) | BG_SBB(bg.sbb) | bpp_flag | size;
+    // u16 bpp_flag = (sprites_bpp8 == 1) ? BG_8BPP : BG_4BPP;
+    *bg_reg |= BG_CBB(bg.cbb) | BG_SBB(bg.sbb) | BG_8BPP | size;
 }
