@@ -8,16 +8,21 @@ OBJ_AFFINE* obj_aff_buffer = (OBJ_AFFINE*)obj_buffer;
 
 EWRAM_DATA Sprite sprites[NUM_SPRITES];
 
-#define BPP 8
+BOOL sprites_bpp8; // when true, 8BPP, when false, 4BPP
 
 void dusk_sprites_init() {
     // initialize object buffer
     oam_init(obj_buffer, NUM_SPRITES);
     memset(sprites, 0, sizeof(Sprite) * NUM_SPRITES);
 
+    // reset bpp to default
+    sprites_bpp8 = TRUE;
+
     // enable sprite display
     REG_DISPCNT |= DCNT_OBJ | DCNT_OBJ_1D;
 }
+
+void dusk_sprites_configure(BOOL bpp8) { sprites_bpp8 = bpp8; }
 
 void dusk_sprites_upload_atlas(SpriteAtlas* atlas) {
     // 1. upload the atlas tile palette to palette memory
@@ -130,7 +135,8 @@ Sprite* dusk_sprites_make(int index, u8 width, u8 height, Sprite spr) {
 
     // set main attributes
     // leave tile id (attr2) null, it will be set in sync
-    obj_set_attr(&obj_buffer[index], shape_attr | ATTR0_8BPP, size_attr, 0);
+    u16 bpp_flag = sprites_bpp8 ? ATTR0_8BPP : ATTR0_4BPP;
+    obj_set_attr(&obj_buffer[index], shape_attr | bpp_flag, size_attr, 0);
 
     // save sprite metadata
     sprites[index] = spr;
@@ -152,7 +158,9 @@ inline void dusk_sprites_sync(int i) {
     // obj_set_attr(obj, obj->attr0, obj->attr1, (sprites[i].tid + sprites[i].page) * sprites[i].tile_sz * 2);
 
     // raw base tid mode
-    obj_set_attr(obj, obj->attr0, obj->attr1, (sprites[i].base_tid + (sprites[i].page * sprites[i].tile_sz)) * 2);
+    int bpp_mult = sprites_bpp8 ? 2 : 1;
+    obj_set_attr(obj, obj->attr0, obj->attr1,
+                 (sprites[i].base_tid + (sprites[i].page * sprites[i].tile_sz)) * bpp_mult);
 }
 
 void dusk_sprites_update() {
@@ -242,5 +250,7 @@ void dusk_background_make(u8 bg_id, u16 size, Background bg) {
     enable_bg(bg_id);
     // set control flags
     vu16* bg_reg = dusk_get_background_register(bg_id);
-    *bg_reg |= BG_CBB(bg.cbb) | BG_SBB(bg.sbb) | BG_8BPP | size;
+
+    u16 bpp_flag = sprites_bpp8 ? BG_8BPP : BG_4BPP;
+    *bg_reg |= BG_CBB(bg.cbb) | BG_SBB(bg.sbb) | bpp_flag | size;
 }

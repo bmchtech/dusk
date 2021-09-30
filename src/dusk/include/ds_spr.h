@@ -57,6 +57,8 @@ extern Sprite sprites[NUM_SPRITES];
 
 /** initialize sprite and OAM memory */
 void dusk_sprites_init();
+/** set mode options for dusk sprites */
+void dusk_sprites_configure(BOOL bpp8);
 /** upload a sprite atlas to tile and palette memory */
 void dusk_sprites_upload_atlas(SpriteAtlas* atlas);
 /** upload a sprite atlas section to tile and palette memory */
