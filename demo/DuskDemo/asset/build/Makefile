@@ -21,7 +21,7 @@ SOUND_SRC := $(shell find $(SOUND_DIR) -type f)
 SOUND_BIN := soundbank.bin
 SOUND_H := soundbank.h
 
-GRIT_BPP := 4
+GRIT_BPP := 8
 GRIT_FLAGS := -gt -p -g -gB $(GRIT_BPP) -gu32 -pu32 -ftb -fh!
 CRUNCH_FLAGS := -p -j -b -s256 -p0
 
