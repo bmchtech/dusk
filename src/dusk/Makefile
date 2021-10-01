@@ -18,7 +18,7 @@ endif
 include $(DEVKITARM)/gba_rules
 
 BUILD		:=	build
-SRCDIRS		:=	src src/contrib
+SRCDIRS		:=	src src/contrib src/mpack
 INCDIRS		:=	include include/contrib
 
 DEPFLAGS	:= -I$(DEVKITPRO)/libtonc/include -L$(DEVKITPRO)/libtonc/lib -ltonc
