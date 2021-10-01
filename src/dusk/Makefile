@@ -19,7 +19,7 @@ include $(DEVKITARM)/gba_rules
 
 BUILD		:=	build
 SRCDIRS		:=	src src/contrib src/mpack
-INCDIRS		:=	include include/contrib
+INCDIRS		:=	include include/contrib include/mpack
 
 DEPFLAGS	:= -I$(DEVKITPRO)/libtonc/include -L$(DEVKITPRO)/libtonc/lib -ltonc
 
