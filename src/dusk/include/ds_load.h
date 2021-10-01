@@ -53,6 +53,7 @@ void dusk_load_init();
 
 // - CONTENT LOADERS: pass filename without extension
 
+const void* dusk_load_raw(char* name, u32* len);
 GritImage dusk_load_image(char* name);
 SpriteAtlas dusk_load_atlas(char* name);
 SpriteAtlasLayout dusk_load_atlas_layout(const char* name);

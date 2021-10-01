@@ -13,6 +13,10 @@ void dusk_load_init() {
     gbfs_dat = find_first_gbfs_file(find_first_gbfs_file);
 }
 
+const void* dusk_load_raw(char* name, u32* len) {
+    return gbfs_get_obj(gbfs_dat, name, len);
+}
+
 GritImage dusk_load_image(char* name) {
     GritImage img;
     char tiles_name[GBFS_ENTRY_SIZE];
