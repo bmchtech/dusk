@@ -5,14 +5,6 @@
 
 uint frame_count;
 
-void dusk_init_all() {
-    // 1. initialize system graphics
-    dusk_init_graphics_mode0();
-
-    // initialize loader
-    dusk_load_init();
-}
-
 void dusk_clear_vidmem() {
     // clear video memory (vram region)
     memset32(vid_mem, 0, VRAM_BG_SIZE / 4);
@@ -26,9 +18,19 @@ void dusk_reset_irq() {
     irq_add(II_VBLANK, NULL);
 }
 
+void dusk_init_all() {
+    // 1. initialize system graphics
+    dusk_init_graphics_mode0();
+
+    dusk_reset_irq();
+
+    // initialize loader
+    dusk_load_init();
+}
+
 void dusk_init_graphics_mode0() {
     dusk_clear_vidmem();
-    dusk_reset_irq();
+    // dusk_reset_irq();
 
     // reset registers
     REG_DISPCNT = DCNT_MODE0;
