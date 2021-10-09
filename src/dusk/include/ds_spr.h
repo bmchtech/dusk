@@ -17,6 +17,7 @@ extern OBJ_AFFINE* obj_aff_buffer;
 #define SPRITEFLAG_PRIORITY_GET(n) ((n >> SPRITEFLAG_PRIORITY_SHIFT) & 0b11)
 #define SPRITEFLAG_PRIORITY(n) ((n << SPRITEFLAG_PRIORITY_SHIFT) & 0b11)
 
+#define DUSKSPRITE_FLAGS_VISIBLE (0x1 << 0)
 /** sprite data */
 typedef struct Sprite {
     s16 x, y;
@@ -26,7 +27,7 @@ typedef struct Sprite {
     u16 base_tid;
     /** the frame index of the spritesheet */
     u8 page;
-    /** */
+    /** flags: 0/0/0/0/0/0/0/visible */
     u8 flags;
 } Sprite;
 

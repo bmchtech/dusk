@@ -139,6 +139,9 @@ Sprite* dusk_sprites_make(int index, u8 width, u8 height, Sprite spr) {
     u16 bpp_flag = (sprites_bpp8 == 1) ? ATTR0_8BPP : ATTR0_4BPP;
     obj_set_attr(&obj_buffer[index], ATTR0_REG | shape_attr | bpp_flag, size_attr, 0);
 
+    // set default flags
+    spr.flags = (DUSKSPRITE_FLAGS_VISIBLE);
+
     // save sprite metadata
     sprites[index] = spr;
 
@@ -150,17 +153,26 @@ Sprite* dusk_sprites_make(int index, u8 width, u8 height, Sprite spr) {
 }
 
 inline void dusk_sprites_sync(int i) {
+    Sprite* sprite = &sprites[i];
     OBJ_ATTR* obj = &obj_buffer[i];
     // position
-    obj_set_pos(obj, sprites[i].x, sprites[i].y);
+    obj_set_pos(obj, sprite->x, sprite->y);
+
+    // visibility
+    if ((sprite->flags & DUSKSPRITE_FLAGS_VISIBLE) > 0) {
+        obj_unhide(obj, ATTR0_REG);
+    } else {
+        obj_hide(obj);
+    }
+
     // main attrs
 
     // logical base tid mode
-    // obj_set_attr(obj, obj->attr0, obj->attr1, (sprites[i].tid + sprites[i].page) * sprites[i].tile_sz * 2);
+    // obj_set_attr(obj, obj->attr0, obj->attr1, (sprite->tid + sprite->page) * sprite->tile_sz * 2);
 
     // raw base tid mode
     int bpp_mult = (sprites_bpp8 == 1) ? 2 : 1;
-    u16 tid = (sprites[i].base_tid + (sprites[i].page * sprites[i].tile_sz)) * bpp_mult;
+    u16 tid = (sprite->base_tid + (sprite->page * sprite->tile_sz)) * bpp_mult;
     obj_set_attr(obj, obj->attr0, obj->attr1, ATTR2_ID(tid) | ATTR2_PALBANK(0));
 }
 
