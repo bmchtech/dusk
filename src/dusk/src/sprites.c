@@ -137,7 +137,7 @@ Sprite* dusk_sprites_make(int index, u8 width, u8 height, Sprite spr) {
     // set main attributes
     // leave tile id (attr2) null, it will be set in sync
     u16 bpp_flag = (sprites_bpp8 == 1) ? ATTR0_8BPP : ATTR0_4BPP;
-    obj_set_attr(&obj_buffer[index], shape_attr | bpp_flag, size_attr, 0);
+    obj_set_attr(&obj_buffer[index], ATTR0_REG | shape_attr | bpp_flag, size_attr, 0);
 
     // save sprite metadata
     sprites[index] = spr;
