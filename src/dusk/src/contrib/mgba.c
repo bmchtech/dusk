@@ -1,5 +1,6 @@
 #include "contrib/mgba.h"
 
+#ifdef DEBUG
 void mgba_printf(int level, const char* ptr, ...) {
     va_list args;
     level &= 0x7;
@@ -15,3 +16,8 @@ BOOL mgba_open(void) {
 }
 
 void mgba_close(void) { *REG_DEBUG_ENABLE = 0; }
+#else
+void mgba_printf(int level, const char* ptr, ...) {}
+BOOL mgba_open(void) { return FALSE; }
+void mgba_close(void) {}
+#endif
