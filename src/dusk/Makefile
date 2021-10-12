@@ -42,7 +42,7 @@ CBASE	+= $(DEPFLAGS)
 CBASE	+= -Werror=implicit-function-declaration
 
 ifeq ($(DEBUG),1)
-	CBASE	+= -g
+	CBASE	+= -g -DDEBUG
 endif
 
 RCFLAGS := $(CBASE) $(RARCH)
