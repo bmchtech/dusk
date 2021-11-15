@@ -3,6 +3,8 @@
 #include "ds_sys.h"
 #include "ds_load.h"
 
+__attribute__((used)) const char* _DUSK_LIB_VERSION = ("$DUSK " DUSK_VERSION);
+
 uint frame_count;
 
 void dusk_clear_vidmem() {

@@ -3,7 +3,7 @@
 #
 
 LIBNAME		:= dusk
-VERSION		:= 0.1.0
+VERSION		:= 0.1.7
 
 #---------------------------------------------------------------------------------
 .SUFFIXES:
@@ -24,6 +24,7 @@ INCDIRS		:=	include include/contrib
 DEPFLAGS	:= -I$(DEVKITPRO)/libtonc/include -L$(DEVKITPRO)/libtonc/lib -ltonc
 
 DATESTRING	:=	$(shell date +%Y)$(shell date +%m)$(shell date +%d)
+GITVERSION	:=	$(shell git describe --long --tags | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g')
 
 ARCH		:=	-mthumb -mthumb-interwork
 RARCH		:= -mthumb-interwork -mthumb
@@ -44,6 +45,9 @@ CBASE	+= -Werror=implicit-function-declaration
 ifeq ($(DEBUG),1)
 	CBASE	+= -g -DDEBUG
 endif
+
+DEFINES = -DGBA -DDUSK_VERSION=\"$(GITVERSION)\"
+CBASE	+= $(DEFINES)
 
 RCFLAGS := $(CBASE) $(RARCH)
 ICFLAGS := $(CBASE) $(IARCH) -mlong-calls #-fno-gcse
