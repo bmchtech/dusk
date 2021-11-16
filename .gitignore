@@ -8,7 +8,8 @@
 
 # ---> C
 # Prerequisites
-*.d
+# *.d
+build/
 
 # Object files
 *.o
