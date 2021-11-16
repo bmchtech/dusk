@@ -26,7 +26,7 @@ struct Scene {
 // __attribute__((used)) const char* _DUSK_LIB_VERSION = ("$DUSK " DUSK_VERSION);
 // const char* _DUSK_LIB_VERSION = ("$DUSK " ~ DUSK_VERSION);
 
-uint frame_count;
+__gshared static uint frame_count;
 
 void dusk_clear_vidmem() {
     // clear video memory (vram region)
@@ -71,11 +71,11 @@ void dusk_frame() {
     frame_count++;
 }
 
-static bool scene_changed = false;
-static void nothing() {}
+__gshared static bool scene_changed = false;
+__gshared static void nothing() {}
 
-static Scene next_scene = Scene(&nothing, &nothing, &nothing);
-static Scene current_scene = Scene(&nothing, &nothing, &nothing);
+__gshared static Scene next_scene = Scene(&nothing, &nothing, &nothing);
+__gshared static Scene current_scene = Scene(&nothing, &nothing, &nothing);
 
 void dusk_scene_set(Scene next) {
     scene_changed = true;

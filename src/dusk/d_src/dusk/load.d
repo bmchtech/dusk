@@ -63,7 +63,7 @@ void dusk_load_init();
 
 // Map dusk_load_map(char* name);
 
-GBFS_FILE* gbfs_dat;
+__gshared static GBFS_FILE* gbfs_dat;
 
 void dusk_load_init() {
     // locate the main GBFS archive

@@ -85,18 +85,18 @@ Anim make_anim(u8 start, u8 len) {
 // void dusk_background_make(u8 bg_id, u16 size, Background bg);
 
 // mixin(EWRAM_DATA!("OBJ_ATTR[NUM_SPRITES]", "obj_buffer"));
-// @(ldc.attributes.section(".ewram")) __gshared OBJ_ATTR[NUM_SPRITES] obj_buffer;
-static OBJ_ATTR[NUM_SPRITES] obj_buffer;
+// static OBJ_ATTR[NUM_SPRITES] obj_buffer;
+@(ldc.attributes.section(".ewram")) __gshared OBJ_ATTR[NUM_SPRITES] obj_buffer;
 // OBJ_AFFINE* obj_aff_buffer = cast(OBJ_AFFINE*) obj_buffer;
-OBJ_AFFINE* obj_aff_buffer() { return cast(OBJ_AFFINE*) obj_buffer; }
+__gshared OBJ_AFFINE* obj_aff_buffer() { return cast(OBJ_AFFINE*) obj_buffer; }
 
 /** memory block used to track sprites */
 // mixin(EWRAM_DATA!("Sprite[NUM_SPRITES]", "sprites"));
-// @(ldc.attributes.section(".ewram")) __gshared Sprite[NUM_SPRITES] sprites;
-static Sprite[NUM_SPRITES] sprites;
+// static Sprite[NUM_SPRITES] sprites;
+@(ldc.attributes.section(".ewram")) __gshared Sprite[NUM_SPRITES] sprites;
 
 /** when true, 8BPP, when false, 4BPP */
-bool sprites_bpp8 = true;
+__gshared bool sprites_bpp8 = true;
 
 void dusk_sprites_init() {
     // initialize object buffer
