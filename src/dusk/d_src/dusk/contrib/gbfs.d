@@ -1,3 +1,5 @@
+module dusk.contrib.gbfs;
+
 /* gbfs.h
    access object in a GBFS file
 
