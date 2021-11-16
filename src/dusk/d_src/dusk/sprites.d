@@ -1,17 +1,22 @@
 module dusk.sprites;
 
-#define NUM_SPRITES 128
-#define NUM_AFFINE_SPRITES 32
-extern OBJ_ATTR obj_buffer[NUM_SPRITES];
-extern OBJ_AFFINE* obj_aff_buffer;
+import dusk.sprites;
+import dusk.sys;
+import dusk.load;
+import tonc;
+import ldc.attributes;
 
-#define SPRITEFLAG_PRIORITY_SHIFT 6
-#define SPRITEFLAG_PRIORITY_GET(n) ((n >> SPRITEFLAG_PRIORITY_SHIFT) & 0b11)
-#define SPRITEFLAG_PRIORITY(n) ((n << SPRITEFLAG_PRIORITY_SHIFT) & 0b11)
+enum NUM_SPRITES = 128;
+enum NUM_AFFINE_SPRITES = 32;
 
-#define DUSKSPRITE_FLAGS_VISIBLE (0x1 << 0)
+enum SPRITEFLAG_PRIORITY_SHIFT = 6;
+// #define SPRITEFLAG_PRIORITY_GET(n) ((n >> SPRITEFLAG_PRIORITY_SHIFT) & 0b11)
+// #define SPRITEFLAG_PRIORITY(n) ((n << SPRITEFLAG_PRIORITY_SHIFT) & 0b11)
+
+enum DUSKSPRITE_FLAGS_VISIBLE = (0x1 << 0);
+
 /** sprite data */
-typedef struct Sprite {
+struct Sprite {
     s16 x, y;
     /** the number of tiles taken up by this sprite */
     u8 tile_sz;
@@ -21,37 +26,40 @@ typedef struct Sprite {
     u8 page;
     /** flags: 0/0/0/0/0/0/0/visible */
     u8 flags;
-} Sprite;
+}
 
 /** animation metadata */
-typedef struct Anim {
+struct Anim {
     /** which page in the sprite the animation starts */
     u8 start;
     /** number of pages in this animation */
     u8 len;
     /** (60/fps), or how many frames each page lasts */
     u8 rate;
-} Anim;
+}
 
 /** background data */
-typedef struct Background {
+struct Background {
     s16 x, y;
     int cbb, sbb;
-} Background;
+}
 
 /** define an animation, given a starting frame and frame count, and fps */
-#define MAKE_ANIM_EX(st, le, fps)                                                                                      \
-    (Anim) { .start = st, .len = le, .rate = (60 / fps) }
+// #define MAKE_ANIM_EX(st, le, fps)                                                                                      \
+//     (Anim) { .start = st, .len = le, .rate = (60 / fps) }
+Anim make_anim_ex(u8 start, u8 len, u8 fps) {
+    return Anim(start, len, 60 / fps);
+}
 /** define an animation, given a starting frame and frame count, at 10 fps */
-#define MAKE_ANIM(st, le) MAKE_ANIM_EX(st, le, 10)
-
-/** memory block used to track sprites */
-extern Sprite sprites[NUM_SPRITES];
+// #define MAKE_ANIM(st, le) MAKE_ANIM_EX(st, le, 10)
+Anim make_anim(u8 start, u8 len) {
+    return make_anim_ex(start, len, 10);
+}
 
 /** initialize sprite and OAM memory */
 void dusk_sprites_init();
 /** set mode options for dusk sprites */
-void dusk_sprites_configure(BOOL bpp8);
+void dusk_sprites_configure(bool bpp8);
 /** upload a sprite atlas to tile and palette memory */
 void dusk_sprites_upload_atlas(SpriteAtlas* atlas);
 /** upload a sprite atlas section to tile and palette memory */
@@ -71,18 +79,15 @@ void dusk_background_upload_raw(GritImage* img, int cbb, int sbb);
 /** create a background and display it */
 void dusk_background_make(u8 bg_id, u16 size, Background bg);
 
-#include "ds_spr.h"
-#include "ds_sys.h"
-#include <tonc.h>
-#include "stdio.h"
+mixin(EWRAM_DATA!("OBJ_ATTR[NUM_SPRITES]", "obj_buffer"));
+// OBJ_AFFINE* obj_aff_buffer = cast(OBJ_AFFINE*) obj_buffer;
+OBJ_AFFINE* obj_aff_buffer() { return cast(OBJ_AFFINE*) obj_buffer; }
 
-EWRAM_DATA OBJ_ATTR obj_buffer[NUM_SPRITES];
-OBJ_AFFINE* obj_aff_buffer = (OBJ_AFFINE*)obj_buffer;
-
-EWRAM_DATA Sprite sprites[NUM_SPRITES];
+/** memory block used to track sprites */
+mixin(EWRAM_DATA!("Sprite[NUM_SPRITES]", "sprites"));
 
 /** when true, 8BPP, when false, 4BPP */
-BOOL sprites_bpp8 = TRUE;
+bool sprites_bpp8 = true;
 
 void dusk_sprites_init() {
     // initialize object buffer
@@ -90,49 +95,49 @@ void dusk_sprites_init() {
     memset(sprites, 0, sizeof(Sprite) * NUM_SPRITES);
 
     // reset bpp to default
-    sprites_bpp8 = TRUE;
+    sprites_bpp8 = true;
 
     // enable sprite display
     REG_DISPCNT |= DCNT_OBJ | DCNT_OBJ_1D;
 }
 
-void dusk_sprites_configure(BOOL bpp8) { sprites_bpp8 = bpp8; }
+void dusk_sprites_configure(bool bpp8) { sprites_bpp8 = bpp8; }
 
 void dusk_sprites_upload_atlas(SpriteAtlas* atlas) {
     // 1. upload the atlas tile palette to palette memory
     // object/sprite palette, in 8bpp stores 256 colors
-    memcpy(&pal_obj_bank[0], atlas->pal, atlas->pal_sz);
+    memcpy(&pal_obj_bank[0], atlas.pal, atlas.pal_sz);
     // 2. upload the atlas tiles to tile memory
     // tile memory (can store 1024 tiles (32x32 tiles or 256x256px)
     // VRAM is charblocks 4 and 5, so &tile_mem[4][0] points to the first tile in object VRAM
-    memcpy(&tile_mem[4][0], atlas->tiles, atlas->tile_sz);
+    memcpy(&tile_mem[4][0], atlas.tiles, atlas.tile_sz);
 }
 
 void dusk_sprites_upload_atlas_section(SpriteAtlasLayout* layout, SpriteAtlas* atlas, SpriteAtlasEntry* entry,
                                        u16 pal_offset, u16 tile_offset) {
 
     // 1. upload the palette (palettes are 16-bit highcolor)
-    memcpy(&pal_obj_bank[0][pal_offset], &atlas->pal[0], atlas->pal_sz);
+    memcpy(&pal_obj_bank[0][pal_offset], &atlas.pal[0], atlas.pal_sz);
 
     // pal_obj_bank[0][4] = CLR_YELLOW;
     // 2. upload the tiles
     int entry_firsttid =
-        dusk_sprites_pos_to_tid(entry->x, entry->y, layout->width, layout->height); // tid of entry start in atlas
-    int entry_tilecount = (entry->w) * (entry->h);                                  // entry size in tiles
+        dusk_sprites_pos_to_tid(entry.x, entry.y, layout.width, layout.height); // tid of entry start in atlas
+    int entry_tilecount = (entry.w) * (entry.h);                                  // entry size in tiles
     int raw_firsttid = entry_firsttid * entry_tilecount * 2;                        // read offset
     // int raw_tilecount = entry_tilecount * 2;
     int raw_tileoffset = tile_offset * 2; // write offset
 
     // printf("ro: %d. wo: %d, n: %d\n", raw_firsttid, raw_tileoffset, raw_tilecount); // debug print tile r/w
 
-    // memcpy(&tile_mem[4][raw_tileoffset], &atlas->tiles[raw_firsttid], entry_tilecount * 64);
+    // memcpy(&tile_mem[4][raw_tileoffset], &atlas.tiles[raw_firsttid], entry_tilecount * 64);
 
     // 3. fix tiles to point at right palette
     // for (int i = 0; i < raw_tilecount; i += 2) {
     //     TILE8 new_tile;
     //     // TILE8 tile.data consists of 16 u32s (a total of 64 bytes)
-    //     // new_tile.data[j] = atlas->tiles[(entry_firsttid + i) * 2];
-    //     u32* rt = &atlas->tiles[raw_firsttid + i]; // read tile
+    //     // new_tile.data[j] = atlas.tiles[(entry_firsttid + i) * 2];
+    //     u32* rt = &atlas.tiles[raw_firsttid + i]; // read tile
 
     //     for (int j = 0; j < 16; j++) {
     //         new_tile.data[j] = rt[j];
@@ -143,14 +148,14 @@ void dusk_sprites_upload_atlas_section(SpriteAtlasLayout* layout, SpriteAtlas* a
     // }
 
     // unroll malloc
-    // memcpy(&tile_mem[4][raw_tileoffset], &atlas->tiles[raw_firsttid], 64);
+    // memcpy(&tile_mem[4][raw_tileoffset], &atlas.tiles[raw_firsttid], 64);
 
     // reinterpret as byte pointers
-    u8* loc_twrite = (u8*)&tile_mem[4][raw_tileoffset];
-    u8* loc_tread = (u8*)&atlas->tiles[raw_firsttid];
+    u8* loc_twrite = cast(u8*)&tile_mem[4][raw_tileoffset];
+    u8* loc_tread = cast(u8*)&atlas.tiles[raw_firsttid];
     for (int i = 0; i < entry_tilecount; i += 1) {
         int c = i * 64;
-        u8 tile[64];                         // create temp tile
+        u8[64] tile;                         // create temp tile
         memcpy(&tile[0], loc_tread + c, 64); // read tile
 
         // fix tile
@@ -225,14 +230,14 @@ Sprite* dusk_sprites_make(int index, u8 width, u8 height, Sprite spr) {
     return &sprites[index];
 }
 
-inline void dusk_sprites_sync(int i) {
+pragma(inline) void dusk_sprites_sync(int i) {
     Sprite* sprite = &sprites[i];
     OBJ_ATTR* obj = &obj_buffer[i];
     // position
-    obj_set_pos(obj, sprite->x, sprite->y);
+    obj_set_pos(obj, sprite.x, sprite.y);
 
     // visibility
-    if ((sprite->flags & DUSKSPRITE_FLAGS_VISIBLE) > 0) {
+    if ((sprite.flags & DUSKSPRITE_FLAGS_VISIBLE) > 0) {
         obj_unhide(obj, ATTR0_REG);
     } else {
         obj_hide(obj);
@@ -241,12 +246,12 @@ inline void dusk_sprites_sync(int i) {
     // main attrs
 
     // logical base tid mode
-    // obj_set_attr(obj, obj->attr0, obj->attr1, (sprite->tid + sprite->page) * sprite->tile_sz * 2);
+    // obj_set_attr(obj, obj.attr0, obj.attr1, (sprite.tid + sprite.page) * sprite.tile_sz * 2);
 
     // raw base tid mode
     int bpp_mult = (sprites_bpp8 == 1) ? 2 : 1;
-    u16 tid = (sprite->base_tid + (sprite->page * sprite->tile_sz)) * bpp_mult;
-    obj_set_attr(obj, obj->attr0, obj->attr1, ATTR2_ID(tid) | ATTR2_PALBANK(0));
+    u16 tid = (sprite.base_tid + (sprite.page * sprite.tile_sz)) * bpp_mult;
+    obj_set_attr(obj, obj.attr0, obj.attr1, ATTR2_ID(tid) | ATTR2_PALBANK(0));
 }
 
 void dusk_sprites_update() {
@@ -263,15 +268,15 @@ void dusk_sprites_update() {
 
 void dusk_sprites_anim_play(Sprite* spr, Anim* anim) {
     // make sure page is within anim range
-    if (spr->page < anim->start || spr->page >= (anim->start + anim->len)) {
-        spr->page = anim->start; // reset to first
+    if (spr.page < anim.start || spr.page >= (anim.start + anim.len)) {
+        spr.page = anim.start; // reset to first
     }
-    int ix = spr->page - anim->start;
-    if (frame_count % anim->rate == 0) {
-        ix = (ix + 1) % anim->len;
+    int ix = spr.page - anim.start;
+    if (frame_count % anim.rate == 0) {
+        ix = (ix + 1) % anim.len;
     }
     // set new frame
-    spr->page = anim->start + ix;
+    spr.page = anim.start + ix;
 }
 
 u16 dusk_sprites_pos_to_tid(u16 x, u16 y, u16 sheet_width, u16 sheet_height) {
@@ -324,11 +329,11 @@ void dusk_background_upload_raw(GritImage* img, int cbb, int sbb) {
     // TODO: support selecting slot
 
     // 1. upload the atlas tile palette to bg palette memory
-    memcpy(&pal_bg_bank[0], img->pal, img->pal_sz);
+    memcpy(&pal_bg_bank[0], img.pal, img.pal_sz);
     // 2. upload the atlas tiles to bg tile memory (CBB)
-    memcpy(&tile_mem[cbb][0], img->tiles, img->tile_sz);
+    memcpy(&tile_mem[cbb][0], img.tiles, img.tile_sz);
     // 3. upload the map (SBB)
-    memcpy(&se_mem[sbb][0], img->map, img->map_sz);
+    memcpy(&se_mem[sbb][0], img.map, img.map_sz);
 }
 
 void dusk_background_make(u8 bg_id, u16 size, Background bg) {

@@ -1,52 +1,58 @@
 module dusk.load;
 
-extern const GBFS_FILE* gbfs_dat;
+import core.stdc.stdio;
+import core.stdc.stdlib;
+import core.stdc.stddef;
+import core.stdc.string;
+import tonc.tonc_types;
+import dusk.contrib.gbfs;
+import dusk.contrib.gbamap;
 
 // represents an atlas, with bitmaps for the image and palette
-typedef struct SpriteAtlas {
+struct SpriteAtlas {
     u32* tiles;
     u32 tile_sz;
     u32* pal;
     u32 pal_sz;
-} SpriteAtlas;
+}
 
-typedef struct GritImage {
+struct GritImage {
     u32* tiles;
     u32 tile_sz;
     u32* pal;
     u32 pal_sz;
     u32* map;
     u32 map_sz;
-} GritImage;
+}
 
-#define ATLAS_ENTRY_LEN 6
+enum ATLAS_ENTRY_LEN = 6;
 
 /** represents a single entry in the sprite atlas.
  * note that names are limited to just 5 chars and a NULL terminator. */
-typedef struct SpriteAtlasEntry {
-    char name[ATLAS_ENTRY_LEN];
+struct SpriteAtlasEntry {
+    char[ATLAS_ENTRY_LEN] name;
     // all of these are in tiles (8px)
     u8 x;
     u8 y;
     u8 w;
     u8 h;
-} SpriteAtlasEntry;
+}
 
 /** represents the layout of items in an atlas (https://github.com/xdrie/crunch#binary-format).
  * we only use the first texture because the vram can only hold one */
-typedef struct SpriteAtlasLayout {
+struct SpriteAtlasLayout {
     u16 width;
     u16 height;
     u16 num_entries;
     SpriteAtlasEntry* entries;
-} SpriteAtlasLayout;
+}
 
 /** initialize loader */
 void dusk_load_init();
 
 // - CONTENT LOADERS: pass filename without extension
 
-const void* dusk_load_raw(char* name, u32* len);
+void* dusk_load_raw(char* name, u32* len);
 GritImage dusk_load_image(char* name);
 SpriteAtlas dusk_load_atlas(char* name);
 SpriteAtlasLayout dusk_load_atlas_layout(const char* name);
@@ -55,46 +61,38 @@ void dusk_free_atlas_layout(SpriteAtlasLayout* layout);
 
 Map dusk_load_map(char* name);
 
-#include <stddef.h>
-#include <string.h>
-#include <assert.h>
-#include <tonc_types.h>
-#include "ds_load.h"
-#include <stdlib.h>
-#include <stdio.h>
-
-const GBFS_FILE* gbfs_dat;
+GBFS_FILE* gbfs_dat;
 
 void dusk_load_init() {
     // locate the main GBFS archive
     gbfs_dat = find_first_gbfs_file(find_first_gbfs_file);
 }
 
-const void* dusk_load_raw(char* name, u32* len) {
+void* dusk_load_raw(char* name, u32* len) {
     return gbfs_get_obj(gbfs_dat, name, len);
 }
 
 GritImage dusk_load_image(char* name) {
     GritImage img;
-    char tiles_name[GBFS_ENTRY_SIZE];
+    char[GBFS_ENTRY_SIZE] tiles_name;
     strcpy(tiles_name, name);
     strcat(tiles_name, ".img.bin");
-    char pal_name[GBFS_ENTRY_SIZE];
+    char[GBFS_ENTRY_SIZE] pal_name;
     strcpy(pal_name, name);
     strcat(pal_name, ".pal.bin");
-    char map_name[GBFS_ENTRY_SIZE];
+    char[GBFS_ENTRY_SIZE] map_name;
     strcpy(map_name, name);
     strcat(map_name, ".map.bin");
 
-    img.tiles = (u32*)gbfs_get_obj(gbfs_dat, tiles_name, &img.tile_sz);
-    img.pal = (u32*)gbfs_get_obj(gbfs_dat, pal_name, &img.pal_sz);
-    img.map = (u32*)gbfs_get_obj(gbfs_dat, map_name, &img.map_sz);
+    img.tiles = cast(u32*)gbfs_get_obj(gbfs_dat, tiles_name, &img.tile_sz);
+    img.pal = cast(u32*)gbfs_get_obj(gbfs_dat, pal_name, &img.pal_sz);
+    img.map = cast(u32*)gbfs_get_obj(gbfs_dat, map_name, &img.map_sz);
 
     return img;
 }
 
 SpriteAtlas dusk_load_atlas(char* name) {
-    char atlas_name[GBFS_ENTRY_SIZE];
+    char[GBFS_ENTRY_SIZE] atlas_name;
     strcpy(atlas_name, name);
     strcat(atlas_name, "_0");
 
@@ -112,7 +110,7 @@ SpriteAtlas dusk_load_atlas(char* name) {
 
     // NOTE: ASSERT pal_sz >= 2
 
-    u16* pal_raw = (u16*)atlas.pal; // 16-bit color
+    u16* pal_raw = cast(u16*)atlas.pal; // 16-bit color
     const int palscan_start = 0;
     const int palscan_inarow = 6; // how many in a row we're looking for
 
@@ -156,7 +154,7 @@ void seek_until_null(const u8* data, int* pos) {
 
 SpriteAtlasLayout dusk_load_atlas_layout(const char* name) {
     SpriteAtlasLayout layout;
-    char file_name[GBFS_ENTRY_SIZE];
+    char[GBFS_ENTRY_SIZE] file_name;
     strcpy(file_name, name);
     strcat(file_name, "_.sht.bin");
 
@@ -215,9 +213,9 @@ SpriteAtlasLayout dusk_load_atlas_layout(const char* name) {
 }
 
 SpriteAtlasEntry* dusk_load_atlas_entry(SpriteAtlasLayout* layout, const char* entry_name) {
-    for (int i = 0; i < layout->num_entries; i++) {
-        SpriteAtlasEntry* entry = &layout->entries[i];
-        if (strncmp(entry_name, entry->name, ATLAS_ENTRY_LEN) == 0) {
+    for (int i = 0; i < layout.num_entries; i++) {
+        SpriteAtlasEntry* entry = &layout.entries[i];
+        if (strncmp(entry_name, entry.name, ATLAS_ENTRY_LEN) == 0) {
             return entry;
         }
     }
@@ -225,13 +223,13 @@ SpriteAtlasEntry* dusk_load_atlas_entry(SpriteAtlasLayout* layout, const char* e
 }
 
 void dusk_free_atlas_layout(SpriteAtlasLayout* layout) {
-    layout->num_entries = 0;
-    free(layout->entries);
-    layout->entries = NULL;
+    layout.num_entries = 0;
+    free(layout.entries);
+    layout.entries = NULL;
 }
 
 Map dusk_load_map(char* name) {
-    char ass_name[GBFS_ENTRY_SIZE];
+    char[GBFS_ENTRY_SIZE] ass_name;
     strcpy(ass_name, name);
     strcat(ass_name, ".bin");
 

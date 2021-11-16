@@ -1,12 +1,14 @@
 module dusk.sys;
 
-extern uint frame_count;
+import core.stdc.stdio;
+import tonc;
+import dusk.load;
 
-typedef struct Scene {
-	void (*start)(void);
-	void (*end)(void);
-	void (*update)(void);
-} Scene;
+struct Scene {
+    void function() start;
+    void function() end;
+    void function() update;
+}
 
 /** initialize the system for using DUSK */
 void dusk_init_all();
@@ -19,12 +21,8 @@ void dusk_frame();
 void dusk_scene_set(Scene next);
 void dusk_scene_update();
 
-#include "stdio.h"
-#include <tonc.h>
-#include "ds_sys.h"
-#include "ds_load.h"
-
-__attribute__((used)) const char* _DUSK_LIB_VERSION = ("$DUSK " DUSK_VERSION);
+// __attribute__((used)) const char* _DUSK_LIB_VERSION = ("$DUSK " DUSK_VERSION);
+// const char* _DUSK_LIB_VERSION = ("$DUSK " ~ DUSK_VERSION);
 
 uint frame_count;
 
@@ -72,17 +70,10 @@ void dusk_frame() {
 }
 
 static bool scene_changed = false;
-static void nothing(void) {}
-static Scene next_scene = {
-    .start = nothing,
-    .end = nothing,
-    .update = nothing,
-};
-static Scene current_scene = {
-    .start = nothing,
-    .end = nothing,
-    .update = nothing,
-};
+static void nothing() {}
+
+static Scene next_scene = Scene(&nothing, &nothing, &nothing);
+static Scene current_scene = Scene(&nothing, &nothing, &nothing);
 
 void dusk_scene_set(Scene next) {
     scene_changed = true;
