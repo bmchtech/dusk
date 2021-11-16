@@ -1,5 +1,7 @@
 module dusk.sys;
 
+extern(C):
+
 import core.stdc.stdio;
 import tonc;
 import dusk.load;
@@ -10,16 +12,16 @@ struct Scene {
     void function() update;
 }
 
-/** initialize the system for using DUSK */
-void dusk_init_all();
-/** initialize mode0 graphics */
-void dusk_init_graphics_mode0();
-/** initialize mode3 graphics */
-void dusk_init_graphics_mode3();
-/** vsync */
-void dusk_frame();
-void dusk_scene_set(Scene next);
-void dusk_scene_update();
+// /** initialize the system for using DUSK */
+// void dusk_init_all();
+// /** initialize mode0 graphics */
+// void dusk_init_graphics_mode0();
+// /** initialize mode3 graphics */
+// void dusk_init_graphics_mode3();
+// /** vsync */
+// void dusk_frame();
+// void dusk_scene_set(Scene next);
+// void dusk_scene_update();
 
 // __attribute__((used)) const char* _DUSK_LIB_VERSION = ("$DUSK " DUSK_VERSION);
 // const char* _DUSK_LIB_VERSION = ("$DUSK " ~ DUSK_VERSION);
@@ -35,8 +37,8 @@ void dusk_clear_vidmem() {
 }
 
 void dusk_reset_irq() {
-    irq_init(NULL);
-    irq_add(II_VBLANK, NULL);
+    irq_init(null);
+    irq_add(eIrqIndex.II_VBLANK, null);
 }
 
 void dusk_init_all() {

@@ -1,5 +1,7 @@
 module dusk.load;
 
+extern(C):
+
 import core.stdc.stdio;
 import core.stdc.stdlib;
 import core.stdc.stddef;
@@ -52,51 +54,51 @@ void dusk_load_init();
 
 // - CONTENT LOADERS: pass filename without extension
 
-void* dusk_load_raw(char* name, u32* len);
-GritImage dusk_load_image(char* name);
-SpriteAtlas dusk_load_atlas(char* name);
-SpriteAtlasLayout dusk_load_atlas_layout(const char* name);
-SpriteAtlasEntry* dusk_load_atlas_entry(SpriteAtlasLayout* layout, const char* entry_name);
-void dusk_free_atlas_layout(SpriteAtlasLayout* layout);
+// void* dusk_load_raw(char* name, u32* len);
+// GritImage dusk_load_image(char* name);
+// SpriteAtlas dusk_load_atlas(char* name);
+// SpriteAtlasLayout dusk_load_atlas_layout(const char* name);
+// SpriteAtlasEntry* dusk_load_atlas_entry(SpriteAtlasLayout* layout, const char* entry_name);
+// void dusk_free_atlas_layout(SpriteAtlasLayout* layout);
 
-Map dusk_load_map(char* name);
+// Map dusk_load_map(char* name);
 
 GBFS_FILE* gbfs_dat;
 
 void dusk_load_init() {
     // locate the main GBFS archive
-    gbfs_dat = find_first_gbfs_file(find_first_gbfs_file);
+    gbfs_dat = cast(GBFS_FILE*) find_first_gbfs_file(&find_first_gbfs_file);
 }
 
 void* dusk_load_raw(char* name, u32* len) {
-    return gbfs_get_obj(gbfs_dat, name, len);
+    return cast(void*) gbfs_get_obj(gbfs_dat, name, len);
 }
 
 GritImage dusk_load_image(char* name) {
     GritImage img;
     char[GBFS_ENTRY_SIZE] tiles_name;
-    strcpy(tiles_name, name);
-    strcat(tiles_name, ".img.bin");
+    strcpy(cast(char*)tiles_name, name);
+    strcat(cast(char*)tiles_name, cast(char*)".img.bin");
     char[GBFS_ENTRY_SIZE] pal_name;
-    strcpy(pal_name, name);
-    strcat(pal_name, ".pal.bin");
+    strcpy(cast(char*)pal_name, name);
+    strcat(cast(char*)pal_name, cast(char*)".pal.bin");
     char[GBFS_ENTRY_SIZE] map_name;
-    strcpy(map_name, name);
-    strcat(map_name, ".map.bin");
+    strcpy(cast(char*)map_name, name);
+    strcat(cast(char*)map_name, cast(char*)".map.bin");
 
-    img.tiles = cast(u32*)gbfs_get_obj(gbfs_dat, tiles_name, &img.tile_sz);
-    img.pal = cast(u32*)gbfs_get_obj(gbfs_dat, pal_name, &img.pal_sz);
-    img.map = cast(u32*)gbfs_get_obj(gbfs_dat, map_name, &img.map_sz);
+    img.tiles = cast(u32*)gbfs_get_obj(gbfs_dat, cast(char*)tiles_name, &img.tile_sz);
+    img.pal = cast(u32*)gbfs_get_obj(gbfs_dat, cast(char*)pal_name, &img.pal_sz);
+    img.map = cast(u32*)gbfs_get_obj(gbfs_dat, cast(char*)map_name, &img.map_sz);
 
     return img;
 }
 
 SpriteAtlas dusk_load_atlas(char* name) {
     char[GBFS_ENTRY_SIZE] atlas_name;
-    strcpy(atlas_name, name);
-    strcat(atlas_name, "_0");
+    strcpy(cast(char*)atlas_name, name);
+    strcat(cast(char*)atlas_name, cast(char*)"_0");
 
-    GritImage img = dusk_load_image(atlas_name);
+    GritImage img = dusk_load_image(cast(char*)atlas_name);
     
     SpriteAtlas atlas;
     atlas.tiles = img.tiles;
@@ -155,11 +157,11 @@ void seek_until_null(const u8* data, int* pos) {
 SpriteAtlasLayout dusk_load_atlas_layout(const char* name) {
     SpriteAtlasLayout layout;
     char[GBFS_ENTRY_SIZE] file_name;
-    strcpy(file_name, name);
-    strcat(file_name, "_.sht.bin");
+    strcpy(cast(char*)file_name, name);
+    strcat(cast(char*)file_name, cast(char*)"_.sht.bin");
 
     u32 data_sz = 0;
-    const u8* data = gbfs_get_obj(gbfs_dat, file_name, &data_sz);
+    const u8* data = cast(u8*) gbfs_get_obj(gbfs_dat, cast(char*)file_name, &data_sz);
 
     int pos = 0;
 
@@ -177,7 +179,7 @@ SpriteAtlasLayout dusk_load_atlas_layout(const char* name) {
     pos += 2;
 
     layout.num_entries = data[pos] | (data[pos + 1] << 8);
-    layout.entries = malloc(sizeof(SpriteAtlasEntry) * layout.num_entries);
+    layout.entries = cast(SpriteAtlasEntry*) malloc((SpriteAtlasEntry.sizeof) * layout.num_entries);
     pos += 2;
 
     // now read blocks
@@ -203,10 +205,10 @@ SpriteAtlasLayout dusk_load_atlas_layout(const char* name) {
         pos += 2;
         // x,y,w,h are 8-bit so don't overflow!
         // these are in tile units (the final div by 8)
-        layout.entries[i].x = x / 8;
-        layout.entries[i].y = y / 8;
-        layout.entries[i].w = w / 8;
-        layout.entries[i].h = h / 8;
+        layout.entries[i].x = cast(u8) x / 8;
+        layout.entries[i].y = cast(u8) y / 8;
+        layout.entries[i].w = cast(u8) w / 8;
+        layout.entries[i].h = cast(u8) h / 8;
     }
 
     return layout;
@@ -215,25 +217,25 @@ SpriteAtlasLayout dusk_load_atlas_layout(const char* name) {
 SpriteAtlasEntry* dusk_load_atlas_entry(SpriteAtlasLayout* layout, const char* entry_name) {
     for (int i = 0; i < layout.num_entries; i++) {
         SpriteAtlasEntry* entry = &layout.entries[i];
-        if (strncmp(entry_name, entry.name, ATLAS_ENTRY_LEN) == 0) {
+        if (strncmp(cast(char*)entry_name, cast(char*)entry.name, ATLAS_ENTRY_LEN) == 0) {
             return entry;
         }
     }
-    return NULL;
+    return null;
 }
 
 void dusk_free_atlas_layout(SpriteAtlasLayout* layout) {
     layout.num_entries = 0;
     free(layout.entries);
-    layout.entries = NULL;
+    layout.entries = null;
 }
 
 Map dusk_load_map(char* name) {
     char[GBFS_ENTRY_SIZE] ass_name;
-    strcpy(ass_name, name);
-    strcat(ass_name, ".bin");
+    strcpy(cast(char*)ass_name, name);
+    strcat(cast(char*)ass_name, cast(char*)".bin");
 
     u32 map_data_sz = 0;
-    const u16* map_data = gbfs_get_obj(gbfs_dat, ass_name, &map_data_sz);
+    const u16* map_data = cast(u16*) gbfs_get_obj(gbfs_dat, cast(char*)ass_name, &map_data_sz);
     return map_load_from_rom(map_data);
 }
