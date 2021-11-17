@@ -107,7 +107,7 @@ void dusk_sprites_init() {
     sprites_bpp8 = true;
 
     // enable sprite display
-    REG_DISPCNT |= DCNT_OBJ | DCNT_OBJ_1D;
+    *REG_DISPCNT |= DCNT_OBJ | DCNT_OBJ_1D;
 }
 
 void dusk_sprites_configure(bool bpp8) { sprites_bpp8 = bpp8; }
@@ -317,19 +317,19 @@ void enable_bg(u8 bg_id) {
     default: assert(0);
     }
 
-    REG_DISPCNT |= bg_flag;
+    *REG_DISPCNT |= bg_flag;
 }
 
 vu16* dusk_get_background_register(u8 bg_id) {
     switch (bg_id) {
     case 0:
-        return &(REG_BG0CNT());
+        return REG_BG0CNT;
     case 1:
-        return &(REG_BG1CNT());
+        return REG_BG1CNT;
     case 2:
-        return &(REG_BG2CNT());
+        return REG_BG2CNT;
     case 3:
-        return &(REG_BG3CNT());
+        return REG_BG3CNT;
     default:
         return null;
     }

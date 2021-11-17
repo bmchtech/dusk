@@ -56,14 +56,14 @@ void dusk_init_graphics_mode0() {
     // dusk_reset_irq();
 
     // reset registers
-    REG_DISPCNT = DCNT_MODE0;
-    REG_BG0CNT = 0;
-    REG_BG1CNT = 0;
-    REG_BG2CNT = 0;
-    REG_BG3CNT = 0;
+    *REG_DISPCNT = DCNT_MODE0;
+    *REG_BG0CNT = 0;
+    *REG_BG1CNT = 0;
+    *REG_BG2CNT = 0;
+    *REG_BG3CNT = 0;
 }
 
-void dusk_init_graphics_mode3() { REG_DISPCNT = DCNT_MODE3 | DCNT_BG2; }
+void dusk_init_graphics_mode3() { *REG_DISPCNT = DCNT_MODE3 | DCNT_BG2; }
 
 void dusk_frame() {
     // vid_vsync();
