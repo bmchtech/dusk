@@ -38,7 +38,7 @@ void dusk_clear_vidmem() {
 
 void dusk_reset_irq() {
     irq_init(null);
-    irq_add(IrqIndex.II_VBLANK, null);
+    irq_add(IrqIndex.VBLANK, null);
 }
 
 void dusk_init_all() {
