@@ -77,14 +77,11 @@ void* dusk_load_raw(char* name, u32* len) {
 GritImage dusk_load_image(char* name) {
     GritImage img;
     char[GBFS_ENTRY_SIZE] tiles_name;
-    strcpy(cast(char*)tiles_name, name);
-    strcat(cast(char*)tiles_name, cast(char*)".img.bin");
+    sprintf(cast(char*)tiles_name, "%s.img.bin", name);
     char[GBFS_ENTRY_SIZE] pal_name;
-    strcpy(cast(char*)pal_name, name);
-    strcat(cast(char*)pal_name, cast(char*)".pal.bin");
+    sprintf(cast(char*)pal_name, "%s.pal.bin", name);
     char[GBFS_ENTRY_SIZE] map_name;
-    strcpy(cast(char*)map_name, name);
-    strcat(cast(char*)map_name, cast(char*)".map.bin");
+    sprintf(cast(char*)map_name, "%s.map.bin", name);
 
     img.tiles = cast(u32*)gbfs_get_obj(gbfs_dat, cast(char*)tiles_name, &img.tile_sz);
     img.pal = cast(u32*)gbfs_get_obj(gbfs_dat, cast(char*)pal_name, &img.pal_sz);
