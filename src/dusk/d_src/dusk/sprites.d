@@ -346,10 +346,13 @@ void dusk_background_upload_raw(GritImage* img, int cbb, int sbb) {
     // memcpy32(&se_mem[sbb][0], img.map, img.map_sz / 4);
 
     memcpy32(&pal_bg_bank[0], img.pal, img.pal_sz / 4);
-    // memcpy32(&tile_mem[cbb][0], img.tiles, img.tile_sz / 4);
+    version (USE_DMA) {
+        dma3_cpy(&tile_mem[cbb][0], img.tiles, img.tile_sz);
+    } else {
+        memcpy32(&tile_mem[cbb][0], img.tiles, img.tile_sz / 4);
+    }
     memcpy32(&se_mem[sbb][0], img.map, img.map_sz / 4);
     // dma3_cpy(&pal_bg_bank[0], img.pal, img.pal_sz);
-    dma3_cpy(&tile_mem[cbb][0], img.tiles, img.tile_sz);
     // dma3_cpy(&se_mem[sbb][0], img.map, img.map_sz);
 }
 
