@@ -339,11 +339,18 @@ void dusk_background_upload_raw(GritImage* img, int cbb, int sbb) {
     // TODO: support selecting slot
 
     // 1. upload the atlas tile palette to bg palette memory
-    memcpy(&pal_bg_bank[0], img.pal, img.pal_sz);
-    // 2. upload the atlas tiles to bg tile memory (CBB)
-    memcpy(&tile_mem[cbb][0], img.tiles, img.tile_sz);
-    // 3. upload the map (SBB)
-    memcpy(&se_mem[sbb][0], img.map, img.map_sz);
+    // memcpy32(&pal_bg_bank[0], img.pal, img.pal_sz / 4);
+    // // 2. upload the atlas tiles to bg tile memory (CBB)
+    // memcpy32(&tile_mem[cbb][0], img.tiles, img.tile_sz / 4);
+    // // 3. upload the map (SBB)
+    // memcpy32(&se_mem[sbb][0], img.map, img.map_sz / 4);
+
+    memcpy32(&pal_bg_bank[0], img.pal, img.pal_sz / 4);
+    // memcpy32(&tile_mem[cbb][0], img.tiles, img.tile_sz / 4);
+    memcpy32(&se_mem[sbb][0], img.map, img.map_sz / 4);
+    // dma3_cpy(&pal_bg_bank[0], img.pal, img.pal_sz);
+    dma3_cpy(&tile_mem[cbb][0], img.tiles, img.tile_sz);
+    // dma3_cpy(&se_mem[sbb][0], img.map, img.map_sz);
 }
 
 void dusk_background_make(u8 bg_id, u16 size, Background bg) {
