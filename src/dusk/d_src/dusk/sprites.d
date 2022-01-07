@@ -1,6 +1,6 @@
 module dusk.sprites;
 
-extern(C):
+extern (C):
 
 import dusk.sprites;
 import dusk.sys;
@@ -22,6 +22,7 @@ enum DUSKSPRITE_FLAGS_VISIBLE = (0x1 << 0);
 
 /** sprite data */
 struct Sprite {
+    /** the screen x and y of the sprite */
     s16 x, y;
     /** the number of tiles taken up by this sprite */
     u8 tile_sz;
@@ -31,6 +32,18 @@ struct Sprite {
     u8 page;
     /** flags: 0/0/0/0/0/0/0/visible */
     u8 flags;
+
+    /** initialize a sprite struct */
+    static Sprite init(s16 x, s16 y, u8 page = 0, u8 flags = 0) {
+        Sprite s;
+        s.x = x;
+        s.y = y;
+        s.tile_sz = 1;
+        s.base_tid = 0;
+        s.page = page;
+        s.flags = flags;
+        return s;
+    }
 }
 
 /** animation metadata */
@@ -88,7 +101,9 @@ Anim make_anim(u8 start, u8 len) {
 // static OBJ_ATTR[NUM_SPRITES] obj_buffer;
 @(ldc.attributes.section(".ewram")) __gshared OBJ_ATTR[NUM_SPRITES] obj_buffer;
 // OBJ_AFFINE* obj_aff_buffer = cast(OBJ_AFFINE*) obj_buffer;
-__gshared OBJ_AFFINE* obj_aff_buffer() { return cast(OBJ_AFFINE*) obj_buffer; }
+__gshared OBJ_AFFINE* obj_aff_buffer() {
+    return cast(OBJ_AFFINE*) obj_buffer;
+}
 
 /** memory block used to track sprites */
 // mixin(EWRAM_DATA!("Sprite[NUM_SPRITES]", "sprites"));
@@ -101,7 +116,7 @@ __gshared bool sprites_bpp8 = true;
 void dusk_sprites_init() {
     // initialize object buffer
     oam_init(cast(OBJ_ATTR*) obj_buffer, NUM_SPRITES);
-    memset(cast(void*)sprites, 0, (Sprite.sizeof) * NUM_SPRITES);
+    memset(cast(void*) sprites, 0, (Sprite.sizeof) * NUM_SPRITES);
 
     // reset bpp to default
     sprites_bpp8 = true;
@@ -110,7 +125,9 @@ void dusk_sprites_init() {
     *REG_DISPCNT |= DCNT_OBJ | DCNT_OBJ_1D;
 }
 
-void dusk_sprites_configure(bool bpp8) { sprites_bpp8 = bpp8; }
+void dusk_sprites_configure(bool bpp8) {
+    sprites_bpp8 = bpp8;
+}
 
 void dusk_sprites_upload_atlas(SpriteAtlas* atlas) {
     // 1. upload the atlas tile palette to palette memory
@@ -123,7 +140,7 @@ void dusk_sprites_upload_atlas(SpriteAtlas* atlas) {
 }
 
 void dusk_sprites_upload_atlas_section(SpriteAtlasLayout* layout, SpriteAtlas* atlas, SpriteAtlasEntry* entry,
-                                       u16 pal_offset, u16 tile_offset) {
+    u16 pal_offset, u16 tile_offset) {
 
     // 1. upload the palette (palettes are 16-bit highcolor)
     memcpy(&pal_obj_bank[0][pal_offset], &atlas.pal[0], atlas.pal_sz);
@@ -132,8 +149,8 @@ void dusk_sprites_upload_atlas_section(SpriteAtlasLayout* layout, SpriteAtlas* a
     // 2. upload the tiles
     int entry_firsttid =
         dusk_sprites_pos_to_tid(entry.x, entry.y, layout.width, layout.height); // tid of entry start in atlas
-    int entry_tilecount = (entry.w) * (entry.h);                                  // entry size in tiles
-    int raw_firsttid = entry_firsttid * entry_tilecount * 2;                        // read offset
+    int entry_tilecount = (entry.w) * (entry.h); // entry size in tiles
+    int raw_firsttid = entry_firsttid * entry_tilecount * 2; // read offset
     // int raw_tilecount = entry_tilecount * 2;
     int raw_tileoffset = tile_offset * 2; // write offset
 
@@ -164,12 +181,12 @@ void dusk_sprites_upload_atlas_section(SpriteAtlasLayout* layout, SpriteAtlas* a
     u8* loc_tread = cast(u8*)&atlas.tiles[raw_firsttid];
     for (int i = 0; i < entry_tilecount; i += 1) {
         int c = i * 64;
-        u8[64] tile;                         // create temp tile
+        u8[64] tile; // create temp tile
         memcpy(&tile[0], loc_tread + c, 64); // read tile
 
         // fix tile
         for (int j = 0; j < 64; j++) {
-            tile[j] = cast(ubyte) (tile[j] + pal_offset);
+            tile[j] = cast(ubyte)(tile[j] + pal_offset);
         }
 
         memcpy(loc_twrite + c, &tile[0], 64); // write tile
@@ -219,7 +236,7 @@ Sprite* dusk_sprites_make(int index, u8 width, u8 height, Sprite spr) {
     }
 
     // calculate the number of tiles used by one frame of this sprite (divide width and height by 8)
-    spr.tile_sz = cast(ubyte) ((width >> 3) * (height >> 3));
+    spr.tile_sz = cast(ubyte)((width >> 3) * (height >> 3));
 
     // set main attributes
     // leave tile id (attr2) null, it will be set in sync
@@ -227,7 +244,7 @@ Sprite* dusk_sprites_make(int index, u8 width, u8 height, Sprite spr) {
     obj_set_attr(&obj_buffer[index], ATTR0_REG | shape_attr | bpp_flag, size_attr, 0);
 
     // set default flags
-    spr.flags = (DUSKSPRITE_FLAGS_VISIBLE);
+    spr.flags |= (DUSKSPRITE_FLAGS_VISIBLE);
 
     // save sprite metadata
     sprites[index] = spr;
@@ -259,7 +276,7 @@ pragma(inline) void dusk_sprites_sync(int i) {
 
     // raw base tid mode
     int bpp_mult = (sprites_bpp8 == 1) ? 2 : 1;
-    u16 tid = cast(u16) ((sprite.base_tid + (sprite.page * sprite.tile_sz)) * bpp_mult);
+    u16 tid = cast(u16)((sprite.base_tid + (sprite.page * sprite.tile_sz)) * bpp_mult);
     obj_set_attr(obj, obj.attr0, obj.attr1, cast(u16)(ATTR2_ID!u16(tid) | ATTR2_PALBANK!u16(0)));
 }
 
@@ -285,7 +302,7 @@ void dusk_sprites_anim_play(Sprite* spr, Anim* anim) {
         ix = (ix + 1) % anim.len;
     }
     // set new frame
-    spr.page = cast(u8) (anim.start + ix);
+    spr.page = cast(u8)(anim.start + ix);
 }
 
 u16 dusk_sprites_pos_to_tid(u16 x, u16 y, u16 sheet_width, u16 sheet_height) {
@@ -295,7 +312,7 @@ u16 dusk_sprites_pos_to_tid(u16 x, u16 y, u16 sheet_width, u16 sheet_height) {
     u16 yt = y;
     u16 imw = sheet_width >> 3; // compute with bitshift (sheet_width / 8)
     // u16 imh = sheet_height >> 3;
-    u16 tid = cast(u16) ((yt * imw) + xt);
+    u16 tid = cast(u16)((yt * imw) + xt);
     return tid;
 }
 
@@ -314,7 +331,8 @@ void enable_bg(u8 bg_id) {
     case 3:
         bg_flag = DCNT_BG3;
         break;
-    default: assert(0);
+    default:
+        assert(0);
     }
 
     *REG_DISPCNT |= bg_flag;
