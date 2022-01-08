@@ -17,6 +17,7 @@ enum MGBALogLevel
     DEBUG = 4
 }
 
+__gshared extern int mgba_is_open;
 void mgba_printf (int level, const(char)* ptr, ...);
 bool mgba_open ();
 void mgba_close ();

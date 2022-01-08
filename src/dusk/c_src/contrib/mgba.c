@@ -1,7 +1,10 @@
 #include "contrib/mgba.h"
 
+int mgba_is_open = 0;
+
 #ifdef DEBUG
 void mgba_printf(int level, const char* ptr, ...) {
+    if (!mgba_is_open) return;
     va_list args;
     level &= 0x7;
     va_start(args, ptr);
@@ -12,7 +15,11 @@ void mgba_printf(int level, const char* ptr, ...) {
 
 BOOL mgba_open(void) {
     *REG_DEBUG_ENABLE = 0xC0DE;
-    return *REG_DEBUG_ENABLE == 0x1DEA;
+    if (*REG_DEBUG_ENABLE == 0x1DEA) {
+        mgba_is_open = 1;
+        return TRUE;
+    }
+    return FALSE;
 }
 
 void mgba_close(void) { *REG_DEBUG_ENABLE = 0; }
