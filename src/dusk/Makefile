@@ -130,6 +130,10 @@ $(TARGET): $(OFILES)
 	@echo $(notdir $<)
 	$(CC) -MMD -MP -MF $(DEPSDIR)/$*.d $(RCFLAGS) -c $< -o $@
 
+%.o : %.s
+	@echo $(notdir $<)
+	$(CC) -MMD -MP -MF $(DEPSDIR)/$*.d $(RCFLAGS) -c $< -o $@
+
 -include $(DEPENDS)
 
 endif
