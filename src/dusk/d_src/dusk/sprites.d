@@ -357,7 +357,7 @@ void dusk_background_upload_raw(GritImage* img, int cbb, int sbb, int pal_offset
     // TODO: support selecting slot
 
     // copy palette and se
-    memcpy32(&pal_bg_bank[0][pal_offset], img.pal, img.pal_sz / 4);
+    memcpy32(&pal_bg_mem[pal_offset], img.pal, img.pal_sz / 4);
     memcpy32(&se_mem[sbb][0], img.map, img.map_sz / 4);
 
     // copy tiles
