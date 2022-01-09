@@ -353,7 +353,7 @@ vu16* dusk_get_background_register(u8 bg_id) {
     }
 }
 
-void dusk_background_upload_raw(GritImage* img, int cbb, int sbb) {
+void dusk_background_upload_raw(GritImage* img, int cbb, int sbb, int pal_offset = 0) {
     // TODO: support selecting slot
 
     // 1. upload the atlas tile palette to bg palette memory
@@ -363,7 +363,18 @@ void dusk_background_upload_raw(GritImage* img, int cbb, int sbb) {
     // // 3. upload the map (SBB)
     // memcpy32(&se_mem[sbb][0], img.map, img.map_sz / 4);
 
-    memcpy32(&pal_bg_bank[0], img.pal, img.pal_sz / 4);
+    // fix tiles to point at new palette pos
+    if (pal_offset > 0) {
+        auto raw_tdata = cast(u8*) img.tiles;
+        for (int i = 0; i < img.tile_sz; i += 64) {
+            auto raw_tile = cast(u8[64]*)raw_tdata[i];
+            for (int j = 0; j < 64; j++) {
+                raw_tile[0][j] += pal_offset;
+            }
+        }
+    }
+
+    memcpy32(&pal_bg_bank[0][pal_offset], img.pal, img.pal_sz / 4);
     version (USE_DMA) {
         dma3_cpy(&tile_mem[cbb][0], img.tiles, img.tile_sz);
     } else {
