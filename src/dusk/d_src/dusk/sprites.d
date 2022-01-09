@@ -367,9 +367,8 @@ void dusk_background_upload_raw(GritImage* img, int cbb, int sbb, int pal_offset
     if (pal_offset > 0) {
         auto raw_tdata = cast(u8*) img.tiles;
         for (int i = 0; i < img.tile_sz; i += 64) {
-            auto raw_tile = cast(u8[64]*)raw_tdata[i];
             for (int j = 0; j < 64; j++) {
-                raw_tile[0][j] += pal_offset;
+                raw_tdata[i + j] += pal_offset;
             }
         }
     }
