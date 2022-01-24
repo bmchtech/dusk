@@ -106,25 +106,8 @@ extern (D) RTCDateTime rtc_get_datetime_ex() {
     auto rawdt = rtc_get_datetime();
     // re-enable interrupts
     *REG_IME = ime;
-
-    // ret.year = cast(dt_field_size) RTC_TM_YEAR(rawdt);
-    // ret.month = cast(dt_field_size) RTC_TM_MON(rawdt);
-    // ret.day = cast(dt_field_size) RTC_TM_MDAY(rawdt);
-    // ret.wday = cast(dt_field_size) RTC_TM_WDAY(rawdt);
-    // ret.hour = cast(dt_field_size) RTC_TM_HOUR(rawdt);
-    // ret.min = cast(dt_field_size) RTC_TM_MIN(rawdt);
-    // ret.sec = cast(dt_field_size) RTC_TM_SEC(rawdt);
-
-    // time.tm_year = BCD_DECODE( RTC_TM_YEAR( datetime ) ) + ( 2000u - 1900u );
-    // time.tm_mon = BCD_DECODE( RTC_TM_MON( datetime ) ) - 1;
-    // time.tm_mday = BCD_DECODE( RTC_TM_MDAY( datetime ) );
-    // time.tm_wday = BCD_DECODE( RTC_TM_WDAY( datetime ) );
-
-    // time.tm_hour = BCD_DECODE( RTC_TM_HOUR( datetime ) );
-    // time.tm_min = BCD_DECODE( RTC_TM_MIN( datetime ) );
-    // time.tm_sec = BCD_DECODE( RTC_TM_SEC( datetime ) );
-
-    ret.year = cast(dt_field_size) BCD_DECODE(RTC_TM_YEAR(rawdt));
+    
+    ret.year = cast(dt_field_size) BCD_DECODE(RTC_TM_YEAR(rawdt)) + 2000;
     ret.month = cast(dt_field_size) BCD_DECODE(RTC_TM_MON(rawdt));
     ret.day = cast(dt_field_size) BCD_DECODE(RTC_TM_MDAY(rawdt));
     ret.wday = cast(dt_field_size) BCD_DECODE(RTC_TM_WDAY(rawdt));
