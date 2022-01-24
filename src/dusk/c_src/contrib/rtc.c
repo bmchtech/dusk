@@ -13,12 +13,12 @@
 typedef int rtc_time;
 typedef long long int rtc_tm;
 
-int __rtc_init();
-int __rtc_get_status();
-rtc_time __rtc_get_time();
-rtc_tm __rtc_get_datetime();
-void __rtc_set_time( rtc_time time );
-void __rtc_set_datetime( rtc_tm datetime );
+int rtc_init();
+int rtc_get_status();
+rtc_time rtc_get_time();
+rtc_tm rtc_get_datetime();
+void rtc_set_time( rtc_time time );
+void rtc_set_datetime( rtc_tm datetime );
 
 typedef unsigned short u16;
 typedef volatile u16 vu16;
@@ -72,21 +72,21 @@ typedef volatile u16 vu16;
 
 static void rtc_reset();
 
-int __rtc_init() {
+int rtc_init() {
     GPIO_PORT_READ_ENABLE = 1;
-    int status = __rtc_get_status();
+    int status = rtc_get_status();
     if ( ( status & RTC_STATUS_POWER ) || ( status & RTC_STATUS_24HOUR ) == 0 ) {
         // Reset (also switches to 24-hour mode)
         rtc_reset();
     }
 
-    const rtc_time time = __rtc_get_time();
+    const rtc_time time = rtc_get_time();
     if ( time & TIME_BIT_TEST ) {
         // Reset to leave test mode
         rtc_reset();
     }
 
-    status = __rtc_get_status();
+    status = rtc_get_status();
 
     if ( status & RTC_STATUS_POWER ) {
         GPIO_PORT_READ_ENABLE = 0;
@@ -98,7 +98,7 @@ int __rtc_init() {
         return RTC_E12HOUR;
     }
 
-    const rtc_tm datetime = __rtc_get_datetime();
+    const rtc_tm datetime = rtc_get_datetime();
 
     if ( TM_YEAR( datetime ) > 0x9f || TM_YEAR_UNIT( datetime ) > 9 ) {
         GPIO_PORT_READ_ENABLE = 0;
@@ -141,7 +141,7 @@ int __rtc_init() {
 static void rtc_write_command( int cmd );
 static int rtc_read_data8();
 
-int __rtc_get_status() {
+int rtc_get_status() {
     GPIO_PORT_DATA = 0x1;
     GPIO_PORT_DATA = 0x5;
     GPIO_PORT_DIRECTION = 0x7;
@@ -221,7 +221,7 @@ static void rtc_write_data8( const int data ) {
 
 static int rtc_read_data24();
 
-rtc_time __rtc_get_time() {
+rtc_time rtc_get_time() {
     GPIO_PORT_DATA = 0x1;
     GPIO_PORT_DATA = 0x5;
     GPIO_PORT_DIRECTION = 0x7;
@@ -255,7 +255,7 @@ static int rtc_read_data24() {
 
 static int rtc_read_data32();
 
-rtc_tm __rtc_get_datetime() {
+rtc_tm rtc_get_datetime() {
     GPIO_PORT_DATA = 0x1;
     GPIO_PORT_DATA = 0x5;
     GPIO_PORT_DIRECTION = 0x7;
@@ -288,7 +288,7 @@ static int rtc_read_data32() {
     return ( int ) ( ( word & 0xff000000 ) >> 24 ) | ( word << 24 ) | ( ( word & 0xff0000 ) >> 8 ) | ( ( word & 0xff00 ) << 8 );
 }
 
-void __rtc_set_time( const rtc_time time ) {
+void rtc_set_time( const rtc_time time ) {
     GPIO_PORT_DATA = 0x1;
     GPIO_PORT_DATA = 0x5;
     GPIO_PORT_DIRECTION = 0x7;
@@ -304,7 +304,7 @@ void __rtc_set_time( const rtc_time time ) {
     GPIO_PORT_DATA = 0x1;
 }
 
-void __rtc_set_datetime( const rtc_tm datetime ) {
+void rtc_set_datetime( const rtc_tm datetime ) {
     GPIO_PORT_DATA = 0x1;
     GPIO_PORT_DATA = 0x5;
     GPIO_PORT_DIRECTION = 0x7;
