@@ -36,6 +36,15 @@ they have plenty of comments explaining what and why the code does what it does.
 
 furthermore, they demonstrate many of the different features provided by dusk.
 
+## documentation
+
+in the spirit of simplicity and minimalism, and to back up the claims that dusk is simple and easy:
+
+documentation is provided in the literate style, interspersed within a few header files.
+these header files contain the entirety of the dusk core api.
+
+view these self documenting files here: https://github.com/redthing1/dusk/tree/main/src/dusk/include
+
 ## hacking
 
 ### requirements
