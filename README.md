@@ -5,7 +5,7 @@
 
 DUsK, a library for gba dev
 
-## example
+## media!
 
 <img src="media/duskdemo.webp" width="256">
 <img src="media/fountain2.webp" width="256">
@@ -20,6 +20,21 @@ DUsK, a library for gba dev
     + sprite/animation helpers
     + tiled map exporter and loader (via Tiled2GBA)
 + (WIP) saves
+
+## ideas
+
+dusk is built all around the idea of simplicity, clarity, and readability.
+the exposed api is minimal, but not limiting.
+
+## samples
+
+sample projects can be found here: https://github.com/redthing1/dusk/tree/main/demo
+
+these demo projects are written simply and cleanly.
+
+they have plenty of comments explaining what and why the code does what it does.
+
+furthermore, they demonstrate many of the different features provided by dusk.
 
 ## hacking
 
