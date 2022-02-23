@@ -33,6 +33,10 @@ IARCH		:= -mthumb-interwork -marm
 bTEMPS		:= 0	# Save gcc temporaries (.i and .s files)
 # DEBUG		:= 0	# Generate debug info
 
+# get revision id from git
+GITVERSION_ID := $(shell printf "r%s" "$(shell git rev-parse --short HEAD)")
+$(info build id: $(GITVERSION_ID))
+
 #---------------------------------------------------------------------------------
 # Options for code generation
 #---------------------------------------------------------------------------------
@@ -46,8 +50,13 @@ ifeq ($(DEBUG),1)
 	CBASE	+= -g -DDEBUG
 endif
 
-DEFINES = -DGBA -DDUSK_VERSION=\"$(GITVERSION)\"
-CBASE	+= $(DEFINES)
+# add define for gba
+EXTRA_DEFINES := -DGBA
+
+# add EXTRA_DEFINES for version and git version
+EXTRA_DEFINES += -DVERSION_ID_DEF="\"$(VERSION)\"" -DLIB_BUILD_ID_DEF="\"$(GITVERSION_ID)\""
+
+CBASE	+= $(EXTRA_DEFINES)
 
 RCFLAGS := $(CBASE) $(RARCH)
 ICFLAGS := $(CBASE) $(IARCH) -mlong-calls #-fno-gcse

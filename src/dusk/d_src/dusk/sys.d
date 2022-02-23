@@ -23,9 +23,6 @@ struct Scene {
 // void dusk_scene_set(Scene next);
 // void dusk_scene_update();
 
-// __attribute__((used)) const char* _DUSK_LIB_VERSION = ("$DUSK " DUSK_VERSION);
-// const char* _DUSK_LIB_VERSION = ("$DUSK " ~ DUSK_VERSION);
-
 __gshared static uint frame_count;
 
 void dusk_clear_vidmem() {
