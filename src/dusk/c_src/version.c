@@ -17,5 +17,5 @@
 #endif
 #define RES_LIB_BUILD (RES_LIB_ID " $BUILD " LIB_BUILD_ID_DEF)
 
-__attribute__((used)) const char* LIB_VERSION = RES_LIB_VERSION;
-__attribute__((used)) const char* LIB_BUILD = RES_LIB_BUILD;
+__attribute__((used)) const char* DUSK_LIB_VERSION = RES_LIB_VERSION;
+__attribute__((used)) const char* DUSK_LIB_BUILD = RES_LIB_BUILD;
