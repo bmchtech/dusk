@@ -396,6 +396,32 @@ void dusk_background_upload_raw(GritImage* img, int cbb, int sbb, int pal_offset
     }
 }
 
+void dusk_background_upload_section(GritImage* img, int cbb, int sbb, u16 tx, u16 ty, u16 tw, u16 th) {
+    // upload a section of the image to a 32x32 tile (256x256px) background
+
+    auto num_tiles_cpy = 16 * 16;
+    enum bpp8_tile_sz = TILE8.sizeof;
+
+    // copy palette and se
+    // memcpy32(&pal_bg_mem[pal_offset], img.pal, img.pal_sz / 4);
+    memcpy32(&pal_bg_mem[0], img.pal, img.pal_sz / 4);
+    memcpy32(&se_mem[sbb][0], img.map, img.map_sz / 4);
+
+    auto tile_data = cast(u8*) img.tiles;
+    auto tile_dest = cast(u8*) &tile_mem[cbb][0];
+
+    auto tile_cpy_bytes = num_tiles_cpy * bpp8_tile_sz;
+
+    import dusk.contrib.mgba;
+    mgba_printf(MGBALogLevel.ERROR,
+        "img tile_sz: %u, num_tiles_cpy: %u, tile_cpy_bytes: %u",
+        img.tile_sz, num_tiles_cpy, tile_cpy_bytes);
+    memcpy32(tile_dest, tile_data, tile_cpy_bytes / 4);
+    // memcpy32(tile_dest, tile_data, img.tile_sz / 4);
+
+    // calculate tids of the slice we want
+}
+
 void dusk_background_make(u8 bg_id, u16 size, Background bg) {
     // set bg on screen enabled
     enable_bg(bg_id);
