@@ -1,0 +1,124 @@
+import "wox" for W, R
+
+var BASE_DIR = "./asset/build/"
+
+var IMGS_DIR = "%(BASE_DIR)../img"
+var MAPS_DIR = "%(BASE_DIR)../map"
+var RAWMAPS_DIR = "%(BASE_DIR)../rawmap"
+var SOUND_DIR = "%(BASE_DIR)../snd"
+
+var ATLS_SRC = W.lines(W.shell("find %(IMGS_DIR) -mindepth 1 -type d"))
+var ATLS_PNG = ATLS_SRC.map{|x|
+    var y = W.path_basename(x)
+    return "%(BASE_DIR)./a_%(y)_0.png"
+}.toList
+
+var IMGS_BINS = ATLS_PNG.map{|x|
+    return x.replace(".png", ".img.bin")
+}
+
+var RAWMAPS_SRCS = W.lines(W.shell("find %(RAWMAPS_DIR) -name '*.png'"))
+var RAWMAPS_BINSS = RAWMAPS_SRCS.map{|x|
+    var y = W.path_basename(x).replace(".png", ".img.bin")
+    return "%(BASE_DIR)./%(y)"
+}.toList
+
+var MAPS_SRCS = W.lines(W.shell("find %(MAPS_DIR) -name '*.tmx'"))
+var MAPS_BINS = MAPS_SRCS.map{|x|
+    var y = W.path_basename(x).replace(".tmx", ".bin")
+    return "%(BASE_DIR)./%(y)"
+}.toList
+
+var SOUND_SRCS = W.lines(W.shell("find %(SOUND_DIR) -type f"))
+var SOUND_BIN = "%(BASE_DIR)./soundbank.bin"
+var SOUND_H = "%(BASE_DIR)./soundbank.h"
+
+var GRIT_BPP = 8
+var GRIT_FLAGS = "-gt -p -g -gB %(GRIT_BPP) -gu32 -pu32 -ftb -fh!"
+var CRUNCH_FLAGS = "-p -j -b -s256 -p0"
+
+var gen_atl2png2grit_cmd = Fn.new{|input, output, size|
+    return "grit %(input) %(GRIT_FLAGS) -Mh %(size) -Mw %(size) -o %(output)"
+}
+
+var custom_imgbins = [
+    ["%(BASE_DIR)./a_part_0.png", 1],
+    ["%(BASE_DIR)./a_chars_0.png", 2],
+    ["%(BASE_DIR)./a_logo_0.png", 8],
+    ["%(BASE_DIR)./a_thred_0.png", 8],
+    ["%(BASE_DIR)./a_mus_0.png", 8]
+]
+
+var custom_imgbin_recipes = custom_imgbins.map{|x|
+    var in_name = x[0]
+    var out_name = x[0].replace(".png", ".img.bin")
+    var size = x[1]
+    var cmd = gen_atl2png2grit_cmd.call(in_name, out_name, size)
+    return W.recipe(out_name, [in_name], [out_name], [R.c(cmd)])    
+}.toList
+
+var atlas_png_sprite_dir_pairs = W.zip(ATLS_PNG, ATLS_SRC)
+var atlas_png_recipes = atlas_png_sprite_dir_pairs.map{|x|
+    var in_name = x[1]
+    var out_name = x[0]
+    var out_prefix = W.ext_remove(out_name)[0..-2]
+    var cmd = "crunch_gen %(out_prefix) %(in_name) %(CRUNCH_FLAGS)"
+    // W.log_inf("atlas png recipe: %(out_name) <- %(in_name)")
+    return W.recipe(out_name, [in_name], [out_name], [R.c(cmd)])
+}.toList
+
+// tmx maps
+var tmx_map_bin_pairs = W.zip(MAPS_BINS, MAPS_SRCS)
+var tmx_map_recipes = tmx_map_bin_pairs.map{|x|
+    var in_name = x[1]
+    var out_name = x[0]
+    var cmd = "Tiled2GBA -b %(in_name) %(out_name)"
+    return W.recipe(out_name, [in_name], [out_name], [R.c(cmd)])
+}.toList
+
+// raw maps
+var raw_map_bin_pairs = W.zip(RAWMAPS_BINSS, RAWMAPS_SRCS)
+var raw_map_recipes = raw_map_bin_pairs.map{|x|
+    var in_name = x[1]
+    var out_name = x[0]
+    var cmd = "grit %(in_name) -p -m -g -gB 8 -gu32 -pu32 -ftb -o %(out_name)"
+    return W.recipe(out_name, [in_name], [out_name], [R.c(cmd)])
+}.toList
+
+// soundbank
+var soundbank_recipe = W.recipe(SOUND_BIN, SOUND_SRCS, [SOUND_BIN, SOUND_H], 
+    [R.c("mmutil %(W.join(SOUND_SRCS)) -o%(SOUND_BIN) -h%(SOUND_H)")]
+)
+
+var ASSET_RECIPES = atlas_png_recipes + tmx_map_recipes + raw_map_recipes + custom_imgbin_recipes + [soundbank_recipe]
+var ASSET_OUTPUTS = W.flatten(ASSET_RECIPES.map{|x|
+    return x.outputs
+}).map{|x|
+    return x.name
+}.toList
+
+// var clean_recipe = W.virtual_recipe("clean", [],
+//     [
+//         R.c("rm -rf *.bin"),
+//         R.c("rm -rf *.b"),
+//         R.c("rm -rf *.h"),
+//         R.c("rm -rf atl*"),
+//         R.c("rm -rf *.png"),
+//         R.c("rm -rf *.hash"),
+//         R.c("rm -rf *.json")
+//     ]
+// )
+// var all_recipe = W.meta_recipe("all", asset_recipes)
+
+// var BUILD_RECIPES = asset_recipes + [all_recipe, clean_recipe]
+
+// class Build {
+//     static recipes { BUILD_RECIPES }
+//     static default_recipe { "all" }
+// }
+
+class PartialBuild_Assets {
+    static recipes { ASSET_RECIPES }
+    static outputs { ASSET_OUTPUTS }
+}
+

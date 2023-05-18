@@ -1,0 +1,146 @@
+import "wox" for W, R
+import "./asset/build/build.wox" for PartialBuild_Assets
+
+var TITLE           = "DuskDemo"
+
+var DEBUG = W.cliopt_bool("-g", false)
+
+var DEVKITARM  = W.env("DEVKITARM", "")
+var DEVKITPRO  = W.env("DEVKITPRO", "")
+
+for (devkit_env in ["DEVKITARM", "DEVKITPRO"]) {
+    if (W.env(devkit_env, "") == "") {
+        W.log_err("Please set %(devkit_env) in your environment.")
+        W.fail()
+    }
+}
+
+// Project settings
+var SOURCE_DIR = "./src"
+var LIB_DIR    = "./lib"
+var DUSK_DIR   = "../../src/dusk"
+var LIBDUSK_A  = "%(DUSK_DIR)/lib/libdusk.a"
+var DATA_DIR   = "./asset/build"
+var SPECS      = "-specs=gba.specs"
+
+// Compilation settings
+var CROSS     = "arm-none-eabi-"
+var AS        = "%(CROSS)as"
+var CC        = "%(CROSS)gcc"
+var LD        = "%(CROSS)gcc"
+var OBJCOPY   = "%(CROSS)objcopy"
+
+var ARCH      = "-mthumb-interwork -mthumb"
+
+var INCFLAGS  = "-I%(DUSK_DIR)/include -I%(DEVKITPRO)/libtonc/include -I%(DEVKITPRO)/libgba/include -I%(SOURCE_DIR) -I%(DATA_DIR)"
+var LIBFLAGS  = "-L%(DUSK_DIR)/lib -ldusk -L%(DEVKITPRO)/libtonc/lib -ltonc -L%(DEVKITPRO)/libgba/lib -lmm"
+var ASFLAGS   = "-mthumb-interwork"
+var CFLAGS    = "%(ARCH) -Wall -Werror -fno-strict-aliasing -mcpu=arm7tdmi -mtune=arm7tdmi %(INCFLAGS) %(LIBFLAGS)"
+var LDFLAGS   = "%(ARCH) %(SPECS) %(LIBFLAGS) -Wl,-Map,%(TITLE).map"
+
+var ASSET_MKFLAGS = ""
+var DUSK_MKFLAGS  = ""
+
+if (DEBUG) {
+    CFLAGS = CFLAGS + " -O2 -g"
+    DUSK_MKFLAGS = DUSK_MKFLAGS + " DEBUG=1"
+} else {
+    CFLAGS = CFLAGS + "-O2 -fomit-frame-pointer -ffast-math"
+}
+
+// Find and predetermine all relevant source files
+var APP_MAIN_SOURCE = W.lines(W.shell("find %(SOURCE_DIR) -name '*main.c' | head -n 1"))[0]
+var APP_MAIN_OBJECT = APP_MAIN_SOURCE.replace(".c", ".o")
+var APP_SOURCES_C   = W.lines(W.shell("find %(SOURCE_DIR) -name '*.c' ! -name '*main.c' ! -name '*.test.c'"))
+var APP_SOURCES_S   = W.lines(W.shell("find %(SOURCE_DIR) -name '*.s'"))
+var APP_OBJECTS_C   = W.exts_replace(APP_SOURCES_C, ".c", ".o")
+var APP_OBJECTS_S   = W.exts_replace(APP_SOURCES_S, ".s", ".o")
+var APP_OBJECTS     = APP_OBJECTS_C + APP_OBJECTS_S
+
+var TARGET_GBA          = "%(TITLE).gba"
+var TARGET_GBA_CODE     = "%(TITLE)-code.gba"
+var TARGET_ELF          = "%(TITLE).elf"
+var TARGET_GBFS         = "%(TITLE).gbfs"
+
+// assets
+// var assets_bins_recipes = W.make_recipes_relative(DATA_DIR, PartialBuild_Assets.recipes)
+var assets_bins_recipes = PartialBuild_Assets.recipes
+var assets_meta_recipe = W.meta_recipe("assets", assets_bins_recipes)
+
+// var assets_outputs = W.relative_paths(DATA_DIR, PartialBuild_Assets.outputs)
+var assets_outputs = PartialBuild_Assets.outputs
+W.log_inf("assets outputs: %(assets_outputs)")
+
+// C objects
+var c_obj_pairs = W.zip(APP_SOURCES_C, APP_OBJECTS_C)
+var c_obj_recipes = c_obj_pairs.map { |x|
+    return W.recipe(x[1], [x[0]] + assets_outputs, [x[1]], 
+        [ R.c("%(CC) %(CFLAGS) -c %(x[0]) -o %(x[1])") ]
+    )
+}.toList
+
+// S objects
+var s_obj_pairs = W.zip(APP_SOURCES_S, APP_OBJECTS_S)
+var s_obj_recipes = s_obj_pairs.map { |x|
+    return W.recipe(x[1], [x[0]], [x[1]], 
+        [ R.c("%(CC) %(CFLAGS) -c %(x[0]) -o %(x[1])") ]
+    )
+}.toList
+
+// main source
+var main_obj_recipe = W.recipe(APP_MAIN_OBJECT, [APP_MAIN_SOURCE], [APP_MAIN_OBJECT], 
+    [ R.c("%(CC) %(CFLAGS) -c %(APP_MAIN_SOURCE) -o %(APP_MAIN_OBJECT)") ]
+)
+
+var obj_recipes = [main_obj_recipe] + c_obj_recipes + s_obj_recipes
+
+// libraries
+var libdusk_recipe = W.recipe("libdusk", [], [LIBDUSK_A], 
+    [ R.c("cd %(DUSK_DIR) && make %(DUSK_MKFLAGS)") ]
+)
+
+var lib_targets = [LIBDUSK_A]
+var lib_recipes = [libdusk_recipe]
+
+// main recipes
+var target_elf_recipe = W.recipe("target_elf", [APP_MAIN_OBJECT] + APP_OBJECTS + lib_targets, [TARGET_ELF], 
+    [ R.c("%(LD) %(W.join(APP_OBJECTS)) %(APP_MAIN_OBJECT) %(LDFLAGS) -o %(TARGET_ELF)") ]
+)
+
+var target_gba_code_recipe = W.recipe("target_gba_code", [TARGET_ELF], [TARGET_GBA_CODE], 
+    [ 
+        R.c("%(OBJCOPY) -v -O binary %(TARGET_ELF) %(TARGET_GBA_CODE)"),
+        R.c("gbafix %(TARGET_GBA_CODE) -t%(TITLE)"),
+        R.c("padbin 256 %(TARGET_GBA_CODE)") 
+    ]
+)
+
+var target_gbfs_recipe = W.recipe("target_gbfs", assets_outputs, [TARGET_GBFS],
+    [ R.c("gbfs %(TARGET_GBFS) %(W.join(assets_outputs))") ]
+)
+
+var target_gba_recipe = W.recipe("target_gba", [TARGET_GBA_CODE, TARGET_GBFS], [TARGET_GBA],
+    [ R.c("cat %(TARGET_GBA_CODE) %(TARGET_GBFS) > %(TARGET_GBA)") ]
+)
+
+var clean_recipe = W.virtual_recipe("clean", [],
+    [
+        R.c("rm -f *.gba"),
+        R.c("rm -f *.elf"),
+        R.c("rm -f *.sav"),
+        R.c("rm -f *.gbfs"),
+        R.c("rm -rf %(APP_OBJECTS)"),
+        R.c("rm -rf %(APP_MAIN_OBJECT)"),
+        R.c("cd %(DUSK_DIR) && make clean"),
+        R.c("cd %(DATA_DIR) && make clean")
+    ]
+)
+
+var all_recipe = W.meta_recipe("all", [target_gba_recipe])
+
+var BUILD_RECIPES = obj_recipes + lib_recipes + PartialBuild_Assets.recipes + [assets_meta_recipe, target_elf_recipe, target_gba_code_recipe, target_gbfs_recipe, target_gba_recipe, clean_recipe, all_recipe]
+
+class Build {
+    static recipes { BUILD_RECIPES }
+    static default_recipe { "all" }
+}
