@@ -69,7 +69,7 @@ var assets_meta_recipe = W.meta_recipe("assets", assets_bins_recipes)
 
 // var assets_outputs = W.relative_paths(DATA_DIR, PartialBuild_Assets.outputs)
 var assets_outputs = PartialBuild_Assets.outputs
-W.log_inf("assets outputs: %(assets_outputs)")
+// W.log_inf("assets outputs: %(assets_outputs)")
 
 // C objects
 var c_obj_pairs = W.zip(APP_SOURCES_C, APP_OBJECTS_C)
