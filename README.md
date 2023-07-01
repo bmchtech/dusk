@@ -3,7 +3,11 @@
 
 # dusk
 
-DUsK, a library for gba dev
+**dusk**, a library for gba dev
+
+supported toolchains:
+- DevkitARM/C/C++ (version 0.1.x), [view](https://github.com/redthing1/dusk/tree/lang_c)
+- DevkitARM/D (version 0.2+) [view](https://github.com/redthing1/dusk/tree/d-port)
 
 ## media!
 
@@ -11,14 +15,14 @@ DUsK, a library for gba dev
 <img src="media/fountain2.webp" width="256">
 
 ## features
-+ simple, intuitive C API
++ simple, intuitive C/D API
 + library integration
     + built in support for TONC, GBFS
 + graphics
     + scene architecture
     + 8bpp texture atlas packing
     + sprite/animation helpers
-    + tiled map exporter and loader (via Tiled2GBA)
+    + tiled map exporter and loader
 + (WIP) saves
 
 ## ideas
